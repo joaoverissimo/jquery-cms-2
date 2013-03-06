@@ -1,0 +1,29 @@
+<table class="table table-hover table-striped" id="tablelista">
+    <thead>
+        <tr>
+            <th>__(jqueryseopalavra.cod)</th>
+            <th>__(jqueryseopalavra.palavra)</th>
+            <th>__(jqueryseopalavra.url)</th>
+            <th>__(jqueryseopalavra.count)</th>            
+            <th></th>
+        </tr>
+    </thead>
+    <repeat>
+        <tr>
+            <td>getCod</td>
+            <td>getPalavra</td>
+            <td>getUrl</td>
+            <td>getCount</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-primary" href="getRewriteUrl" target="_blank"><i class="icon-share icon-white"></i> __(abrir)</a>
+                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="editar.php?cod=getCod"><i class="icon-pencil"></i> __(editar)</a></li>                    
+                        <li><a href="deletar.php?cod=getCod"><i class="icon-trash"></i> __(deletar)</a></li>                    
+                    </ul>
+                </div>            
+            </td>
+        </tr>
+    </repeat>
+</table>

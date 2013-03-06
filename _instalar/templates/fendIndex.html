@@ -1,0 +1,77 @@
+<?php
+require_once 'jquerycms/config.php';
+
+//order
+$orderbyfield = "$tabela#.$primarykey#";
+$orderbyvalue = "asc";
+
+if (isset($_REQUEST['orderbyfield']))
+    $orderbyfield = $_REQUEST['orderbyfield'];
+
+if (isset($_REQUEST['orderbyvalue']))
+    $orderbyvalue = $_REQUEST['orderbyvalue'];
+
+$orderBy = new dataOrder($orderbyfield, $orderbyvalue);
+
+//Where
+$where = "";
+
+if (isset($_REQUEST['$primarykey#'])) {
+    $where = new dataFilter("$tabela#.$primarykey#", $_REQUEST['$primarykey#']);
+}
+
+if (isset($_REQUEST['$firsStringField#'])) {
+    $where = new dataFilter("$tabela#.$firsStringField#", $_REQUEST['$firsStringField#'], dataFilter::op_likeMatches);
+}
+
+//Limit & pager
+$paginaAtual = 0;
+if (isset($_REQUEST['page']))
+    $paginaAtual = $_REQUEST['page'];
+
+$pager = new dataPager($paginaAtual, 15, $Conexao, '$tabela#', $where);
+
+//Obtem a lista
+$dados = db$tabelaFistUpper#::ObjsListLeft($Conexao, $where, $orderBy, $pager->getLimit());
+?><!DOCTYPE HTML>
+<html>
+    <head>
+        <title><?php echo __('table_$tabela#'); ?> - Listar</title>
+
+        <?php include 'masterpage/head.php'; ?>
+    </head>
+    <body>        
+        <?php include 'masterpage/header.php'; ?>
+
+        <div class="container" style="margin-top: 50px;">
+            <section id="lista">
+                <div class="page-header">
+                    <h1><?php echo __('table_$tabela#'); ?> <small>Listar</small></h1>
+                </div>
+
+                <?php
+                if ($dados === false) :
+                    echo "Não existem registros.";
+                else :
+                    ?>
+
+                    <ul class="jquerylista">
+                        <?php foreach ($dados as $obj) : ?>
+                            <li>
+                                $fieldvals#
+                                <a href="$tabela#-detalhe.php?$primarykey#=<?php echo $obj->get$primarykeyU#(); ?>" class="btn btn-mini">(+) Detalhes</a>
+                            </li>                            
+                        <?php endforeach; ?>
+                    </ul>
+
+                    <div class="clearfix"></div>
+                <?php endif; ?>
+
+                <?php echo $pager->getPager(); ?>
+
+            </section>
+
+            <?php include 'masterpage/footer.php'; ?>
+        </div>
+    </body>
+</html>

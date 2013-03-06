@@ -1,0 +1,7 @@
+table_equipe;Equipe
+equipe.cod;Cod
+equipe.nome;Nome
+equipe.descricao;Descrição
+equipe.email;Email
+equipe.imagem;Imagem
+equipe.ordem;Ordem

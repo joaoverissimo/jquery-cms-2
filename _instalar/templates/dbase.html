@@ -1,0 +1,259 @@
+<?php
+
+class dbase$tabelaFistUpper# {
+    
+    const tabela = "$tabela#";
+    const primaryKey = "$primarykey#";
+    
+    $dbasecampos#
+    
+    public static function Carregar($Conexao, $valor, $campo = '$primarykey#') {
+        $dados = dataCarregar($Conexao, '$tabela#', $campo, $valor);
+        $dados = db$tabelaFistUpper#::CorrigeValoresSimples($dados);
+        return $dados;
+    }
+
+    public static function CarregarLeft($Conexao, $valor, $campo = '$primarykey#') {
+        $where = new dataFilter("$tabela#.$campo", $valor);
+        $dados = db$tabelaFistUpper#::ListarLeft($Conexao, $where, "", "0,1");
+
+        if (issetArray($dados[0]) && isset($dados[0][$campo])) {
+            return $dados[0];
+        } else {
+            return false;
+        }        
+    }
+    
+    public static function getMax($Conexao, $increment1 = false){
+        $primaryKey = db$tabelaFistUpper#::primaryKey;
+        $sql = "select MAX($primaryKey) AS getmax from $tabela#";
+        $dados = dataExecSqlDireto($Conexao, $sql, false);
+        
+        if (is_numeric($dados["getmax"]) && $increment1) {
+            return intval($dados["getmax"]) + 1;
+        } elseif (is_numeric($dados["getmax"])) {
+            return $dados["getmax"];
+        } else {
+            return 0;
+        }
+    }
+    
+    public static function Inserir($Conexao, $DbInserirValores#) {
+        try {
+            $sql = "INSERT INTO `$tabela#`
+                    ($dbaseInsertParametros#)
+                    VALUES
+                    ($dbaseInsertParametrosBinds#)";
+
+            $statement = $Conexao->prepare($sql);
+
+            $dbaseInsertParametrosValues#
+
+            $retorno = $statement->execute();
+
+            if ($retorno && ($statement->rowCount() == 1))
+                return $Conexao->lastInsertid(); 
+            else {
+                $erroInfo = $statement->errorInfo();
+                if (isset($erroInfo[2])) {
+                    throw new jquerycmsException("Problema para inserir. {$erroInfo[2]}. ");
+                } else {
+                    throw new jquerycmsException("Problema para inserir. O registro nao foi inserido, será necessario debugar o codigo. ");
+                }
+            }
+
+        } catch (Exception $exc) {
+            throw new jquerycmsException("Problema para inserir. {$exc->getMessage()}. ");
+        }
+    }
+
+    public static function Update($Conexao, $DbEditarValores#) {
+        try {
+            $sql = "UPDATE `$tabela#` SET
+                   $dbaseUpdateParametros#
+                   WHERE  `$primarykey#` = :$primarykey#;";
+
+            $statement = $Conexao->prepare($sql);
+
+            $dbaseUpdateParametrosValues#
+
+            $retorno = $statement->execute();
+            
+            if ($retorno)
+                return true;
+            else {
+                $erroInfo = $statement->errorInfo();
+                if (isset($erroInfo[2])) {
+                    throw new jquerycmsException("Problema para update. {$erroInfo[2]}. ");
+                } else {
+                    throw new jquerycmsException("Problema para update. O registro nao foi editado, será necessario debugar o codigo. ");
+                }
+            }
+
+        } catch (Exception $exc) {
+            throw new jquerycmsException("Problema para update. {$exc->getMessage()} ");
+        }
+    }
+
+    public static function Deletar($Conexao, $$primarykey#) {
+        return dataDeletar($Conexao, "$tabela#", "$primarykey#", $$primarykey#);
+    }
+    
+    public static function DeletarWhere($Conexao, $where) {
+        $dados = db$tabelaFistUpper#::Listar($Conexao, $where);
+        if ($dados !== false) {
+            foreach ($dados as $registro) {
+                db$tabelaFistUpper#::Deletar($Conexao, $registro['$primarykey#']);
+            }
+        }
+    }
+
+    public static function Listar($Conexao, $where = "", $orderBy = "", $limit = "") {
+        if ($where instanceof dataFilter) {
+            $where->setValidFields("$dbaseListValidFields#");
+        }         
+        
+        if ($orderBy instanceof dataOrder) {
+            $orderBy->setValidFields("$dbaseListValidFields#");
+        } elseif (!$orderBy) {
+            $orderBy = "$primarykey# desc";
+        }
+
+        $dados = dataListar($Conexao, '$tabela#', $where, $orderBy, $limit);
+        $dados = db$tabelaFistUpper#::CorrigeValoresSimplesAll($dados);
+        
+        if (! issetArray($dados)) {
+            return false;
+        } 
+        
+        return $dados;        
+    }
+
+    public static function ListarLeft($Conexao, $where = "", $orderBy = "", $limit = "") {
+        if ($where instanceof dataFilter) {
+            $where->setValidFields("$dbaseListValidFields# $dbaseLeftValidFields#");
+        } 
+        
+        if ($orderBy instanceof dataOrder) {
+            $orderBy->setValidFields("$dbaseListValidFields# $dbaseLeftValidFields#");
+        } elseif (!$orderBy) {
+            $orderBy = "$primarykey# desc";
+        }
+
+        $select = "$tabela#.* $dbaseLeftJoinFields# ";
+        
+        $leftjoin = "$dbaseLeftJoin#";
+            
+        $dados = dataListar($Conexao, '$tabela#', $where, $orderBy, $limit, $select, $leftjoin);
+        $dados = db$tabelaFistUpper#::CorrigeValoresSimplesAll($dados);
+        
+        if (! issetArray($dados)) {
+            return false;
+        } 
+        
+        return $dados;
+    }
+    
+    /**
+     * @return obj$tabelaFistUpper#[]
+     */
+    public static function ObjsList($Conexao, $where = "", $orderBy = "", $limit = "") {
+        $dados = db$tabelaFistUpper#::Listar($Conexao, $where, $orderBy, $limit);
+        $objs = array();
+        if (issetArray($dados)) {
+            foreach ($dados as $registro) {
+                $obj = new obj$tabelaFistUpper#($Conexao);
+                $obj->loadByArray($registro);
+
+                $objs[] = $obj;
+            }
+        }
+
+        if (issetArray($objs)) {
+            return $objs;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * @return obj$tabelaFistUpper#[]
+     */
+    public static function ObjsListLeft($Conexao, $where = "", $orderBy = "", $limit = "") {
+        $dados = db$tabelaFistUpper#::ListarLeft($Conexao, $where, $orderBy, $limit);
+        $objs = array();
+        if (issetArray($dados)) {
+            foreach ($dados as $registro) {
+                $obj = new obj$tabelaFistUpper#($Conexao);
+                $obj->loadLeftByArray($registro);
+
+                $objs[] = $obj;
+            }
+        }
+
+        if (issetArray($objs)) {
+            return $objs;
+        } else {
+            return false;
+        }
+    }
+
+    public static function template($ObjsList, $filename, $filefolder = '') {
+        if ($filefolder == '')
+            $filefolder = ___AppRoot . "adm/$tabela#/templates/";
+
+        if (!arquivos::existe($filefolder . $filename)) {
+            return "Arquivo <b>$filefolder/$filename</b> nao existe.";
+        }
+            
+        $str = arquivos::ler($filefolder . $filename);
+        if (!$str) {
+            return "";
+        } elseif (!str_contains($str, "<repeat>")) {
+            throw new jquerycmsException("$filefolder/$filename nao contem <repeat>");
+        }
+        
+        if (!issetArray($ObjsList)) {
+            return $str;
+        }
+
+        
+        $repeats = explode("<repeat>", $str);
+        $retorno = "";
+        foreach ($repeats as $block) {
+            $posJqueryBlock = strpos($block, "</repeat>");
+            if ($posJqueryBlock === false)
+                $retorno .= internacionalizacao::TraduzirString($block);
+            else {
+                $subblock = explode("</repeat>", $block);
+                if (isset($subblock[0])) {
+                    foreach ($ObjsList as $obj) {
+                        if ($obj instanceof obj$tabelaFistUpper#) {                        
+                            $retorno .= $obj->getHtmlTemplateString($subblock[0]);
+                        }
+                    }
+                }
+                if (isset($subblock[1]))
+                    $retorno .= internacionalizacao::TraduzirString($subblock[1]);
+            }
+        }
+
+        return $retorno;
+    }
+            
+    private static function CorrigeValoresSimples($dados) {
+        $dbaseCorrigeValoresSimples#
+        return $dados;
+    }
+    
+    private static function CorrigeValoresSimplesAll($dados) {
+        if ((! isset($dados)) || (!is_array($dados)))
+            return ""; 
+        
+        foreach ($dados as $key => $value) {
+            $dbaseCorrigeValoresAll#
+        }
+        
+        return $dados;
+    }
+}

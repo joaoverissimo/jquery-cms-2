@@ -1,0 +1,29 @@
+<?php
+
+require_once "base/dbase$tabelaFistUpper#.php";
+
+class db$tabelaFistUpper# extends dbase$tabelaFistUpper# {
+// <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">       
+    public static function Inserir($Conexao, $DbInserirValores#, $die = false) {
+        
+        return parent::Inserir($Conexao, $DbInserirValores#, $die);
+    }
+    
+    public static function Update($Conexao, $DbEditarValores#, $die = false) {
+        
+        return parent::Update($Conexao, $DbEditarValores#, $die);
+    }
+    
+    public static function Deletar($Conexao, $$primarykey#) {
+        /*$obj = new obj$tabelaFistUpper#($Conexao);
+        $obj->loadByCod($$primarykey#);
+        
+        $DbDeleteRel#*/
+        
+        return parent::Deletar($Conexao, $$primarykey#);
+    }
+// </editor-fold>
+
+    
+    
+}

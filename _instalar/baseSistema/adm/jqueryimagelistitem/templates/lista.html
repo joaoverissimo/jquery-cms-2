@@ -1,0 +1,38 @@
+<table class="table table-hover table-striped" id="tablelista">
+    <thead>
+        <tr>
+            <th>__(jqueryimagelistitem.cod)</th>
+        <th>__(jqueryimagelistitem.jqueryimagelist)</th>
+        <th>__(jqueryimagelistitem.jqueryimage)</th>
+        <th>__(jqueryimagelistitem.titulo)</th>
+        <th>__(jqueryimagelistitem.link)</th>
+        <th>__(jqueryimagelistitem.target)</th>
+        <th>__(jqueryimagelistitem.descricao)</th>
+        <th>__(jqueryimagelistitem.ordem)</th>
+        <th>__(jqueryimagelistitem.principal)</th>            
+            <th></th>
+        </tr>
+    </thead>
+    <repeat>
+        <tr>
+            <td>getCod</td>
+            <td>getJqueryimagelist</td>
+            <td>getJqueryimage</td>
+            <td>getTitulo</td>
+            <td>getLink</td>
+            <td>getTarget</td>
+            <td>getDescricao</td>
+            <td>getOrdem</td>
+            <td>getPrincipal</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-primary" href="editar.php?cod=getCod&jqueryimagelist=getJqueryimagelist"><i class="icon-pencil icon-white"></i> __(editar)</a>
+                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="deletar.php?cod=getCod&jqueryimagelist=getJqueryimagelist"><i class="icon-trash"></i> __(deletar)</a></li>                    
+                    </ul>
+                </div>            
+            </td>
+        </tr>
+    </repeat>
+</table>

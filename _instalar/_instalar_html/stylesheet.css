@@ -1,0 +1,142 @@
+body {
+background-color: #F2F2F2;
+font-family: Helvetica, Arial, Verdana, sans-serif;
+margin-left: 0px;
+margin-top: 0px;
+margin-right: 0px;
+margin-bottom: 0px;
+background-color: #282A34;
+}
+
+a { color: #08c; }
+a:link, a:visited, a:active { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h2 { color: #08c; border-bottom: solid 1px #08c;}
+
+#corpo {
+	background-repeat:    repeat-x;
+	background-position: center top;
+	background: url(back-index.jpg) repeat-x;
+	width: 100%;
+	height: 100%;
+}
+
+.inner {
+	width: 990px;
+	position: relative;
+	margin: 0 auto;	
+}
+
+#cabecalho {
+	height: 136px;
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+#cabecalho .logo{
+	height: 98px;
+	width: 230px;
+	margin-top: 17px;
+	margin-left: 31px;
+	float: left;
+	background-image: url(cabecalho-logo.png);
+}
+
+#main {
+	min-height: 360px;
+}
+
+#main .inner{
+	border: 1px solid #4082AE;
+	-webkit-box-shadow: rgba(0,0,0,.15) 0 1px 3px;
+	-moz-box-shadow: rgba(0,0,0,.15) 0 1px 3px;
+	box-shadow: rgba(0,0,0,.15) 0 1px 3px;
+	box-shadow: rgba(0,0,0,.15) 0 1px 6px url(0/IE9);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	_margin-left: expression(this.previousSibling==null?'0':'8px');
+	background-color: #F2F2F2;
+	padding: 20px;
+	margin-top: 20px;
+	margin-bottom: 30px;	
+	min-height: 310px;
+}
+
+#main .inner .execAll {
+position: absolute;
+right: 10px;
+width: 530px;
+top: 10px;
+height: 270px;
+overflow-y: scroll;
+overflow-x: hidden;
+border: 1px solid #CCC;
+background: white;
+}
+
+.btn {
+	background-image: url(btn_button.png);
+	height: 35px;
+	width: 180px;
+	padding-top: 14px;
+	text-align: center;
+	color: white !important;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+a.btn {color: white !important;}
+
+.avancar {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+.backend{
+	position: absolute;
+	left: 130px;
+	bottom: 30px;
+}
+
+.fend  {
+	position: absolute;
+	right: 210px;
+	bottom: 30px;
+}
+
+.small {
+font-size: 12px;
+color: #555;
+font-weight: normal;
+}
+
+/* FORMS //////////////////////////////////////////////////////////////////////////////*/
+
+.field {
+margin-bottom: 8px;
+clear: both;
+}
+
+
+.field label {
+width: 250px;
+display: block;
+float: left;
+margin-right: 5px;
+text-align: right;
+padding-top: 2px;
+}
+/* /FORMS //////////////////////////////////////////////////////////////////////////////*/
+
+#rodape{
+	background-image: url(rodape-cor.jpg);
+	height: 250px;
+}
+#rodape .inner{
+	background-image: url(rodape-cor.jpg);
+	text-align: center;
+	padding-top: 66px;
+}
+#rodape .inner a{color: white;}

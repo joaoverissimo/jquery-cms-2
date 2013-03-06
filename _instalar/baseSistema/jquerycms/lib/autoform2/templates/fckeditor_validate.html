@@ -1,0 +1,11 @@
+                
+                $(document).ready(function(){
+                        $('#$name').ckeditor();
+
+                        $('#$form').submit(function() {
+                            if ($('#$name').val() == '') {
+                                alert('Valor inválido para o editor de texto ´$label´');
+                                return false;
+                            }
+                        });
+                });

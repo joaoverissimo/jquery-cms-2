@@ -1,0 +1,41 @@
+<?php
+
+$meuDb = "$txtMysqlDataDb#";
+$httpCreator = "$txtUrl#";    
+
+$outputFolder = $_SERVER['DOCUMENT_ROOT']; //pasta onde os arquivo serão salvos
+if ($outputFolder[strlen($outputFolder) - 1] != "/")
+    $outputFolder.= "/";
+
+if (!isset($_GET['execAll']) || $_GET['execAll'] != 1) {
+    $outputFolder .= "_instalar/output/";
+}
+
+define('___MySqlDataServer', "$txtMySqlDataServer#");
+define('___MySqlDataUser', "$txtMySqlDataUser#");
+define('___MySqlDataPass', "$txtMySqlDataPass#");
+define('___MysqlDataDb', "$txtMysqlDataDb#");
+
+define('___AdmUser', "$txtAdmLogin#");
+define('___AdmPass', "$txtAdmPass#");
+
+function verificaAllPastas($outputFolder, $tabela = false) {
+    verificaPasta($outputFolder . "adm/");
+    verificaPasta($outputFolder . "adm/lib/");
+
+    if ($tabela) {
+        verificaPasta($outputFolder . "adm/" . $tabela . "/");
+        verificaPasta($outputFolder . "adm/" . $tabela . "/templates/");
+    }
+
+    verificaPasta($outputFolder . "jquerycms/");
+    verificaPasta($outputFolder . "jquerycms/dataClass/");
+    verificaPasta($outputFolder . "jquerycms/dataClass/base/");
+    verificaPasta($outputFolder . "jquerycms/dataObj/");
+    verificaPasta($outputFolder . "jquerycms/dataObj/base/");
+    verificaPasta($outputFolder . "jquerycms/upload/");
+    verificaPasta($outputFolder . "jquerycms/upload/images/");
+
+    verificaPasta($outputFolder . "locale/");
+    verificaPasta($outputFolder . "locale/pt-br");
+}

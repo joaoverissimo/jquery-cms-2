@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+	#RewriteRule ^produtos/([a-z0-9-]+)/([a-z0-9-]+)/?$ /produtos.php?id=$2&url=$1 [NC]
+	
+</IfModule>
+
+php_value date.timezone 'America/Sao_Paulo'

@@ -1,0 +1,197 @@
+<?php
+
+/**
+$fbaseAssComentarios#
+ * 
+ */
+class fbase$tabelaFistUpper# {
+    
+// <editor-fold defaultstate="collapsed" desc="Propriedades">
+	
+    protected $Conexao;
+    protected $die;
+        
+    $dbasecampos#
+    
+	$dbasepublics#
+	
+// </editor-fold>
+	
+// <editor-fold defaultstate="collapsed" desc="Gets And Sets">
+	
+	$fbaseGetAndSet#
+
+// </editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Objetos Associados">
+
+	$fbaseAssObjs#
+	        
+// </editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Load And Save">
+
+    public function loadByArray($registro, $prefixArr = '') {
+        $load = false;
+        $fbaseLoadByArrayFields#
+        
+        if (!$load && $this->die) {
+            throw new jquerycmsException("Problemas ao carregar o registro, não existe ou incopativel.");
+        }
+        
+        return $load;
+    }
+	
+    public function loadByCod($valor, $campo = '$primarykey#') {
+        $registro = db$tabelaFistUpper#::Carregar($this->Conexao, $valor, $campo);
+        
+        if ($registro === false && $this->die) {
+            throw new jquerycmsException("Problemas ao carregar o registro $valor, não existe.");
+        } elseif ($registro === false) {
+            return false;
+        }
+        
+        return $this->loadByArray($registro);
+    }
+	
+    public function loadLeftByArray($registro) {
+        $criarFbaseLoadLeftByArray#        
+        return $this->loadByArray($registro);
+    }
+    
+    public function loadLeftByCod($valor, $campo = '$primarykey#') {
+        $registro = db$tabelaFistUpper#::CarregarLeft($this->Conexao, $valor, $campo);
+
+        if ($registro === false && $this->die) {
+            throw new jquerycmsException("Problemas ao carregar o registro $valor, não existe.");
+        } elseif ($registro === false) {
+            return false;
+        }
+        
+        return $this->loadByArray($registro);
+    }
+    
+    public function Save() {
+        if (isset($this->$primarykey#) && is_numeric($this->$primarykey#)) {
+            return db$tabelaFistUpper#::Update($this->Conexao, $fbaseEditarValores#);
+        } else {    
+            $this->$primarykey# = db$tabelaFistUpper#::Inserir($this->Conexao, $fbaseInserirValores#);
+            return $this->$primarykey# != 0;
+        }      
+    }
+    
+    public function Delete() {
+        return db$tabelaFistUpper#::Deletar($this->Conexao, $this->$primarykey#);
+    }
+
+    
+// </editor-fold>
+
+// <editor-fold defaultstate="collapsed" desc="Stringuize">
+
+    public function getHtmlTemplateString($html, $prefix = '') {
+        $methods = @get_class_methods($this);
+        if (!issetArray($methods))
+            return $html;
+
+        //Caso Vazia
+        if ($html == "") {
+            $this->die = false;
+            echo "\nMetodo Permitidos para obj$tabelaFistUpper#: [";
+            foreach ($methods as $method) {
+                if (strpos($method, "get") !== false && strpos($method, "get") == 0) {
+                    echo "\n\t[$method]";
+                } elseif (strpos($method, "obj") !== false && strpos($method, "obj") == 0) {
+                    $obj = call_user_func(array($this, $method));
+                    echo "\n\n" . $method . "->";
+                    $obj->getHtmlTemplateString($html);
+                }
+            }
+            echo "\n]";
+
+            if ($this->die)
+                die("<h1>Valor para html nao pode ser nulo</h1>");
+        }
+
+        //Objs
+        $methodsArr = array();
+        foreach ($methods as $method) {
+            if (strpos($method, "obj") !== false && strpos($method, "obj") == 0) {
+                if (strpos($html, $method . "->") !== false) {
+                    $methodsArr[] = $method;
+                }
+            }
+        }
+        
+        if (issetArray($methodsArr)) {
+            usort($methodsArr, "stringuizeCmp");
+
+            foreach ($methodsArr as $method) {
+                $obj = call_user_func(array($this, $method));
+                $html = $obj->getHtmlTemplateString($html, $method . "->");
+
+                $html = str_replace($prefix . $method . "->", "", $html);
+            }
+        }
+                
+        //Gets
+        $methodsArr = array();
+        foreach ($methods as $method) {
+            if (strpos($method, "get") !== false && strpos($method, "get") == 0 && strpos($html, $method)) {
+                $methodsArr[] = $method;
+            }
+        }
+        
+        if (issetArray($methodsArr)) {
+            usort($methodsArr, "stringuizeCmp");
+
+            foreach ($methodsArr as $method) {
+                if (preg_match_all("/$method\((.*)\)/", $html, $matches)) {
+                    for ($index = 0; $index < count($matches[0]); $index++) {
+                        $params = explode(",", $matches[1][$index]);
+                        $params = array_map('trim', $params);
+                        $params = array_filter($params);
+                        
+                        $valor = @call_user_func_array(array($this, $method), $params);
+                        if (isset($valor) && $valor !== false) {
+                            $html = str_replace($prefix . $matches[0][$index], $valor, $html);
+                        } else {
+                            $html = str_replace($prefix . $matches[0][$index], '', $html);
+                        }
+                    }
+                } else {
+                    $valor = @call_user_func(array($this, $method));
+                    if (isset($valor) && $valor !== false) {
+                        $html = str_replace($prefix . $method, $valor, $html);
+                    } else {
+                        $html = str_replace($prefix . $method, '', $html);
+                    }
+                }
+            }
+        }
+        
+        //Traduz e retorna        
+        $html = internacionalizacao::TraduzirString($html);
+        $html = Fncs_TemplateHtml($html);
+        return $html;
+    }
+
+    public function getHtmlTemplateFile($file, $folder = "~/adm/$tabela#/templates/") {
+        if (!$file) {
+            $file = "__reference.html";
+        }
+        
+        $folder = str_replace("~/", ___AppRoot, $folder);
+        $html = arquivos::ler($folder . $file);
+        return $this->getHtmlTemplateString($html);
+    }
+    
+// </editor-fold>
+
+    function __construct($Conexao, $die = true) {
+        $this->Conexao = $Conexao;
+        
+        $this->die = $die;
+    }
+	
+}
