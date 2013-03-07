@@ -31,7 +31,17 @@ class dbJqueryimage extends dbaseJqueryimage {
     public static function InserirByFileImagems($Conexao, $FormFieldNome, $die = false) {
         $prefix = self::getMax($Conexao, true) . "_";
         $valor = arquivos::uploadImage($FormFieldNome . '-file', $prefix);
-        return parent::Inserir($Conexao, $valor, $die);
+        $exec = parent::Inserir($Conexao, $valor, $die);
+
+        if ($exec) {
+            //Redimensiona
+            $obj = new objJqueryimage($Conexao);
+            $obj->loadByCod($exec);
+
+            arquivos::resizeImageMaxSize($obj->getFileName(), 1000, 700);
+        }
+
+        return $exec;
     }
 
     public static function UpdateByFileImagems($Conexao, $FormFieldNome, $die = false) {
@@ -48,6 +58,9 @@ class dbJqueryimage extends dbaseJqueryimage {
             $obj->loadByCod($cod);
             arquivos::deletar($obj->getFileName());
 
+            //Redimensiona
+            arquivos::resizeImageMaxSize($obj->getFileName(), 1000, 700);
+            
             if (!parent::Update($Conexao, $cod, $newvalor, $die)) {
                 throw new jquerycmsException("Nao foi possivel salvar o registro!");
             }
