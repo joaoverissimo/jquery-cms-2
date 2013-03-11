@@ -15,6 +15,10 @@ class dbLocmapaponto extends dbaseLocmapaponto {
     }
 
     public static function Deletar($Conexao, $cod) {
+        if ($cod == 0 || $cod == 1) {
+            return false;
+        }
+
         /* $obj = new objLocmapaponto($Conexao);
           $obj->loadByCod($cod);
 
@@ -85,12 +89,27 @@ class CtrlMapaPontoView {
         $numero = $this->numero;
         $lat = $this->lat;
         $lng = $this->lng;
-        $heading = $this->heading;
-        $pitch = $this->pitch;
-        $zoom = $this->zoom;
         $comportamento = $this->comportamento;
         $this->suporta = $this->suporta;
 
+        if ($this->heading) {
+            $heading = $this->heading;
+        } else {
+            $heading = 0;
+        }
+
+        if ($this->pitch) {
+            $pitch = $this->pitch;
+        } else {
+            $pitch = 10;
+        }
+
+        if ($this->zoom) {
+            $zoom = $this->zoom;
+        } else {
+            $zoom = 1;
+        }
+        
         $s = "";
         if ($addJsMapsApi) {
             $s.= "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
@@ -520,7 +539,7 @@ class CtrlMapaPontoLatLng {
         $pitch = $this->pitch;
         $zoom = $this->zoom;
         $height = $this->height;
-        
+
         $s = "
         <div class='ctrlmapaponto'>
             <select id='{$name}comportamento' name='{$name}comportamento'>
