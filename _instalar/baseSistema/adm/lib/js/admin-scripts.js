@@ -58,4 +58,11 @@ $(document).ready(function() {
     
     //Enable the tooltip
     $('a[rel=tooltip]').tooltip();
+	
+	//Enable tabs
+    $('.tabbable .tab-pane.active').each(function(){
+        var tab_href = $($(this)).attr("id");
+        var s = "a[href=#" + tab_href + "]";
+        $(s).tab("show");
+    }); 
 });
