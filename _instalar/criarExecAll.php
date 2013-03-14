@@ -6,7 +6,6 @@ function criarExecAll($Conexao, $temlate, $dados, $outputFolder, $meuDb, $httpCr
 
     criarBootStrapData($Conexao, $temlate, $dados, $outputFolder, $meuDb, $httpCreator);
     criarBootStrapObjFend($temlate, $dados, $outputFolder, $meuDb);
-    criarLogin($outputFolder);
     criarHome($outputFolder, $dados);
     criarLibConfig($outputFolder);
     criarPermissoes($Conexao, $dados, $outputFolder, $meuDb);
@@ -41,18 +40,6 @@ function criarBootStrapObjFend($temlate, $dados, $outputFolder, $meuDb) {
     }
 
     arquivos::criar($s, $outputFolder . "jquerycms/dataObj/bootStrapObjFend.php");
-}
-
-function criarLogin($outputFolder) {
-    $temlate = obterDocumentRoot() . "_instalar/templates/";
-    $s = stringuize("login.html", array(
-        '$___AdmUser#' => ___AdmUser,
-        '$___AdmPass#' => ___AdmPass
-            )
-            , $temlate);
-
-    $filename = $outputFolder . "adm/login.php";
-    arquivos::criar($s, $filename);
 }
 
 function criarHome($outputFolder, $dados) {
