@@ -253,7 +253,7 @@ class autoform2 {
 
     function url($label, $name, $value = '', $validate = '0', $span = '', $add = '') {
         $add = $this->retornarAddArray($add, "add, class, labelclass, precontrol, poscontrol, divcontrolsclass, spanclass, maxlength, type");
-        
+
         $s = $this->FieldIn();
         $s .= "\n\t\t<label class='control-label {$add['labelclass']}' for='$name'>$label: </label>";
 
@@ -682,9 +682,12 @@ class autoform2 {
         $this->formOut .= "<div style='clear: both'></div>";
         $this->formOut .= "\n\t</form>\n";
     }
-    
+
     public static function LabelControlGroup($label, $htmlInnerCtrl) {
-        return "<div class='control-group'><label class='control-label '>$label: </label><div class='controls '>" . $htmlInnerCtrl . "</div></div>";
+        if ($label) {
+            $label = "$label: ";
+        }
+        return "<div class='control-group'><label class='control-label '>$label</label><div class='controls '>" . $htmlInnerCtrl . "</div></div>";
     }
 
 }
