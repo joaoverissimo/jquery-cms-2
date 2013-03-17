@@ -140,8 +140,9 @@ class CtrlLocalizacao {
             function {$name}_destaque() {
                 var s = '$cidadeDestaque';
                 var start = false;
-                s.split(',').forEach(function (e) {
-                    var value = e.trim();
+                var sp = s.split(',');
+                for (var i = 0; i < sp.length; i++) {
+                    var value = $.trim(sp[i]);
                     if (start === false) {
                         $('#{$name}_cidade option[value='+ value +']').insertBefore($('#{$name}_cidade option:eq(1)'));     
                     } else {
@@ -149,10 +150,9 @@ class CtrlLocalizacao {
                     }
 
                     start = value;
-                });
+                }
                 
                 $('#{$name}_cidade option[value='+ start +']').after('<option disabled>------------------</option>');
-
             }
             
             $(document).ready(function(){
