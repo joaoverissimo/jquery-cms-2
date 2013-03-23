@@ -84,7 +84,7 @@ class arquivos {
     }
 
     public static function deletar($filename) {
-        if (self::existe($filename))
+        if (self::existe($filename) && is_file($filename))
             return unlink($filename);
         else
             return false;
