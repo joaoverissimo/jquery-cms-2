@@ -80,6 +80,23 @@ class CtrlMapaPontoView {
         $this->suporta = $obj->getSuportaview();
     }
 
+	public function loadByCtrlLocalizacao(CtrlLocalizacao $ctrlLocalizacao) {
+        $estado = new objLocestado($this->Conexao, false);
+        $estado->loadByCod($ctrlLocalizacao->estado);
+
+        $cidade = new objLoccidade($this->Conexao, false);
+        $cidade->loadByCod($ctrlLocalizacao->cidade);
+
+        $bairro = new objLocbairro($this->Conexao, false);
+        $bairro->loadByCod($ctrlLocalizacao->bairro);
+
+        $this->uf = $estado->getUf();
+        $this->cidade = $cidade->getNome();
+        $this->bairro = $bairro->getNome();
+        $this->rua = $ctrlLocalizacao->rua;
+        $this->numero = $ctrlLocalizacao->numero;
+    }
+
     public function getHead($addJsMapsApi = true) {
         $name = $this->CtrlName;
         $uf = $this->uf;
