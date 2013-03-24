@@ -238,6 +238,7 @@ class dataFilter {
      * @return string
      */
     const op_notnull = "notnull";
+    const op_injectsql = "injectsql";
 
 // </editor-fold>
 
@@ -366,6 +367,8 @@ class dataFilter {
                 $s .= " {$filter[0]} IS NULL";
             } elseif ($op == "notnull") {
                 $s .= " {$filter[0]} IS NOT NULL";
+            } elseif ($op == "injectsql") {
+                $s .= " {$filter[0]} {$filter[1]}";
             } else {
                 $s .= " {$filter[0]} {$filter[2]} '{$filter[1]}'";
             }
@@ -428,6 +431,8 @@ class dataFilter {
                 $s .= " {$filter[0]} IS NULL";
             } elseif ($op == "notnull") {
                 $s .= " {$filter[0]} IS NOT NULL";
+            } elseif ($op == "injectsql") {
+                $s .= " {$filter[0]} {$filter[1]}";
             } else {
                 $s .= " {$filter[0]} {$filter[2]} :$bindkey";
                 $this->binds[$bindkey] = $filter[1];
