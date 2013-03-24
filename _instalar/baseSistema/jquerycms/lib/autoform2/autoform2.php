@@ -248,7 +248,7 @@ class autoform2 {
         $s .= "</div>";
         $s .= $this->FieldOut();
         $this->formOut .= $s;
-        $this->javascript .= "\n\n\t " . '$(document).ready(function(){$("#' . $name . '").keyup(function(){var e=$(this).val();var t=e.length;var n=1;var r="";for(var i=t-1;i>=0;i--){if(!isNaN(parseFloat(e[i]))&&isFinite(e[i])){r=e[i]+r;if(n==3&&i>0){n=0;r="."+r}n++}}if(r){r="R$ "+r+",00";$(this).siblings("i").text(r)}else{$(this).siblings("i").text("")}}).change(function(){var e=$(this).val();if(e.indexOf(".")!==-1||e.indexOf(",")!==-1){var t=$(this).closest(".control-group").find(".control-label").text().replace(": ", "");alert("Você digitou virgula ou ponto no campo \'"+t+"\'.")}if(e.indexOf(",00")!==-1){e=e.substr(0,e.length-3)}$(this).val(e.replace(/[^0-9]/g,""));$(this).keyup()}).after("<i></i>")})';
+        $this->javascript .= "\n\n\t " . '$(document).ready(function(){$("#' . $name . '").keyup(function(){var e=$(this).val();var t=e.length;var n=1;var r="";for(var i=t-1;i>=0;i--){if(!isNaN(parseFloat(e[i]))&&isFinite(e[i])){r=e[i]+r;if(n==3&&i>0){n=0;r="."+r}n++}}if(r){r="R$ "+r+",00";$(this).siblings("i").text(r)}else{$(this).siblings("i").text("")}}).change(function(){var e=$(this).val();if(e.indexOf(".")!==-1||e.indexOf(",")!==-1){var t=$(this).closest(".control-group").find(".control-label").text().replace(": ", "");alert("Você digitou virgula ou ponto no campo \'"+t+"\'.")}if(e.indexOf(",00")!==-1){e=e.substr(0,e.length-3)}$(this).val(e.replace(/[^0-9]/g,""));$(this).keyup()}).after("<i></i>"); $("#' . $name . '").change();})';
     }
 
     function url($label, $name, $value = '', $validate = '0', $span = '', $add = '') {
