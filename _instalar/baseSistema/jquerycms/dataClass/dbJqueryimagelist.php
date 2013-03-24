@@ -16,10 +16,8 @@ class dbJqueryimagelist extends dbaseJqueryimagelist {
     }
 
     public static function Deletar($Conexao, $cod) {
-        /* $obj = new objJqueryimagelist($Conexao);
-          $obj->loadByCod($cod);
-
-         */
+        $where = new dataFilter(dbJqueryimagelistitem::_jqueryimagelist, $cod);
+        dbJqueryimagelistitem::DeletarWhere($Conexao, $where);
 
         return parent::Deletar($Conexao, $cod);
     }
