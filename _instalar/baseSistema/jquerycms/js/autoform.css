@@ -4,3 +4,14 @@
 .control-group .controls.FormfileImagems .div_field_imgAtual span{font-size: x-small;margin-left: 4px;}
 
 .brDate {background: url(tabela_admin/calendar-icon.png) no-repeat right,0 white;}
+
+/* form-inline */
+.form-inline {}
+.form-inline div {clear: none !important;}
+.form-inline .control-group {float: left;margin: 0px 10px 0px 0px;}
+
+.form-inline .control-group input[type="text"], 
+.form-inline .control-group select, 
+.form-inline .control-group text-area {width: 120px;}
+
+.form-inline .form-actions {float: left;margin: 0px;padding: 23px 0px 0px 0px;background-color: transparent;border: 0;}
