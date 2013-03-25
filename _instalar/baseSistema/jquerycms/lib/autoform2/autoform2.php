@@ -1,6 +1,5 @@
 <?php
 
-require_once 'ckeditor/ckeditor.php';
 require_once 'autoform2-tabs.php';
 
 class autoform2 {

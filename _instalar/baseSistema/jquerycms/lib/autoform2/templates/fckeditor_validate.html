@@ -1,9 +1,10 @@
                 
                 $(document).ready(function(){
-                        $('#$name').ckeditor();
+                        CKEDITOR.replace( '$name' );
 
                         $('#$form').submit(function() {
-                            if ($('#$name').val() == '') {
+                            var valor = CKEDITOR.instances["$name"].getData();
+                            if (valor == '') {
                                 alert('Valor inválido para o editor de texto ´$label´');
                                 return false;
                             }
