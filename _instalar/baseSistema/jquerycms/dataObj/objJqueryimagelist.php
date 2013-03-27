@@ -26,6 +26,10 @@ class objJqueryimagelist extends fbaseJqueryimagelist {
         return $this->obtemJqueryimagelistitemRel($orderByField, $orderByOrientation, $limit);
     }
 
+	/**
+     * Obtem o primeiro ou default item
+     * @return objJqueryimagelist
+     */  
     public function objItemFirstOrDefault() {
         if (!isset($this->firstordefault)) {
             $this->firstordefault = dbJqueryimagelist::obtemFirstOrDefault($this->Conexao, $this->getCod());
