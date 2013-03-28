@@ -30,7 +30,13 @@ class dbJqueryimage extends dbaseJqueryimage {
 
     public static function InserirByFileImagems($Conexao, $FormFieldNome, $die = false) {
         $prefix = self::getMax($Conexao, true) . "_";
-        $valor = arquivos::uploadImage($FormFieldNome . '-file', $prefix);
+        
+		if (isset($_FILES[$FormFieldNome . '-file']) && $_FILES[$FormFieldNome . '-file']["size"] > 0) {
+            $valor = arquivos::uploadImage($FormFieldNome . '-file', $prefix);
+		} else {
+			$valor = $prefix . "imagem.jpg";
+		}
+		
         $exec = parent::Inserir($Conexao, $valor, $die);
 
         if ($exec) {
