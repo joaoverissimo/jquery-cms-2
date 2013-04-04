@@ -13,7 +13,7 @@ $editarValoresPost#
         $exec = $registro->Save();
 
         if ($exec && $adm_tema != 'branco') {
-            header("Location: index.php");
+            header("Location: $cancelLink");
         } else {
             $msg = fEnd_MsgString("O registro foi inserido.$fEnd_closeTheIFrameImDone", 'success');
         }

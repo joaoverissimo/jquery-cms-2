@@ -28,7 +28,7 @@ class objJqueryimagelist extends fbaseJqueryimagelist {
 
 	/**
      * Obtem o primeiro ou default item
-     * @return objJqueryimagelist
+     * @return objJqueryimagelistitem
      */  
     public function objItemFirstOrDefault() {
         if (!isset($this->firstordefault)) {

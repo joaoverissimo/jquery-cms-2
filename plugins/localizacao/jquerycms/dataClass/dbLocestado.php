@@ -139,20 +139,22 @@ class CtrlLocalizacao {
         
             function {$name}_destaque() {
                 var s = '$cidadeDestaque';
-                var start = false;
-                var sp = s.split(',');
-                for (var i = 0; i < sp.length; i++) {
-                    var value = $.trim(sp[i]);
-                    if (start === false) {
-                        $('#{$name}_cidade option[value='+ value +']').insertBefore($('#{$name}_cidade option:eq(1)'));     
-                    } else {
-                        $('#{$name}_cidade option[value='+ value +']').insertAfter($('#{$name}_cidade option[value='+ start +']'));
-                    }
+				if (s) {
+					var start = false;
+					var sp = s.split(',');
+					for (var i = 0; i < sp.length; i++) {
+						var value = $.trim(sp[i]);
+						if (start === false) {
+							$('#{$name}_cidade option[value='+ value +']').insertBefore($('#{$name}_cidade option:eq(1)'));     
+						} else {
+							$('#{$name}_cidade option[value='+ value +']').insertAfter($('#{$name}_cidade option[value='+ start +']'));
+						}
 
-                    start = value;
-                }
-                
-                $('#{$name}_cidade option[value='+ start +']').after('<option disabled>------------------</option>');
+						start = value;
+					}
+					
+					$('#{$name}_cidade option[value='+ start +']').after('<option disabled>------------------</option>');
+				}
             }
             
             $(document).ready(function(){

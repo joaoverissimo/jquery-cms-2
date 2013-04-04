@@ -128,7 +128,9 @@ class fbase$tabelaFistUpper# {
 
             foreach ($methodsArr as $method) {
                 $obj = call_user_func(array($this, $method));
-                $html = $obj->getHtmlTemplateString($html, $method . "->");
+				if (is_object($obj)) {
+					$html = $obj->getHtmlTemplateString($html, $method . "->");
+				}
 
                 $html = str_replace($prefix . $method . "->", "", $html);
             }
