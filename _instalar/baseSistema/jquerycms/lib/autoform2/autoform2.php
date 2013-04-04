@@ -187,7 +187,10 @@ class autoform2 {
               success: function(label) {
                 label.closest('.control-group').removeClass('error');
               }
-        " . '}); ' . $add['onready'] . '}); ';
+        " . '}); ' . 
+            $add['onready'] . '
+            $("#' . $name . '").submit(function(){ $(".btn").attr("disabled","disabled"); });    
+        }); ';
         $this->formName = $name;
     }
 
