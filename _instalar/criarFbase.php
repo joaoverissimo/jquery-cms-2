@@ -43,7 +43,7 @@ function criarFbaseAssObjs($relacoes) {
      */
     public function objOBJNAME(){
     	if (! isset(\$this->_objOBJNAME)) { 
-    		\$obj = new objUpperCampo(\$this->Conexao, \$this->die); 
+    		\$obj = new objUpperCampo(\$this->Conexao, false); 
     		\$obj->loadByCod(\$this->COLUMN_NAME); 
     		\$this->_objOBJNAME = \$obj; 
     	} 

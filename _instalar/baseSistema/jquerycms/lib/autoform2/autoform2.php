@@ -189,7 +189,7 @@ class autoform2 {
               }
         " . '}); ' . 
             $add['onready'] . '
-            $("#' . $name . '").submit(function(){ $(".btn").attr("disabled","disabled"); });    
+            $("#' . $name . '").submit(function(){ if ($("#' . $name . '").valid()) {$(".btn").attr("disabled","disabled"); }});
         }); ';
         $this->formName = $name;
     }

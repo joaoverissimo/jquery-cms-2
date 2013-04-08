@@ -127,10 +127,14 @@ class fbase$tabelaFistUpper# {
             usort($methodsArr, "stringuizeCmp");
 
             foreach ($methodsArr as $method) {
-                $obj = call_user_func(array($this, $method));
-				if (is_object($obj)) {
-					$html = $obj->getHtmlTemplateString($html, $method . "->");
-				}
+				try {
+					$obj = call_user_func(array($this, $method));
+					if (is_object($obj)) {
+						$html = $obj->getHtmlTemplateString($html, $method . "->");
+					}
+				} catch (Exception $exc) {
+                    unset($exc);
+                }
 
                 $html = str_replace($prefix . $method . "->", "", $html);
             }
