@@ -85,7 +85,6 @@ function Fncs_LerDataTime($data) {
 }
 
 function Fncs_LerDataTimeRtData($data) {
-    $data = Funcs_LerDataTime($data);
     $data = explode(" ", $data);
     if (isset($data[0]))
         return $data[0];
@@ -144,7 +143,7 @@ function str_toInteger($s) {
 
 function str_dataPtBrToMySql($data) {
     try {
-        return implode('-', array_reverse(split('[/]', $data)));
+        return implode('-', array_reverse(explode('/', $data)));
     } catch (Exception $exc) {
         echo "<!--ATENÇÃO: Ocorreu um erro ao converter a data; Função dataPtBrToMySql().-->";
         return $data;
