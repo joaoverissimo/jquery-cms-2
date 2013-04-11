@@ -241,6 +241,9 @@ function toRewriteString($s) {
     $s = str_replace("  ", " ", $s);
     $s = str_replace(" ", "-", $s);
 
+    $s = str_replace("---", "-", $s);
+    $s = str_replace("--", "-", $s);
+	
     $s = preg_replace("/[^a-zA-Z0-9_.-]/", "", $s);
     $s = str_replace("-.", ".", $s);
     return $s;
