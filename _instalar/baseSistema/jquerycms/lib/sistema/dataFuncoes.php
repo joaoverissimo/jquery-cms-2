@@ -398,11 +398,13 @@ class dataFilter {
                 $s .= " {$filter[0]} LIKE :$bindkey";
                 $this->binds[$bindkey] = "%{$filter[1]}%";
             } elseif ($op == "incommavalues") {
-                $s .= " {$filter[0]} IN (:$bindkey)";
-                $this->binds[$bindkey] = self::getCommaValues($filter[1]);
+                //$s .= " {$filter[0]} IN (:$bindkey)";
+                //$this->binds[$bindkey] = self::getCommaValues($filter[1]);
+				$s .= " {$filter[0]} IN (" . self::getCommaValues($filter[1]) . ")";
             } elseif ($op == "notincommavalues") {
-                $s .= " {$filter[0]} NOT IN (:$bindkey)";
-                $this->binds[$bindkey] = self::getCommaValues($filter[1]);
+                //$s .= " {$filter[0]} NOT IN (:$bindkey)";
+                //$this->binds[$bindkey] = self::getCommaValues($filter[1]);
+				$s .= " {$filter[0]} NOT IN (" . self::getCommaValues($filter[1]) . ")";
             } elseif ($op == "inarrayvalues") {
                 $s .= " {$filter[0]} IN (:$bindkey)";
                 $this->binds[$bindkey] = self::getArrayValues($filter[1]);
