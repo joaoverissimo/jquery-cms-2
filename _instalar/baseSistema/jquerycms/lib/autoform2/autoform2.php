@@ -511,7 +511,7 @@ class autoform2 {
         $s .= "</div>";
         $s .= $this->FieldOut();
         $this->formOut .= $s;
-        $this->javascript .= "\n\n\t $(document).ready(function() { $('#{$name}DDD').change(function (){ $('#{$name}').val($('#{$name}DDD').val() + '-' + $('#{$name}NUM').val()); }); $('#{$name}NUM').change(function (){ $('#{$name}').val($('#{$name}DDD').val() + '-' + $('#{$name}NUM').val()); }); }); \n";
+        $this->javascript .= "\n\n\t $(document).ready(function() { $('#{$name}DDD').change(function (){ $('#{$name}').val($('#{$name}DDD').val() + '-' + $('#{$name}NUM').val()).trigger('change'); }); $('#{$name}NUM').change(function (){ $('#{$name}').val($('#{$name}DDD').val() + '-' + $('#{$name}NUM').val()).trigger('change'); }); }); \n";
     }
 
     function data($label, $name, $value = '', $validate = '0', $span = '', $add = '') {
