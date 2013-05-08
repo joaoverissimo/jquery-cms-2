@@ -22,3 +22,6 @@ No ambiente de produção, somente será necessário permissão de escrita nas p
 ~/cache
 ~/jquerycms/upload
 
+Wiki do Projeto
+==============
+<a href='https://github.com/joaoverissimo/jquery-cms-2/wiki'>Wiki</a>

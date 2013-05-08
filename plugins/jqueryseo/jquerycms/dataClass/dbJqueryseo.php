@@ -195,7 +195,7 @@ class CtrlJquerySeo {
                         $('#{$ctrlname}_palavra_container').sortable({});
                         $('#{$ctrlname}_palavra_container').disableSelection();
                         ";
-        if ($tags) {
+        if ($this->seocod) {
             $html.= "
                 $('#{$ctrlname}_titulo').val('$titulo');
                 $('#{$ctrlname}_descricao').val('$descricao');
