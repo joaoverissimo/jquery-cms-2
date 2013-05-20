@@ -13,7 +13,7 @@ $dados = dbUsuariocontatotipo::ObjsList($Conexao, $where, 'ordem asc');
 ?><!DOCTYPE HTML>
 <html>
     <head>
-        <title><?php echo __('table_usuariocontatotipo'); ?> - Listar</title>
+        <title>Ordem</title>
 
         <?php include '../lib/masterpage/head.php'; ?>
 
@@ -43,7 +43,7 @@ $dados = dbUsuariocontatotipo::ObjsList($Conexao, $where, 'ordem asc');
         <div class="main">
             <div class="inner">
                 <div class="page-header">
-                    <h3><?php echo __('table_usuariocontatotipo'); ?> <small>Ordem</small></h3>
+                    <h3>Ordem</h3>
                 </div>
 
                 <div class="btn-toolbar">
@@ -57,7 +57,7 @@ $dados = dbUsuariocontatotipo::ObjsList($Conexao, $where, 'ordem asc');
                         <?php foreach ($dados as $obj) { ?>
 
                             <li class="navbar-inner" id="listItem_<?php echo $obj->getCod(); ?>">
-                                <span class="titulo"><?php echo $obj->getTituo(); ?></span>
+                                <span class="titulo"><?php echo $obj->getTitulo(); ?></span>
                             </li>
 
                         <?php } ?>
