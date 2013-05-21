@@ -197,7 +197,7 @@ function Fncs_EnviarEmail($para, $from, $mensagemHTML, $assunto, $charset = "utf
     }
 }
 
-function toRewriteString($s) {
+function toRewriteString($s, $permitePonto = false) {
     $s = trim($s);
     $s = mb_strtolower($s, 'UTF-8');
 
@@ -243,7 +243,11 @@ function toRewriteString($s) {
 
     $s = str_replace("---", "-", $s);
     $s = str_replace("--", "-", $s);
-	
+
+    if ($permitePonto === false) {
+        $s = str_replace(".", "", $s);
+    }
+
     $s = preg_replace("/[^a-zA-Z0-9_.-]/", "", $s);
     $s = str_replace("-.", ".", $s);
     return $s;
