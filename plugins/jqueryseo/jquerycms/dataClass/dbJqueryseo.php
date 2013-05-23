@@ -94,6 +94,8 @@ class CtrlJquerySeo {
     public function getCtrl() {
         $ctrlname = $this->ctrlname;
 
+        $palavras = dbJqueryseopalavra::ObjsList($this->Conexao, "", new dataOrder(dbJqueryseopalavra::_count, "desc"), "0,20");
+
         $html = "<div class='{$ctrlname}'>
                     <div class='control-group'>
                         <label class='control-label' for='titulo'>SEO: </label>
@@ -114,9 +116,23 @@ class CtrlJquerySeo {
                                     <span class='titulo'>Palavras-chave</span>
                                     <input type='text' id='{$ctrlname}_palavrainput' name='{$ctrlname}_palavra' value='' placeholder='Digite aqui uma keyword...'>
                                     <button type='button' class='btn btn-primary btn-mini' id='{$ctrlname}_addkey' rel='tooltip' title='Adicionar Palavra-Chave' tabIndex='-1'><i class='icon-plus icon-white'></i></button>
+                                    ";
+        if ($palavras) {
+            $html .= "<button type='button' class='btn btn-primary btn-mini' id='{$ctrlname}_showcomum' rel='tooltip' title='Adicionar Palavra-Chave' tabIndex='-1'><i class='icon-tags icon-white'></i></button>";
+        }
+        $html .= "
                                 </label>
                                 <div id='{$ctrlname}_palavra_container'></div>
-                            </div>
+                                    ";
+        if ($palavras) {
+            $html .= "<div id='{$ctrlname}_comum'>";
+            foreach ($palavras as $palavra) {
+                $html .= "<span onclick=\"{$ctrlname}_addKeyword(('{$palavra->getPalavra()}'));\">{$palavra->getPalavra()}</span>";
+            }
+            $html .= "</div>";
+        }
+
+        $html .= "          </div>
                         </div>
                     </div>
                 </div>";
@@ -170,9 +186,9 @@ class CtrlJquerySeo {
                             }
                         });
                         
-                        $('#{$ctrlname}_palavrainput').focusout(function(){
+                        /*$('#{$ctrlname}_palavrainput').focusout(function(){
                             {$ctrlname}_addKeywordsGroup();
-                        });
+                        });*/
                         
                         $('#{$ctrlname}_palavrainput').autocomplete({
                             source: '/adm/jqueryseo/ctrl/ajax.php',
@@ -190,6 +206,10 @@ class CtrlJquerySeo {
                         
                         $('#{$ctrlname}_palavra_container .palavra a.close').click(function(){
                             $(this).closest('.palavra').remove();
+                        });
+                        
+                        $('#{$ctrlname}_showcomum').click(function(){
+                            $('#{$ctrlname}_comum').slideToggle();
                         });
                         
                         $('#{$ctrlname}_palavra_container').sortable({});
@@ -211,10 +231,12 @@ class CtrlJquerySeo {
                     .{$ctrlname} {}
                     .{$ctrlname} .controls {}
                     .{$ctrlname} .controls .resumo {}
-                    .{$ctrlname} .controls .{$ctrlname}_ctrl {display: none;border: 1px #ECECEC solid; background: #FAFAFA; padding: 10px;}
+                    .{$ctrlname} .controls .{$ctrlname}_ctrl {display: none;border: 1px #ECECEC solid; background: #FAFAFA; padding: 10px;position: relative;}
                     .{$ctrlname} .controls .{$ctrlname}_ctrl label {}
                     .{$ctrlname} .controls .{$ctrlname}_ctrl label span.titulo {width: 120px; display: block; float: left; text-align: right; padding-right: 10px;color: #999;}
                     .{$ctrlname} .controls #{$ctrlname}_palavra_container .palavra {display: inline-block; margin: 3px; margin-right: 10px; padding: 2px; height: 25px;}
+                    .{$ctrlname} .controls #{$ctrlname}_comum {display: none;width: 420px; height: 155px; position: absolute; top: 7px; right: 7px; overflow: hidden;}
+                    .{$ctrlname} .controls #{$ctrlname}_comum span {float: left; display: block; padding: 1px 2px 2px 4px; margin-left: 5px; margin-bottom: 2px; border-right: 1px solid rgb(202, 202, 202); border-bottom: 1px solid rgb(202, 202, 202); background: rgb(238, 238, 238); cursor: pointer; font-size: 12px; font-weight: bold; font-family: Arial;}
                 </style>";
 
         return $html;
