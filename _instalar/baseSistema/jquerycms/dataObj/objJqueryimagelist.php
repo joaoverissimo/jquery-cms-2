@@ -37,5 +37,9 @@ class objJqueryimagelist extends fbaseJqueryimagelist {
 
         return $this->firstordefault;
     }
+	
+	public function RecalcInfo() {
+        return dbJqueryimagelist::RecalcInfo($this->Conexao, $this->getCod());
+    }
 
 }

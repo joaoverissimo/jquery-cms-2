@@ -213,6 +213,7 @@ function toRewriteString($s, $permitePonto = false) {
     $s = str_replace("ê", "e", $s);
     $s = str_replace("è", "e", $s);
     $s = str_replace("ë", "e", $s);
+    $s = str_replace("&", "e", $s);
 
     //letra i
     $s = str_replace("í", "i", $s);

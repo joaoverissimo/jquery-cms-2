@@ -69,6 +69,23 @@ class dbJqueryimagelist extends dbaseJqueryimagelist {
 
         return false;
     }
+	
+	public static function RecalcInfo($Conexao, $cod, $updatedb = true) {
+        $sql = "SELECT COUNT(*) AS rt FROM  `jqueryimagelistitem` WHERE  `jqueryimagelist` = '{$cod}'";
+        $dados = dataExecSqlDireto($Conexao, $sql, false);
+
+        $info = 0;
+        if (isset($dados['rt'])) {
+            $info = $dados['rt'];
+        }
+
+        if ($updatedb) {
+            //Se $updatedb seja falso nao executa alteracao no db - ideal para inserir imoveis
+            dbJqueryimagelist::Update($Conexao, $cod, $info);
+        }
+
+        return $info;
+    }
 
 }
 
