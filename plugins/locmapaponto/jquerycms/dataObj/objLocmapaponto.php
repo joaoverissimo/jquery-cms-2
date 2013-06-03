@@ -89,6 +89,8 @@ class objLocmapaponto extends fbaseLocmapaponto {
         $cod = $this->getCod();
         $lat = $this->getLat();
         $lng = $this->getLng();
+		
+        $title = str_replace("'", "", $title);
 
         if (strpos($height, "px") === false) {
             $height .= "px";
