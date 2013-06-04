@@ -12,6 +12,11 @@ if (isset($_GET['palavra']) && $_GET['palavra']) {
     $palavra = mysql_real_escape_string($palavra);
     $palavrastr = $palavra;
     $where = "palavra LIKE '%$palavra%'";
+	
+	$objPalavra = new objJqueryseopalavra($Conexao, false);
+    if ($objPalavra->loadByCod(toRewriteString($palavra), 'url')) {
+        header("Location: " . $objPalavra->getRewriteUrl());
+    }
 }
 
 if (isset($_GET['url']) && $_GET['url']) {

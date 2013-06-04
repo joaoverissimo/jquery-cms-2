@@ -310,9 +310,9 @@ class CtrlJquerySeoBusca {
             </script>
             <form class='form-search' method='get' id='$ctrlName' action='/seobusca.php'>
                 <label>
-                    <input type='text' id='palavra' name='palavra' value='$default_value' class='input-medium search-query'></input>
+                    <input type='text' id='palavra' name='palavra' value='$default_value' class='input-medium search-query' x-webkit-speech></input>
                 </label>
-                <button type='submit' class='btn'>Search</button>
+                <button type='submit' class='btn'>Buscar</button>
             </form>
             ";
 
