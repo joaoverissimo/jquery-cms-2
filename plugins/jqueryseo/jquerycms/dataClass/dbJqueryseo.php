@@ -304,7 +304,10 @@ class CtrlJquerySeoBusca {
                 $(document).ready(function(){
                     $('#$ctrlName input').autocomplete({
                         source: '/adm/jqueryseo/ctrl/ajax.php',
-                        minLength: 3
+                        minLength: 3,
+                        select: function( event, ui ) {
+                            $(event.currentTarget).closest('form').find('.btn').click();
+                        }
                     });
                 });
             </script>
