@@ -7,6 +7,7 @@ class dbJqueryimagelistitem extends dbaseJqueryimagelistitem {
 // <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">       
     public static function Inserir($Conexao, $jqueryimagelist, $jqueryimage, $titulo, $link, $target, $descricao, $ordem, $principal, $die = false) {
 		$imagelist = new objJqueryimagelist($Conexao);
+		$imagelist->loadByCod($jqueryimagelist);
         $imagelist->setInfo($imagelist->getInfo() + 1);
         $imagelist->Save();
 

@@ -11,7 +11,7 @@ class autoform2tabs {
         $id = toRewriteString($id);
 
         $this->id = $id;
-        $this->html = "<div class='tabbable tabs-left' id='$id'><ul class='nav nav-tabs'>";
+        $this->html = "<div class='tabbable $class' id='$id'><ul class='nav nav-tabs'>";
     }
 
     public function start() {
