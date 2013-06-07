@@ -33,6 +33,7 @@ $template = array(
 
                 <div class="btn-toolbar">
                     <a href="inserir.php" class="btn btn-primary"><i class="icon-plus icon-white"></i> Inserir</a>                    
+                    <a href="ordem.php" class="btn btn-primary"><i class="icon-move icon-white"></i> Ordem</a>                    
                 </div>
                                 
                 <?php echo $msg; ?>
