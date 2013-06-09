@@ -7,6 +7,9 @@ $msg = "";
 
 //Lista os dados
 $where = new dataFilter('jqueryadminmenu.cod', 0, dataFilter::op_different);
+$where->add(dbJqueryadminmenu::_codmenu, 0);
+$where->add(dbJqueryadminmenu::_patch, "home", dataFilter::op_different);
+
 $orderBy = new dataOrder('jqueryadminmenu.ordem', 'asc');
 $dados = dbJqueryadminmenu::ObjsList($Conexao, $where, $orderBy);
 ?><!DOCTYPE HTML>

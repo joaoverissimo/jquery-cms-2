@@ -102,5 +102,19 @@ class objJqueryseo extends fbaseJqueryseo {
         
         return $s;
     }
+	
+	public function AddKeyWord($palavra) {
+        $objSeoPalavra = new objJqueryseopalavra($this->Conexao, false);
+        if (!$objSeoPalavra->loadByCod($palavra, 'palavra')) {
+            $objSeoPalavra->setPalavra($palavra);
+            $objSeoPalavra->Save();
+        }
+
+        $objSeoRel = new objJqueryseorel($this->Conexao, false);
+        $objSeoRel->setSeo($this->getCod());
+        $objSeoRel->setPalavra($objSeoPalavra->getCod());
+        
+        return $objSeoRel->Save();
+    }
 
 }
