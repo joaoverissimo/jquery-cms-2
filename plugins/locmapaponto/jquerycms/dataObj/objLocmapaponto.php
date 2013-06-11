@@ -137,4 +137,14 @@ class objLocmapaponto extends fbaseLocmapaponto {
         return $s;
     }
 
+	public function getGmapsStaticImage($zoom = 12, $width = "300px", $height = "200px") {
+        $lat = $this->getLat();
+        $lng = $this->getLng();
+
+        $width = str_replace("px", "", $width);
+        $height = str_replace("px", "", $height);
+
+        return "http://maps.googleapis.com/maps/api/staticmap?center={$lat},{$lng}&zoom={$zoom}&size={$width}x{$height}&maptype=roadmap%20&markers=color:red%7C{$lat},{$lng}&sensor=false";
+    }
+	
 }
