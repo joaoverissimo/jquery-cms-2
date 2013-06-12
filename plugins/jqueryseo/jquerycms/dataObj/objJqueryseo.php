@@ -84,14 +84,18 @@ class objJqueryseo extends fbaseJqueryseo {
         return $this->keysVirgula;
     }
 
-    public function getHeadTags($titleIfEmpty, $canonical = "") {
+    public function getHeadTags($titleIfEmpty, $canonical = "", $descriptionIfEmpty = "") {
         $titulo = $this->getTitulo();
         if (!$titulo) {
             $titulo = $titleIfEmpty;
         }
 
-        $keys = $this->getKeysVirgula();
         $descricao = $this->getDescricao();
+        if (!$descricao) {
+            $descricao = $descriptionIfEmpty;
+        }
+
+        $keys = $this->getKeysVirgula();
         $s = "<title>$titulo</title>";
         $s .= "<meta name='keywords' content='$keys'/>";
         $s .= "<meta name='description' content='$descricao'/>";
@@ -99,7 +103,7 @@ class objJqueryseo extends fbaseJqueryseo {
         if ($canonical) {
             $s.= "<link rel='canonical' href='$canonical' />";
         }
-        
+
         return $s;
     }
 	
