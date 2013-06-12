@@ -22,7 +22,24 @@ class objJqueryimage extends fbaseJqueryimage {
         $titulo = toRewriteString($this->getValor());
         $titulo = str_replace("{$cod}_", "", $this->getValor());
 
-        $link = "img.php?img=$cod&valor=$titulo&width=$width&height=$height&crop=$crop";
+        $params = array();
+        $params[] = "img=$cod";
+        $params[] = "valor=$titulo";
+        if ($width) {
+            $params[] = "width=$width";
+        }
+
+        if ($height) {
+            $params[] = "height=$height";
+        }
+
+        if ($crop) {
+            $params[] = "crop=1";
+        } else {
+            $params[] = "crop=0";
+        }
+
+        $link = "img.php?" . join("&", $params);
 
         if ($fullUrl)
             return ___siteUrl . $link;
