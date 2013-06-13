@@ -164,6 +164,23 @@ class SimpleCachePhp {
         return true;
     }
 
+	public static function sanitize_output($buffer) {
+		/* from http://stackoverflow.com/questions/6225351/how-to-minify-php-page-html-output */
+        $search = array(
+            '/\>[^\S ]+/s', //strip whitespaces after tags, except space
+            '/[^\S ]+\</s', //strip whitespaces before tags, except space
+            '/(\s)+/s'  // shorten multiple whitespace sequences
+        );
+        $replace = array(
+            '>',
+            '<',
+            '\\1'
+        );
+        $buffer = preg_replace($search, $replace, $buffer);
+
+        return $buffer;
+    }
+	
     public static function criarFileCache($folderCache, $fileName, $conteudo) {
         self::verificaDiretorios($folderCache);
 
@@ -171,7 +188,7 @@ class SimpleCachePhp {
 
         $fp = @fopen($filename, "w");
         if ($fp) {
-            fwrite($fp, $conteudo);
+            fwrite($fp, sanitize_output($conteudo));
             fclose($fp);
 
             if (file_exists($filename)) {
