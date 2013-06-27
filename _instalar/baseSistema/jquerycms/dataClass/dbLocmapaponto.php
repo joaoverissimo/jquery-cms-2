@@ -342,6 +342,10 @@ class CtrlMapaPontoView {
         return $s;
     }
 
+    public function getCtrl() {
+        return $this->getAutoFormField();
+    }
+    
     public function SaveByPost() {
         $name = $this->CtrlName;
 
@@ -578,6 +582,10 @@ class CtrlMapaPontoLatLng {
         return $s;
     }
 
+    public function getCtrl() {
+        return $this->getAutoFormField();
+    }
+    
     public function SaveByPost() {
         $name = $this->CtrlName;
 

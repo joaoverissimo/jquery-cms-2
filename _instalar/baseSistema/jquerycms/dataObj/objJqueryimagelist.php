@@ -26,10 +26,10 @@ class objJqueryimagelist extends fbaseJqueryimagelist {
         return $this->obtemJqueryimagelistitemRel($orderByField, $orderByOrientation, $limit);
     }
 
-	/**
+    /**
      * Obtem o primeiro ou default item
      * @return objJqueryimagelistitem
-     */  
+     */
     public function objItemFirstOrDefault() {
         if (!isset($this->firstordefault)) {
             $this->firstordefault = dbJqueryimagelist::obtemFirstOrDefault($this->Conexao, $this->getCod());
@@ -37,8 +37,20 @@ class objJqueryimagelist extends fbaseJqueryimagelist {
 
         return $this->firstordefault;
     }
-	
-	public function RecalcInfo() {
+
+    /**
+     * Obtem a primeira ou default imagem
+     * @return objJqueryimage
+     */
+    public function objImageFirstOrDefault() {
+        if ($this->objItemFirstOrDefault() && $this->objItemFirstOrDefault()->objJqueryimage()->getExiste()) {
+            return $this->objItemFirstOrDefault()->objJqueryimage();
+        }
+
+        return false;
+    }
+
+    public function RecalcInfo() {
         return dbJqueryimagelist::RecalcInfo($this->Conexao, $this->getCod());
     }
 

@@ -4,13 +4,12 @@
  * SIMPLE CACHE PHP
  * Reference: https://github.com/joaoverissimo/SimpleCachePhp
  * To Use:
-<?php $cache = new SimpleCachePhp(__FILE__); ?>
-<html>
- [..]
-</html>
-<?php $cache->CacheEnd(); ?>
+  <?php $cache = new SimpleCachePhp(__FILE__); ?>
+  <html>
+  [..]
+  </html>
+  <?php $cache->CacheEnd(); ?>
  */
-
 class SimpleCachePhp {
     /* private $folderCache = sistemaCache::obterDocumentRoot() . "cache";
       $filename = "aluguel-lang$ididioma.html";
@@ -164,23 +163,6 @@ class SimpleCachePhp {
         return true;
     }
 
-	public static function sanitize_output($buffer) {
-		/* from http://stackoverflow.com/questions/6225351/how-to-minify-php-page-html-output */
-        $search = array(
-            '/\>[^\S ]+/s', //strip whitespaces after tags, except space
-            '/[^\S ]+\</s', //strip whitespaces before tags, except space
-            '/(\s)+/s'  // shorten multiple whitespace sequences
-        );
-        $replace = array(
-            '>',
-            '<',
-            '\\1'
-        );
-        $buffer = preg_replace($search, $replace, $buffer);
-
-        return $buffer;
-    }
-	
     public static function criarFileCache($folderCache, $fileName, $conteudo) {
         self::verificaDiretorios($folderCache);
 
@@ -188,7 +170,7 @@ class SimpleCachePhp {
 
         $fp = @fopen($filename, "w");
         if ($fp) {
-            fwrite($fp, sanitize_output($conteudo));
+            fwrite($fp, $conteudo);
             fclose($fp);
 
             if (file_exists($filename)) {

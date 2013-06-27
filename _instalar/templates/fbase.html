@@ -199,5 +199,16 @@ class fbase$tabelaFistUpper# {
         
         $this->die = $die;
     }
+    
+    public static function init($valor, $campo = '$primarykey#', $die = true, $Conexao = null) {
+        if (!isset($Conexao)) {
+            global $Conexao;
+        }
+        
+        $obj = new obj$tabelaFistUpper#($Conexao, $die);
+        $obj->loadByCod($valor, $campo);
+
+        return $obj;
+    }
 	
 }

@@ -76,8 +76,7 @@ CREATE TABLE IF NOT EXISTS `jqueryadminuser` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 INSERT INTO `jqueryadminuser` (`cod`, `nome`, `mail`, `senha`, `grupo`) VALUES
-(1, 'João', 'joao@areadigital.com.br', '12345', 1),
-(2, 'Eduardo', 'eduardo@areadigital.com.br', 'eduardo', 2);
+(1, 'Administrador', '{{txtAdmLogin}}', '{{txtAdmPass}}', 1);
 
 
 -- --------------------------------------------------------
@@ -108,6 +107,67 @@ CREATE TABLE IF NOT EXISTS `jqueryimagelistitem` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
+-- Estrutura da tabela `jqueryseo`
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `jqueryseo` (
+  `cod` int(11) NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(255) NOT NULL,
+  `descricao` varchar(255) NOT NULL,
+  PRIMARY KEY (`cod`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
+-- Estrutura da tabela `jqueryseopalavra`
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `jqueryseopalavra` (
+  `cod` int(11) NOT NULL AUTO_INCREMENT,
+  `palavra` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `count` int(11) NOT NULL,
+  PRIMARY KEY (`cod`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+-- Estrutura da tabela `jqueryseorel`
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `jqueryseorel` (
+  `cod` int(11) NOT NULL AUTO_INCREMENT,
+  `seo` int(11) NOT NULL,
+  `palavra` int(11) NOT NULL,
+  PRIMARY KEY (`cod`),
+  KEY `seo` (`seo`),
+  KEY `palavra` (`palavra`),
+  KEY `palavra_2` (`palavra`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+-- Estrutura da tabela `jqueryseotabela`
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `jqueryseotabela` (
+  `cod` int(11) NOT NULL AUTO_INCREMENT,
+  `tabela` varchar(255) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `ordem` int(11) NOT NULL,
+  PRIMARY KEY (`cod`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+-- LocMapaPonto
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `locmapaponto` (
+  `cod` int(11) NOT NULL AUTO_INCREMENT,
+  `lat` varchar(255) NOT NULL,
+  `lng` varchar(255) NOT NULL,
+  `heading` varchar(255) NOT NULL,
+  `pitch` varchar(255) NOT NULL,
+  `zoom` varchar(255) NOT NULL,
+  `comportamento` int(11) NOT NULL,
+  `suportaview` tinyint(1) NOT NULL,
+  PRIMARY KEY (`cod`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 -- Restrições 
 -- --------------------------------------------------------
 ALTER TABLE `jqueryadmingrupo2menu`
@@ -124,3 +184,7 @@ ALTER TABLE `jqueryadminuser`
 ALTER TABLE `jqueryimagelistitem`
   ADD CONSTRAINT `jqueryimagelistitem_ibfk_2` FOREIGN KEY (`jqueryimage`) REFERENCES `jqueryimage` (`cod`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `jqueryimagelistitem_ibfk_1` FOREIGN KEY (`jqueryimagelist`) REFERENCES `jqueryimagelist` (`cod`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE `jqueryseorel`
+  ADD CONSTRAINT `jqueryseorel_ibfk_1` FOREIGN KEY (`seo`) REFERENCES `jqueryseo` (`cod`),
+  ADD CONSTRAINT `jqueryseorel_ibfk_2` FOREIGN KEY (`palavra`) REFERENCES `jqueryseopalavra` (`cod`);

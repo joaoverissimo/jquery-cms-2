@@ -59,10 +59,32 @@ $(document).ready(function() {
     //Enable the tooltip
     $('a[rel=tooltip]').tooltip();
 	
-	//Enable tabs
+    //Enable tabs
     $('.tabbable .tab-pane.active').each(function(){
         var tab_href = $($(this)).attr("id");
         var s = "a[href=#" + tab_href + "]";
         $(s).tab("show");
     }); 
+    
+    //Tabela lista - altera checkbox
+    $("#tablelista tr").click(function(){
+        $ck = $(this).find(".multi-input");
+        $ck.prop("checked", !$ck.prop("checked"));
+    });
+    
+    $("#tablelista tr .multi-input").click(function(){
+        $ck = $(this);
+        $ck.prop("checked", !$ck.prop("checked"));
+    });
+    
+    $('#multi_all').click (function () {
+        var checkedStatus = this.checked;
+        $('#tablelista tr').find('td:first :checkbox').each(function () {
+            $(this).prop('checked', checkedStatus);
+        });
+    });
+    
+    $("#multi_submit").click(function(){
+        return confirm("Deletar os registros Selecionados?");
+    })
 });

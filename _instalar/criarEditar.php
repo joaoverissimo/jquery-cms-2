@@ -7,9 +7,11 @@ function criarEditar($Conexao, $tabela, $campos, $relacoes, $outputFolder, $real
         '$tabelaFistUpper#' => ucfirst($tabela),
         '$templatesFolder#' => $realFolder . "templates/",
         '$primarykey#' => $campos[0]['Field'],
-        '$editarValoresPost#' => criarEdiarObtemValoresPost($campos),
+        '$editarValoresPost#' => criarEdiarObtemValoresPost($campos, $relacoes),
         '$editarValoresVariaveis#' => criarEdiarObtemValoresVariaveis($campos),
-        '$formfields#' => criarObtemFormFields($Conexao, $campos, $relacoes, $tabela)
+        '$formfields#' => criarObtemFormFields($Conexao, $campos, $relacoes, $tabela),
+        '$editarCtrls#' => criarEditarCtrls($campos, $relacoes),
+        '$editarCtrlsHead#' => criarEditarCtrlsHead($campos, $relacoes)
             )
             , $temlate);
 
@@ -22,20 +24,23 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
     $pular = true;
     $tabelaFistUpper = ucfirst($tabela);
 
-//TEMPLATES    
+    //TEMPLATES    
     $templateVarChar = "\$form->text(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateLongText = "\$form->textarea(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateDate = "\$form->calendario(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateDateTime = "\$form->datatime(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateRelation = "\$form->selectDb(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), '', \$Conexao, '#tabela#', '#REFERENCED_COLUMN_NAME#', '#campo2#');\n";
-//FAZ O LOOP
+    $templateFileImage = "\$form->fileImagems(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), 0);\n";
+    $templateLocMapa = "\$form->insertHtml(autoform2::LabelControlGroup('Posição do mapa', \$ctrlCampoUpper->getCtrl()));\n";
+    $templateSeo = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
+    $templateImageList = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
+
+    //FAZ O LOOP
     foreach ($campos as $value) {
         $value["CampoUpper"] = ucfirst($value['Field']);
 
         if (!$pular) {
-
             if (!criarObtemFormFieldsIsRelacionado($value['Field'], $relacoes)) {
-
                 $type = $value['Type'];
 
                 if (str_contains($type, "varchar")) {
@@ -58,17 +63,27 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
                 if ($value['Default'] != "")
                     $temp = "//" . $temp;
             } else {
-                $temp = stringuizeStr($templateRelation, $value);
-                $relacao = criarObtemFormFieldsObtemRelacao($value['Field'], $relacoes);
-                $campo2 = criarObtemFormFieldsObtemCampo2($Conexao, $relacao['REFERENCED_TABLE_NAME']);
+                if (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimage")) {
+                    $temp = stringuizeStr($templateFileImage, $value);
+                } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "locmapaponto")) {
+                    $temp = stringuizeStr($templateLocMapa, $value);
+                } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryseo")) {
+                    $temp = stringuizeStr($templateSeo, $value);
+                } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimagelist")) {
+                    $temp = stringuizeStr($templateImageList, $value);
+                } else {
+                    $temp = stringuizeStr($templateRelation, $value);
+                    $relacao = criarObtemFormFieldsObtemRelacao($value['Field'], $relacoes);
+                    $campo2 = criarObtemFormFieldsObtemCampo2($Conexao, $relacao['REFERENCED_TABLE_NAME']);
 
-                $temp = str_replace("#tabela#", $relacao['REFERENCED_TABLE_NAME'], $temp);
-                $temp = str_replace("#campo1#", $value['Field'], $temp);
-                $temp = str_replace("#REFERENCED_COLUMN_NAME#", $relacao['REFERENCED_COLUMN_NAME'], $temp);
-                $temp = str_replace("#campo2#", $campo2['Field'], $temp);
+                    $temp = str_replace("#tabela#", $relacao['REFERENCED_TABLE_NAME'], $temp);
+                    $temp = str_replace("#campo1#", $value['Field'], $temp);
+                    $temp = str_replace("#REFERENCED_COLUMN_NAME#", $relacao['REFERENCED_COLUMN_NAME'], $temp);
+                    $temp = str_replace("#campo2#", $campo2['Field'], $temp);
+                }
             }
 
-//ADICIONA
+            //ADICIONA
             $s .= $temp;
             $temp = "";
         }
@@ -77,38 +92,6 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
     }
 
     return $s;
-}
-
-function criarObtemFormFieldsObtemRelacao($campo, $relacoes) {
-    $retorno = null;
-
-    foreach ($relacoes as $value) {
-        if ($value["COLUMN_NAME"] == $campo)
-            $retorno = $value;
-    }
-
-    return $retorno;
-}
-
-function criarObtemFormFieldsIsRelacionado($campo, $relacoes) {
-    $retorno = false;
-
-    foreach ($relacoes as $value) {
-        if ($value["COLUMN_NAME"] == $campo)
-            $retorno = true;
-    }
-
-    return $retorno;
-}
-
-function criarObtemFormFieldsObtemCampo2($Conexao, $REFERENCED_TABLE_NAME) {
-    $campos = obtemCampos($Conexao, $REFERENCED_TABLE_NAME);
-    foreach ($campos as $campo) {
-        if (strpos($campo['Type'], "varchar") !== false)
-            return $campo;
-    }
-
-    return $campos[0];
 }
 
 function criarEdiarObtemFormFieldsObtemValidate($string, $valueNull, $norequired, $required) {
@@ -145,29 +128,88 @@ function criarEdiarObtemValoresVariaveis($campos) {
     return $s;
 }
 
-function criarEdiarObtemValoresPost($campos) {
-    $s = "\t";
+function criarEdiarObtemValoresPost($campos, $relacoes) {
+    $s = "";
     $pular = true;
-    $template = "\$registro->setCampoUpper(issetpost('Field'));\n\t";
-    $templateI = "\$registro->setCampoUpper(issetpostInteger('Field'));\n\t";
 
     foreach ($campos as $value) {
         $temp = "";
         $value["CampoUpper"] = ucfirst($value['Field']);
 
         if (!$pular) {
-            if ($value['Type'] == "int(11)")
-                $temp .= stringuizeStr($templateI, $value);
-            else
-                $temp .= stringuizeStr($template, $value);
+            if (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimage")) {
+                $template = "\$registro->setCampoUpper(dbJqueryimage::UpdateByFileImagems(\$Conexao, 'Field'));\n\t\t";
+            } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "locmapaponto")) {
+                $template = "\n\t\t\$ctrlCampoUpper->SaveByPost();\n\t\t\n\t\t";
+            } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryseo")) {
+                $template = "\n\t\t\$registro->setCampoUpper(\$ctrlCampoUpper->updateByPost());\n\t\t";
+            } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimagelist")) {
+                $template = ""; #salva por ajax, nao necessita salvar
+            } elseif ($value['Type'] == "int(11)") {
+                $template = "\$registro->setCampoUpper(issetpostInteger('Field'));\n\t\t";
+            } else {
+                $template = "\$registro->setCampoUpper(issetpost('Field'));\n\t\t";
+            }
 
-            if ($value['Default'] != "")
+            $temp .= stringuizeStr($template, $value);
+
+            if ($value['Default'] != "") {
                 $temp = "//" . $temp;
+            }
 
             $s .= $temp;
         }
 
         $pular = false;
     }
+    return $s;
+}
+
+function criarEditarCtrls($campos, $relacoes) {
+    $s = "";
+
+    foreach ($campos as $value) {
+        $value["CampoUpper"] = ucfirst($value['Field']);
+
+        if (obtemRelacaoMachTable($value['Field'], $relacoes, "locmapaponto")) {
+            $temp = "\$ctrl#CampoUpper# = new CtrlMapaPontoLatLng(\$Conexao, '#Field#'); \n\$ctrl#CampoUpper#->loadByCod(\$registro->get#CampoUpper#());";
+            $temp = str_replace("#CampoUpper#", $value["CampoUpper"], $temp);
+            $temp = str_replace("#Field#", $value['Field'], $temp);
+            $s .= $temp;
+        } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryseo")) {
+            $temp = "\$ctrl#CampoUpper# = new CtrlJquerySeo(\$Conexao, \$registro->get#CampoUpper#(), 'jqueryseoctrl#CampoUpper#');\n";
+            $temp = str_replace("#CampoUpper#", $value["CampoUpper"], $temp);
+            $s .= $temp;
+        } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimagelist")) {
+            $temp = "\$ctrl#CampoUpper# = new CtrlJqueryImageList('ctrl#CampoUpper#', \$registro->get#CampoUpper#());\n";
+            $temp = str_replace("#CampoUpper#", $value["CampoUpper"], $temp);
+            $s .= $temp;
+        }
+    }
+
+    return $s;
+}
+
+function criarEditarCtrlsHead($campos, $relacoes) {
+    $s = "";
+
+    foreach ($campos as $value) {
+        $value["CampoUpper"] = ucfirst($value['Field']);
+
+        if (obtemRelacaoMachTable($value['Field'], $relacoes, "locmapaponto")) {
+            $temp = "<?php echo \$ctrl#CampoUpper#->getHead(); ?>\n\t";
+            $temp = str_replace("#CampoUpper#", $value["CampoUpper"], $temp);
+            $s .= $temp;
+        } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryseo")) {
+            $temp = "<?php echo \$ctrl#CampoUpper#->getHead(); ?>\n\t\t";
+            $temp = str_replace("#CampoUpper#", $value["CampoUpper"], $temp);
+            $s .= $temp;
+        } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimagelist")) {
+            $temp = "<?php echo \$ctrl#CampoUpper#->getHead(); ?>\n\t\t";
+            $temp = str_replace("#CampoUpper#", $value["CampoUpper"], $temp);
+            $s .= $temp;
+        }
+    }
+
     return $s;
 }

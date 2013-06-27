@@ -82,3 +82,49 @@ function verificaPasta($folder) {
     if (!file_exists($folder))
         return mkdir($folder);
 }
+
+function obtemRelacaoMachTable($Field, $relacoes, $tabela) {
+    foreach ($relacoes as $relacao) {
+        if ($relacao['REFERENCED_TABLE_NAME'] == $tabela && $relacao['COLUMN_NAME'] == $Field) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+function criarObtemFormFieldsObtemRelacao($campo, $relacoes) {
+    $retorno = null;
+
+    foreach ($relacoes as $value) {
+        if ($value["COLUMN_NAME"] == $campo)
+            $retorno = $value;
+    }
+
+    return $retorno;
+}
+
+function criarObtemFormFieldsIsRelacionado($campo, $relacoes) {
+    $retorno = false;
+
+    foreach ($relacoes as $value) {
+        if ($value["COLUMN_NAME"] == $campo)
+            $retorno = true;
+    }
+
+    return $retorno;
+}
+
+function criarObtemFormFieldsObtemCampo2($Conexao, $REFERENCED_TABLE_NAME, $campos = null) {
+    if (!$campos) {
+        $campos = obtemCampos($Conexao, $REFERENCED_TABLE_NAME);
+    }
+
+    foreach ($campos as $campo) {
+        if (strpos($campo['Type'], "varchar") !== false)
+            return $campo;
+    }
+
+    return $campos[0];
+}

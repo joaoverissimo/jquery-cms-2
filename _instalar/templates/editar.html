@@ -9,11 +9,14 @@ Fncs_ValidaQueryString("cod", "index.php");
 //CONEXÃO E VALORES
 $registro = new obj$tabelaFistUpper#($Conexao, true);
 $registro->loadByCod($_GET["cod"]);
-    
+
+$editarCtrls#
+
 //POST
 if (count($_POST) > 0) {
-$editarValoresPost#
     try {
+        $editarValoresPost#
+        
         $exec = $registro->Save();
 
         if ($exec && $adm_tema != 'branco') {
@@ -41,6 +44,7 @@ $form->end();
 
         <?php include '../lib/masterpage/head.php'; ?>
         <?php echo $form->getHead(); ?>
+        $editarCtrlsHead#
     </head>
     <body>        
         <?php include '../lib/masterpage/header.php'; ?>

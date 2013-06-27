@@ -57,10 +57,21 @@ if (file_exists($filenameConfig)) {
 <h1>Configuração</h1>
 
 <form method="post">
-
+    <script>
+        $(document).ready(function(){
+            $('form').submit(function(){
+                if (/\S+@\S+\.\S+/.test($("#txtAdmLogin").val()) == false) {
+                    alert('Email de login invalido');
+                    return false
+                }
+                
+                return true;
+            });
+        });
+    </script>
     <h2>Configurações de usuário e senha</h2>
     <div class="field">
-        <label for="txtAdmLogin">Seu login no sistema:</label>
+        <label for="txtAdmLogin">Seu email de login:</label>
         <input type="text" id="txtAdmLogin" name="txtAdmLogin" value="<?php echo $txtAdmLogin; ?>" />
     </div>
     <div class="field">
@@ -100,6 +111,8 @@ if (file_exists($filenameConfig)) {
 
 <?php
 $sqlCreateImage = arquivos::ler("sqlCreate.sql");
+$sqlCreateImage = str_replace("{{txtAdmLogin}}", "$txtAdmLogin", $sqlCreateImage);
+$sqlCreateImage = str_replace("{{txtAdmPass}}", "$txtAdmPass", $sqlCreateImage);
 
 try {
     $Conexao = new PDO("mysql:host=$txtMySqlDataServer; dbname=$txtMysqlDataDb", "$txtMySqlDataUser", "$txtMySqlDataPass", array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));

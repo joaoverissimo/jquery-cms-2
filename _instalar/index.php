@@ -43,6 +43,11 @@ require_once 'criarDeletar.php';
 criarDeletar($tabela, $campos, $relacoes, $outputFolder, $realFolder);
 echo "<div>Criado Deletar</div>";
 
+//CRIA A DELETAR-MULTI.PHP
+require_once 'criarDeletar-Multi.php';
+criarDeletar_Multi($tabela, $campos, $relacoes, $outputFolder, $realFolder);
+echo "<div>Criado Deletar-Multi</div>";
+
 //CRIA DB
 require_once 'criarDb.php';
 criarDb($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFolder);

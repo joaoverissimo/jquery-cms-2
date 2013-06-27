@@ -6,10 +6,13 @@ $msg = "";
 
 $registro = new obj$tabelaFistUpper#($Conexao);
 
+$inserirCtrls#
+
 //POST
 if (count($_POST) > 0) {
-$editarValoresPost#
     try {
+        $inserirValoresPost#
+        
         $exec = $registro->Save();
 
         if ($exec && $adm_tema != 'branco') {
@@ -38,6 +41,7 @@ $form->end();
 
         <?php include '../lib/masterpage/head.php'; ?>
         <?php echo $form->getHead(); ?>
+        $inserirCtrlsHead#
     </head>
     <body>        
         <?php include '../lib/masterpage/header.php'; ?>

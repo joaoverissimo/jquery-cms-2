@@ -148,6 +148,7 @@ function criarPermissoes($Conexao, $dados, $outputFolder, $meuDb) {
                                      VALUES                             (1,{$menu['getmax']})", false);
 
     dataExecSqlDireto($Conexao, "UPDATE `jqueryadminmenu` SET `codmenu`= {$menu['getmax']} WHERE `patch` LIKE 'jquery%'", false);
+    dataExecSqlDireto($Conexao, "UPDATE `jqueryadminmenu` SET `codmenu`= {$menu['getmax']} WHERE `patch` = 'locmapaponto'", false);
     dataExecSqlDireto($Conexao, "UPDATE `jqueryadminmenu` SET `codmenu` = 0 WHERE `cod` = {$menu['getmax']}", false);
 }
 

@@ -9,7 +9,7 @@ function criarDb($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFold
         '$primarykey#' => $campos[0]['Field'],
         '$DbInserirValores#' => criarDbValores($campos, true),
         '$DbEditarValores#' => criarDbValores($campos, false),
-        '$DbDeleteRel#' => criarDbDeleteObjs($campos, $relacoes)
+        '$DbDeleteRel#' => criarDbDeleteObjs($tabela, $campos, $relacoes)
             )
             , $temlate);
 
@@ -41,10 +41,27 @@ function criarDbValores($campos, $pular = true) {
     return $s;
 }
 
-function criarDbDeleteObjs($campos, $relacoes) {
-    $s = "";
+function criarDbDeleteObjs($tabela, $campos, $relacoes) {
+    $tabelaU = ucfirst($tabela);
+    $s = "\$obj = new obj$tabelaU(\$Conexao);\n\t\t\$obj->loadByCod(\${$campos[0]['Field']});\n\n\t\t";
+    $s .= "\$exec = parent::Deletar(\$Conexao, \$cod); \n\n\t\t";
+
+    $coment = true;
+
     foreach ($relacoes as $relacao) {
-        $s .= '$obj->obj' . ucfirst($relacao["COLUMN_NAME"]) . "()->Delete();\n\t\t";
+        if ($relacao['REFERENCED_TABLE_NAME'] == 'jqueryimage' || $relacao['REFERENCED_TABLE_NAME'] == 'locmapaponto' || $relacao['REFERENCED_TABLE_NAME'] == 'jqueryseo' || $relacao['REFERENCED_TABLE_NAME'] == 'jqueryimagelist') {
+            $s .= '$obj->obj' . ucfirst($relacao["COLUMN_NAME"]) . "()->Delete();\n\t\t";
+            $coment = false;
+        } else {
+            $s .= '//$obj->obj' . ucfirst($relacao["COLUMN_NAME"]) . "()->Delete();\n\t\t";
+        }
     }
+
+    if ($coment) {
+        $s = "/* $s \n\t\t return \$exec;\n\t\t */";
+    } else {
+        $s .= "\n\t\treturn \$exec;\n\t\t";
+    }
+
     return $s;
 }
