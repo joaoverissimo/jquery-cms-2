@@ -146,7 +146,7 @@ class CtrlMapaPontoView {
                         zoom: 15,
                         mapTypeId: google.maps.MapTypeId.ROADMAP,
                         streetViewControl: false,
-                        mapTypeControl: false,
+                        mapTypeControl: true,
                         scrollwheel: false
                     };
 

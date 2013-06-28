@@ -137,14 +137,62 @@ class objLocmapaponto extends fbaseLocmapaponto {
         return $s;
     }
 
-	public function getGmapsStaticImage($zoom = 12, $width = "300px", $height = "200px") {
+	public function getGmapsStaticImage($zoom = 12, $width = "300px", $height = "200px", $cache = false) {
+        $cod = $this->getCod();
         $lat = $this->getLat();
         $lng = $this->getLng();
 
         $width = str_replace("px", "", $width);
         $height = str_replace("px", "", $height);
 
-        return "http://maps.googleapis.com/maps/api/staticmap?center={$lat},{$lng}&zoom={$zoom}&size={$width}x{$height}&maptype=roadmap%20&markers=color:red%7C{$lat},{$lng}&sensor=false";
+        $url = "http://maps.googleapis.com/maps/api/staticmap?center={$lat},{$lng}&zoom={$zoom}&size={$width}x{$height}&maptype=roadmap%20&markers=color:red%7C{$lat},{$lng}&sensor=false";
+        
+        if ($cache) {
+            $filename = "map-$cod-$width-$height.jpg";
+            $filefolder = $folder = ___AppRoot . "jquerycms/upload/map-cache/";
+
+            if (!arquivos::existe($filefolder)) {
+                umask(0);
+                mkdir($filefolder, 0777, true);
+            }
+
+            if (arquivos::existe($filefolder . $filename) || arquivos::downloadFile($url, $filefolder . $filename)) {
+                $url = "/jquerycms/upload/map-cache/" . $filename;
+            }
+        }
+        
+        return $url;
+    }
+
+
+    public function getGmapsViewImage($width = "300px", $height = "200px", $cache = false) {
+        $cod = $this->getCod();
+        $lat = $this->getLat();
+        $lng = $this->getLng();
+
+        $heading = $this->getHeading();
+        $pitch = $this->getPitch();
+
+        $width = str_replace("px", "", $width);
+        $height = str_replace("px", "", $height);
+
+        $url = "http://maps.googleapis.com/maps/api/streetview?size={$width}x{$height}&location={$lat},{$lng}&fov=90&heading={$heading}&pitch={$pitch}&sensor=false";
+
+        if ($cache) {
+            $filename = "view-$cod-$width-$height.jpg";
+            $filefolder = $folder = ___AppRoot . "jquerycms/upload/map-cache/";
+
+            if (!arquivos::existe($filefolder)) {
+                umask(0);
+                mkdir($filefolder, 0777, true);
+            }
+
+            if (arquivos::existe($filefolder . $filename) || arquivos::downloadFile($url, $filefolder . $filename)) {
+                $url = "/jquerycms/upload/map-cache/" . $filename;
+            }
+        }
+
+        return $url;
     }
 	
 }
