@@ -1,7 +1,9 @@
 <?php
 
-session_start();
-ini_set('default_charset','UTF-8');
+ini_set('default_charset', 'UTF-8');
+if (!isset($_SESSION)) {
+    session_start();
+}
 
 define('___MyDebugger', true);
 define('___DataEHoraAtual', date('d/m/Y h:i:s'));
