@@ -39,7 +39,7 @@ function criarInserirObtemValoresPost($campos, $relacoes) {
                 if (isset($firstString) && isset($firstString['Field'])) {
                     $template .= "\n\t\t\$ctrlCampoUpper->keyTitle = issetpost('{$firstString['Field']}');";
                 }
-                $template .= "\n\t\t\$registro->setCampoUpper(\$ctrlCampoUpper->inserirByPost()); \n\t\t//\$registro->setCampoUpper(dbJqueryseo::Inserir(\$Conexao, '' ''));\n\t\t";
+                $template .= "\n\t\t\$registro->setCampoUpper(\$ctrlCampoUpper->inserirByPost()); \n\t\t//\$registro->setCampoUpper(dbJqueryseo::Inserir(\$Conexao, '', ''));\n\t\t";
             } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimagelist")) {
                 $template = "\$registro->setCampoUpper(dbJqueryimagelist::Inserir(\$Conexao, 0));\n\t\t";
             } elseif ($value['Type'] == "int(11)") {

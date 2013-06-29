@@ -14,7 +14,7 @@ if (isset($_GET['filtraList']) && $_GET['filtraList']) {
 $where = '';
 if ($filtraList) {
     //$where = new dataFilter('$tabela#.$primarykey#', 0, dataFilter::op_different);
-    $where = new dataFilter('meuteste.titulo', $filtraList, dataFilter::op_likeMatches);
+    $where = new dataFilter('$tabela#.$campo2#', $filtraList, dataFilter::op_likeMatches);
 }
 
 $orderBy = new dataOrder('$tabela#.$primarykey#', 'desc');
