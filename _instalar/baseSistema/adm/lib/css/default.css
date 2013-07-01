@@ -20,3 +20,6 @@ body {background: url(default/body.png) center top no-repeat #b3b3b3;}
 
 .ordem {list-style: none;}
 .ordem li {display: block;padding: 10px;height: auto;min-height: auto;margin-bottom: 5px;cursor: move;}
+
+.ativar0 {display: inline-block; width: 15px; height: 15px; background: url(icons/ativar0.png) no-repeat;}
+.ativar1 {display: inline-block; width: 15px; height: 15px; background: url(icons/ativar1.png) no-repeat}
