@@ -1,8 +1,6 @@
 <?php
 
 function criarIndex($tabela, $campos, $relacoes, $outputFolder, $realFolder) {
-	global $Conexao;
-	
     $temlate = obterDocumentRoot() . "_instalar/templates/";
     $s = stringuize("index.html", array(
         '$tabela#' => $tabela,
@@ -10,7 +8,6 @@ function criarIndex($tabela, $campos, $relacoes, $outputFolder, $realFolder) {
         '$templatesFolder#' => $realFolder . "templates/",
         '$primarykey#' => $campos[0]['Field'],
         '$primarykeyU#' => ucfirst($campos[0]['Field']),
-		'$campo2#' = criarObtemFormFieldsObtemCampo2($Conexao, $tabela, $campos);
         '$tableListaThead#' => criarIndexTableListaThead($tabela, $campos, $relacoes),
         '$tableListaItem#' => criarIndexTableListaItem($tabela, $campos, $relacoes)
             )
@@ -59,9 +56,9 @@ function criarIndexTableListaItem($tabela, $campos, $relacoes) {
             unset($value['Default']);
             $template = "<td><?php if (\$registro->objCampoUpper()->objImageFirstOrDefault()) { echo \"<img src='{\$registro->objCampoUpper()->objImageFirstOrDefault()->getSrc(70, 35)}' />\"; } ?></td>";
         } elseif (criarObtemFormFieldsIsRelacionado($value['Field'], $relacoes)) {
-            $relacao = criarObtemFormFieldsObtemRelacao($value['Field'], $relacoes);            
-            $campo2 = criarObtemFormFieldsObtemCampo2($Conexao, $relacao['TABLE_NAME']);
-            $campo2=  ucfirst($campo2['Field']);
+            $relacao = criarObtemFormFieldsObtemRelacao($value['Field'], $relacoes);
+            $campo2 = criarObtemFormFieldsObtemCampo2($Conexao, $relacao['REFERENCED_TABLE_NAME']);
+            $campo2 = ucfirst($campo2['Field']);
             $template = "<td><?php echo \$registro->objCampoUpper()->get{$campo2}(); ?></td>\n$tab";
         } else {
             $template = "<td><?php echo \$registro->getCampoUpper(); ?></td>\n$tab";
