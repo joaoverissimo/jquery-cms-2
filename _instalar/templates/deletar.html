@@ -19,7 +19,7 @@ if (count($_POST) > 0) {
             $exec = $registro->Delete();
 
             if ($exec && $adm_tema != 'branco') {
-                header("Location: index.php");
+                header("Location: $cancelLink");
             } else {
                 $msg = fEnd_MsgString("O registro foi excluido.$fEnd_closeTheIFrameImDone", 'success');
             }
