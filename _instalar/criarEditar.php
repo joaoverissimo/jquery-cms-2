@@ -26,12 +26,13 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
 
     //TEMPLATES    
     $templateVarChar = "\$form->text(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
+    $templateBoolean = "\$form->checkbox(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateLongText = "\$form->textarea(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateDate = "\$form->calendario(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateDateTime = "\$form->datatime(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateRelation = "\$form->selectDb(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), '', \$Conexao, '#tabela#', '#REFERENCED_COLUMN_NAME#', '#campo2#');\n";
     $templateFileImage = "\$form->fileImagems(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), 0);\n";
-    $templateLocMapa = "\$form->insertHtml(autoform2::LabelControlGroup('PosiÃ§Ã£o do mapa', \$ctrlCampoUpper->getCtrl()));\n";
+    $templateLocMapa = "\$form->insertHtml(autoform2::LabelControlGroup('Posição do mapa', \$ctrlCampoUpper->getCtrl()));\n";
     $templateSeo = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
     $templateImageList = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
 
@@ -46,10 +47,13 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
                 if (str_contains($type, "varchar")) {
                     $temp = stringuizeStr($templateVarChar, $value);
                     $temp = criarEdiarObtemFormFieldsObtemValidate($temp, $value['Null'], 0, 1);
+                } elseif (str_contains($type, "tinyint")) {
+                    $temp = stringuizeStr($templateBoolean, $value);
+                    $temp = criarEdiarObtemFormFieldsObtemValidate($temp, $value['Null'], 0, 0);
                 } elseif (str_contains($type, "int")) {
                     $temp = stringuizeStr($templateVarChar, $value);
                     $temp = criarEdiarObtemFormFieldsObtemValidate($temp, $value['Null'], 2, 3);
-                } elseif ($type == "longtext") {
+                } elseif ($type == "longtext" || $type == "text") {
                     $temp = stringuizeStr($templateLongText, $value);
                     $temp = criarEdiarObtemFormFieldsObtemValidate($temp, $value['Null'], 0, 1);
                 } elseif ($type == "date") {
@@ -145,7 +149,7 @@ function criarEdiarObtemValoresPost($campos, $relacoes) {
                 $template = "\n\t\t\$registro->setCampoUpper(\$ctrlCampoUpper->updateByPost());\n\t\t";
             } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimagelist")) {
                 $template = ""; #salva por ajax, nao necessita salvar
-            } elseif ($value['Type'] == "int(11)") {
+            } elseif ($value['Type'] == "int(11)" || $value['Type'] == "tinyint(1)") {
                 $template = "\$registro->setCampoUpper(issetpostInteger('Field'));\n\t\t";
             } else {
                 $template = "\$registro->setCampoUpper(issetpost('Field'));\n\t\t";
