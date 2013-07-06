@@ -40,10 +40,14 @@ class CtrlLocalizacao {
     public $numero = "";
     public $complemento = "";
 
-    function __construct($Conexao, $CtrlName, $adm_folder, $cidadeDestaque) {
+    function __construct($Conexao, $CtrlName, $adm_folder = "", $cidadeDestaque = "") {
         $this->name = $CtrlName;
         $this->Conexao = $Conexao;
-        $this->adm_folder = $adm_folder;
+        if ($adm_folder) {
+            $this->adm_folder = $adm_folder;
+        } else {
+            $this->adm_folder = "/adm/";
+        }
         $this->cidadeDestaque = $cidadeDestaque;
     }
 
@@ -134,7 +138,7 @@ class CtrlLocalizacao {
         $name = $this->name;
         $cidadeDestaque = $this->cidadeDestaque;
         $adm_folder = $this->adm_folder;
-        
+
         echo "<script>
         
             function {$name}_destaque() {
@@ -177,4 +181,8 @@ class CtrlLocalizacao {
             ";
     }
 
+}
+
+class CtrlLocalizacaoCep extends CtrlLocalizacao {
+    
 }

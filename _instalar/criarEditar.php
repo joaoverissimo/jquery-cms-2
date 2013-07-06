@@ -32,7 +32,7 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
     $templateDateTime = "\$form->datatime(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), #validate#);\n";
     $templateRelation = "\$form->selectDb(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), '', \$Conexao, '#tabela#', '#REFERENCED_COLUMN_NAME#', '#campo2#');\n";
     $templateFileImage = "\$form->fileImagems(__('$tabela.Field'), 'Field', \$registro->getCampoUpper(), 0);\n";
-    $templateLocMapa = "\$form->insertHtml(autoform2::LabelControlGroup('Posição do mapa', \$ctrlCampoUpper->getCtrl()));\n";
+    $templateLocMapa = "\$form->insertHtml(autoform2::LabelControlGroup('PosiÃ§Ã£o do mapa', \$ctrlCampoUpper->getCtrl()));\n";
     $templateSeo = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
     $templateImageList = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
 

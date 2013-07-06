@@ -2,4 +2,4 @@ Em autoform->formName deve ser publico.
 
 Adicionar o floatField
 
-Adicionar em autoform2-tabs o metodo de validação de abas reversa
+Adicionar em autoform2-tabs o metodo de validaÃ§Ã£o de abas reversa
