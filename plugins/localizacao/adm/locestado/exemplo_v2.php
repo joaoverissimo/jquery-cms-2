@@ -1,9 +1,9 @@
 <?php
-require_once 'jquerycms/config.php';
+require_once '../../jquerycms/config.php';
 $ctrl = new CtrlLocalizacaoV2($Conexao);
 
 if (count($_POST) > 0) {
-    echo "O registro inserido na tabela localizacao foi: <a href='exemplo.php?cod=" . $ctrl->SaveByPost() . "'>{$ctrl->registro->getCod()}</a>";
+    echo "O registro inserido na tabela localizacao foi: <a href='exemplo_v2.php?cod=" . $ctrl->SaveByPost() . "'>{$ctrl->registro->getCod()}</a>";
 }
 
 
@@ -24,7 +24,7 @@ if (isset($_GET['cod'])) {
 <!DOCTYPE HTML>
 <html>
     <head>
-        <?php include_once 'masterpage/head.php'; ?>
+        <?php include_once '../../masterpage/head.php'; ?>
         <?php echo $ctrl->getHead(); ?>
         <link rel='stylesheet' type='text/css' href='/jquerycms/js/autoform.css' />
         <script>
