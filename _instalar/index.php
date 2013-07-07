@@ -68,11 +68,6 @@ require_once 'criarLocale.php';
 criarLocale($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFolder);
 echo "<div>Criado Locale</div>";
 
-//CRIA FEND (FRONT END)
-require_once 'criarFend.php';
-criarFend($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFolder);
-echo "<div>Criado Front End</div>";
-
 //CRIA FBASE
 require_once 'criarFbase.php';
 criarFbase($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFolder);

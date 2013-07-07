@@ -183,6 +183,6 @@ class CtrlLocalizacao {
 
 }
 
-class CtrlLocalizacaoCep extends CtrlLocalizacao {
+class CtrlLocalizacaoV2 extends CtrlLocalizacao {
     
 }
