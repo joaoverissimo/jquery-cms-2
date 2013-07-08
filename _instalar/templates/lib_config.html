@@ -36,6 +36,9 @@ require_once 'lib/sistema/BootStrapSistema.php';
 require_once 'dataClass/bootStrapData.php';
 require_once 'lib/autoform2/autoform2.php';
 require_once 'dataObj/bootStrapObjFend.php';
+if (arquivos::existe(___AppRoot . 'lib/bootstrap.php')) {
+    require_once ___AppRoot . 'lib/bootstrap.php';
+}
 
 function obterDocumentRoot() {
 	$AppRoot = $_SERVER['DOCUMENT_ROOT'];
