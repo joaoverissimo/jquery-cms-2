@@ -11,7 +11,7 @@ class autoform2 {
     private $srcJsFiles = '/jquerycms/js';
     private $CKEditorBasePath = '/jquerycms/lib/autoform2/ckeditor/';
     private $autoformFolderTemplate;
-    private $formName;
+    public $formName;
 
     function __construct($autoformFolderTemplate = '') {
         if (!$autoformFolderTemplate)
@@ -227,6 +227,25 @@ class autoform2 {
         $s .= $this->retornarSpan($span, $add['spanclass']);
         $s .= "</div>";
         $s .= $this->FieldOut();
+        $this->formOut .= $s;
+    }
+
+    function floatReal($label, $name, $value = '', $validate = '0', $span = '', $add = '') {
+        $form_name = $this->formName;
+        $add = $this->retornarAddArray($add, "add, class, labelclass, precontrol, poscontrol, divcontrolsclass, spanclass, maxlength, type");
+
+        $s = $this->FieldIn();
+        $s .= "\n\t\t<label class='control-label {$add['labelclass']}' for='$name'>$label: </label>";
+
+        $validateString = $this->retornarValidate($validate);
+        $s .= "\n\t\t<div class='controls {$add['divcontrolsclass']}'>{$add['precontrol']}";
+        $s .= "\n\t\t\t<input type='{$add['type']}' id='$name' name='$name' value='$value' class='$validateString {$add['class']}' placeholder='$label' {$add['add']} {$add['maxlength']} />";
+        $s .= "{$add['poscontrol']}\n\t\t";
+        $s .= $this->retornarSpan($span, $add['spanclass']);
+        $s .= "</div>";
+        $s .= $this->FieldOut();
+
+        $this->javascript .= "\n\n\t $(document).ready(function(){ $('#{$name}').maskMoney({decimal:',',thousands:'.', defaultZero: false, allowZero: true}); $('#{$name}').focus(function(){ $(this).val($(this).val().replace('R$ ', '')); }); $('#{$name}').focusout(function(){ $(this).val('R$ '+ $(this).val()); });$('#{$form_name}').submit(function(){ if ($('#{$name}').val()){ $('#{$name}').maskMoney('destroy'); $('#{$name}').val($('#{$name}').val().replace('R$ ','').replace(/\./g,'').replace(',','.'));} }); })";
         $this->formOut .= $s;
     }
 

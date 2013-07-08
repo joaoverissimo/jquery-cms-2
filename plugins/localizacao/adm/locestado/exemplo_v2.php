@@ -3,7 +3,8 @@ require_once '../../jquerycms/config.php';
 $ctrl = new CtrlLocalizacaoV2($Conexao);
 
 if (count($_POST) > 0) {
-    echo "O registro inserido na tabela localizacao foi: <a href='exemplo_v2.php?cod=" . $ctrl->SaveByPost() . "'>{$ctrl->registro->getCod()}</a>";
+    $exec = $ctrl->SaveByPost();
+    echo "O registro inserido na tabela localizacao foi: <a href='exemplo_v2.php?cod=$exec'>{$ctrl->registro->getCod()}</a>";
 }
 
 

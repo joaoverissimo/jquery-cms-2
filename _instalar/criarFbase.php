@@ -17,6 +17,7 @@ function criarFbase($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realF
         '$dbasepublics#' => criarDbaseCampos($relacoes, "protected \$_objOBJNAME;\n\t", false, ''),
         '$fbaseAssComentarios#' => criarDbaseCampos($relacoes, " * @property objUpperCampo \$_objUpperCampo\n", false, " * @property objUpperCampo \$_objUpperCampo"),
         '$fbaseGetAndSet#' => criarDbaseCampos($campos, "public function getUpperCampo() { \n\t\t return \$this->Field; \n\t} \n\n\tpublic function setUpperCampo(\$Field) { \n\t\t \$this->Field = \$Field; \n\t\t return \$this; \n\t}\n\n\t", false, ''),
+        '$fbaseGetEspeciais#' => criarFbaseEspeciais($Conexao, $tabela, $campos, $relacoes),
         '$fbaseAssObjs#' => criarFbaseAssObjs($relacoes),
         '$criarFbaseLoadLeftByArray#' => criarFbaseLoadLeftByArray($relacoes),
         '$fbaseLoadByArrayFields#' => criarDbaseCampos($campos, "if (isset(\$registro[\$prefixArr . 'Field'])) {\n\t\t\t\$this->setUpperCampo(\$registro[\$prefixArr . 'Field']); \n\t\t\t\$load = true;\n\t\t} \n\n\t\t", false, ''),
@@ -32,7 +33,6 @@ function criarFbase($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realF
     $s = stringuize("fobj.html", $arrayValores, $temlate);
     $filename = $outputFolder . "jquerycms/dataObj/obj" . ucfirst($tabela) . ".php";
     arquivos::criar($s, $filename);
-
 }
 
 function criarFbaseAssObjs($relacoes) {
@@ -54,6 +54,20 @@ function criarFbaseAssObjs($relacoes) {
 		", false, '');
 
     return $obj;
+}
+
+function criarFbaseEspeciais($Conexao, $tabela, $campos, $relacoes) {
+    $s = "";
+    foreach ($campos as $value) {
+        $field = $value['Field'];
+        $fieldU = ucfirst($field);
+        $type = $value['Type'];
+        if (str_contains($type, "float") || str_contains($type, "decimal")) {
+            $s .= "public function get{$fieldU}RS() { \n\t\treturn 'R$ ' . number_format(self::get{$fieldU}(), 2, ',', '.'); \n\t}\n\n\t";
+        }
+    }
+    
+    return $s;
 }
 
 function criarFbaseLoadLeftByArray($relacoes) {
@@ -130,7 +144,6 @@ function criarFbaseCampos($campos, $template, $pular, $templateF) {
     $index = 0;
     return $s;
 }
-
 
 function criarFbaseRelInversas($Conexao, $tabela) {
     $relacoesInversas = obtemRelacoesInversa($Conexao, $tabela, $_GET['meudb']);

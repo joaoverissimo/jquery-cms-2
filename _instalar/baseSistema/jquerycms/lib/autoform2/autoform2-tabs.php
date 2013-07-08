@@ -7,11 +7,22 @@ class autoform2tabs {
     private $i;
     private $tabs = array();
 
-    function __construct($id = "nav_tabs", $class = "tabs-left") {
+    function __construct($id = "nav_tabs", $class = "tabs-left", $formName = "cadastro") {
         $id = toRewriteString($id);
 
         $this->id = $id;
-        $this->html = "<div class='tabbable $class' id='$id'><ul class='nav nav-tabs'>";
+        $s = "<div class='tabbable $class' id='$id'><ul class='nav nav-tabs'>";
+        if ($formName) {
+            $s.= $this->getValidador($formName);
+        }
+        $this->html = $s;
+    }
+
+    public function getValidador($formName = "cadastro") {
+        $id = $this->id;
+        $s = "<script> $(document).ready(function(){ $('#$formName').submit(function(){ if (!$('#$formName').valid()) { $($('.nav-tabs li a').get().reverse()).each(function(){ var \$link = $(this); var \$tab = \$link.closest('.tabbable').find('.tab-content ' + \$link.attr('href')); if (\$tab.find('.control-group.error').length > 0) { \$link.tab('show'); } }); } }); }); </script>";
+
+        return $s;
     }
 
     public function start() {

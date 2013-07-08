@@ -35,7 +35,8 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
     $templateLocMapa = "\$form->insertHtml(autoform2::LabelControlGroup('Posição do mapa', \$ctrlCampoUpper->getCtrl()));\n";
     $templateSeo = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
     $templateImageList = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
-
+    $templateFloat = "\$form->floatReal(__('$tabela.Field'), 'Field', \$registro->getCampoUpperRS(), #validate#);\n";
+    
     //FAZ O LOOP
     foreach ($campos as $value) {
         $value["CampoUpper"] = ucfirst($value['Field']);
@@ -62,6 +63,9 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
                 } elseif ($type == "datetime") {
                     $temp = stringuizeStr($templateDateTime, $value);
                     $temp = criarEdiarObtemFormFieldsObtemValidate($temp, $value['Null'], 11, 12);
+                } elseif (str_contains($type, "float") || str_contains($type, "decimal")) {
+                    $temp = stringuizeStr($templateFloat, $value);
+                    $temp = criarEdiarObtemFormFieldsObtemValidate($temp, $value['Null'], 0, 1);
                 }
 
                 if ($value['Default'] != "")
