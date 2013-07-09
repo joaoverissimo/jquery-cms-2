@@ -13,8 +13,8 @@ if (isset($_GET['filtraList']) && $_GET['filtraList']) {
 //Lista os dados
 $where = '';
 if ($filtraList) {
-    //$where = new dataFilter('$tabela#.$primarykey#', 0, dataFilter::op_different);
-    $where = new dataFilter('$tabela#.$campo2#', $filtraList, dataFilter::op_likeMatches);
+    //$where = new dataFilter(db$tabelaFistUpper#::_$primarykey#', 0, dataFilter::op_different);
+    $where = new dataFilter(db$tabelaFistUpper#::_$campo2#, $filtraList, dataFilter::op_likeMatches);
 }
 
 $orderBy = new dataOrder('$tabela#.$primarykey#', 'desc');

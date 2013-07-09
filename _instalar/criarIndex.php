@@ -1,6 +1,8 @@
 <?php
 
 function criarIndex($tabela, $campos, $relacoes, $outputFolder, $realFolder) {
+    global $Conexao;
+    $campo2 =  criarObtemFormFieldsObtemCampo2($Conexao, $tabela, $campos);
     $temlate = obterDocumentRoot() . "_instalar/templates/";
     $s = stringuize("index.html", array(
         '$tabela#' => $tabela,
@@ -8,9 +10,10 @@ function criarIndex($tabela, $campos, $relacoes, $outputFolder, $realFolder) {
         '$templatesFolder#' => $realFolder . "templates/",
         '$primarykey#' => $campos[0]['Field'],
         '$primarykeyU#' => ucfirst($campos[0]['Field']),
+        '$campo2#' => $campo2['Field'],
         '$tableListaThead#' => criarIndexTableListaThead($tabela, $campos, $relacoes),
         '$tableListaItem#' => criarIndexTableListaItem($tabela, $campos, $relacoes)
-            )
+        )
             , $temlate);
 
 
