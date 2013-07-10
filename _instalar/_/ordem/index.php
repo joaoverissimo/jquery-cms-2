@@ -13,7 +13,7 @@ if (!isset($_GET['tabela'])) {
     $dados = dataExecSqlDireto($Conexao, $sql);
     echo "<h1>Selecione a tabela a ser ordenada</h1>";
     foreach ($dados as $value) {
-        echo "<a href='index.php?tabela={$value['Tables_in_simbras']}'>{$value['Tables_in_simbras']}</a> <br>";
+        echo "<a href='index.php?tabela={$value["Tables_in_$meuDb"]}'>{$value["Tables_in_$meuDb"]}</a> <br>";
     }
     exit();
 }
