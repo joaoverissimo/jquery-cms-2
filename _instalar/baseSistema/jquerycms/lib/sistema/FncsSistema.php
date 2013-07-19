@@ -152,7 +152,7 @@ function str_dataPtBrToMySql($data) {
 
 function issetpost($nome_campo) {
     if (isset($_POST["$nome_campo"]))
-        return $_POST["$nome_campo"];
+        return trim($_POST["$nome_campo"]);
     else
         return "";
 }
@@ -162,7 +162,7 @@ function issetpostInteger($nome_campo) {
         if ($_POST["$nome_campo"] == "on")
             return 1;
 
-        return intval($_POST["$nome_campo"]);
+        return intval(trim($_POST["$nome_campo"]));
     } else
         return 0;
 }
@@ -332,7 +332,7 @@ function Fncs_TemplateHtml($html) {
             }
         }
     }
-    
+
     //_session
     if (preg_match_all("/_session\((.*)\)/", $html, $matches)) {
         for ($index = 0; $index < count($matches[0]); $index++) {
@@ -344,6 +344,6 @@ function Fncs_TemplateHtml($html) {
             }
         }
     }
-    
+
     return $html;
 }

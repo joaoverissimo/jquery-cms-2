@@ -245,7 +245,7 @@ class autoform2 {
         $s .= "</div>";
         $s .= $this->FieldOut();
 
-        $this->javascript .= "\n\n\t $(document).ready(function(){ $('#{$name}').maskMoney({decimal:',',thousands:'.', defaultZero: false, allowZero: true}); $('#{$name}').focus(function(){ $(this).val($(this).val().replace('R$ ', '')); }); $('#{$name}').focusout(function(){ $(this).val('R$ '+ $(this).val()); });$('#{$form_name}').submit(function(){ if ($('#{$name}').val()){ $('#{$name}').maskMoney('destroy'); $('#{$name}').val($('#{$name}').val().replace('R$ ','').replace(/\./g,'').replace(',','.'));} }); })";
+        $this->javascript .= "\n\n\t $(document).ready(function(){ $('#{$name}').bind('paste', function () {return false;}); $('#{$name}').maskMoney({decimal:',',thousands:'.', defaultZero: false, allowZero: true}); $('#{$name}').focus(function(){ $(this).val($(this).val().replace('R$ ', '')); }); $('#{$name}').focusout(function(){ $(this).val('R$ '+ $(this).val()); });$('#{$form_name}').submit(function(){ if ($('#{$name}').val()){ $('#{$name}').maskMoney('destroy'); $('#{$name}').val($('#{$name}').val().replace('R$ ','').replace(/\./g,'').replace(',','.'));} }); })";
         $this->formOut .= $s;
     }
 
