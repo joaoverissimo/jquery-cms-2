@@ -189,7 +189,6 @@ class autoform2 {
               }
         " . '}); ' . 
             $add['onready'] . '
-            $("#' . $name . '").submit(function(){ if ($("#' . $name . '").valid()) {$(".btn").attr("disabled","disabled"); }});
         }); ';
         $this->formName = $name;
     }
@@ -245,7 +244,7 @@ class autoform2 {
         $s .= "</div>";
         $s .= $this->FieldOut();
 
-        $this->javascript .= "\n\n\t $(document).ready(function(){ $('#{$name}').bind('paste', function () {return false;}); $('#{$name}').maskMoney({decimal:',',thousands:'.', defaultZero: false, allowZero: true}); $('#{$name}').focus(function(){ $(this).val($(this).val().replace('R$ ', '')); }); $('#{$name}').focusout(function(){ $(this).val('R$ '+ $(this).val()); });$('#{$form_name}').submit(function(){ if ($('#{$name}').val()){ $('#{$name}').maskMoney('destroy'); $('#{$name}').val($('#{$name}').val().replace('R$ ','').replace(/\./g,'').replace(',','.'));} }); })";
+        $this->javascript .= "\n\n\t $(document).ready(function(){ $('#{$name}').bind('paste', function () {return false;}); $('#{$name}').maskMoney({decimal:',',thousands:'.', defaultZero: false, allowZero: true}); $('#{$name}').focus(function(){ $(this).val($(this).val().replace('R$ ', '')); }); $('#{$name}').focusout(function(){ $(this).val('R$ '+ $(this).val()); });$('#{$form_name}').submit(function(){ if ($('#{$name}').val()){ $('#{$name}').maskMoney('destroy'); $('#{$name}').val($('#{$name}').val().replace('R$ ','').replace(/\./g,'').replace(',','.'));} return $('#{$form_name}').valid();  }); })";
         $this->formOut .= $s;
     }
 
@@ -702,6 +701,16 @@ class autoform2 {
     function end() {
         $this->formOut .= "<div style='clear: both'></div>";
         $this->formOut .= "\n\t</form>\n";
+        $name = $this->formName;
+        $this->formOut .= "<script>
+            $(document).ready(function() { 
+                $('#{$name}').submit(function(){ 
+                    if ($('#{$name}').valid()) { 
+                        $('.btn').attr('disabled','disabled'); 
+                    }
+                }); 
+            });
+            </script>";
     }
 
     public static function LabelControlGroup($label, $htmlInnerCtrl) {
