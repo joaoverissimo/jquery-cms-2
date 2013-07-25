@@ -27,7 +27,7 @@ if (count($_POST) > 0) {
         $exec = $registro->Save();
 
         if ($exec && $adm_tema != 'branco') {
-            header("Location: $cancelLink");
+            header("Location: editar.php?cod={$registro->getCod()}");
         } else {
             $msg = fEnd_MsgString("O registro foi inserido.$fEnd_closeTheIFrameImDone", 'success');
         }

@@ -50,16 +50,16 @@ $form->start("cadastro","","POST");
 
 $form->fieldset("Conteúdo");
 $form->insertHtml($tabs->start());
-$form->text(__('banner3i.titulopt'), 'titulopt', $registro->getTitulopt(), 1);
-$form->text(__('banner3i.descricaopt'), 'descricaopt', $registro->getDescricaopt(), 1);
+$form->text(__('banner3i.titulopt'), 'titulopt', $registro->getTitulopt(), 0);
+$form->text(__('banner3i.descricaopt'), 'descricaopt', $registro->getDescricaopt(), 0);
 
 $form->insertHtml($tabs->tab());
-$form->text(__('banner3i.tituloes'), 'tituloes', $registro->getTituloes(), 1);
-$form->text(__('banner3i.descricaoes'), 'descricaoes', $registro->getDescricaoes(), 1);
+$form->text(__('banner3i.tituloes'), 'tituloes', $registro->getTituloes(), 0);
+$form->text(__('banner3i.descricaoes'), 'descricaoes', $registro->getDescricaoes(), 0);
 
 $form->insertHtml($tabs->tab());
-$form->text(__('banner3i.tituloen'), 'tituloen', $registro->getTituloen(), 1);
-$form->text(__('banner3i.descricaoen'), 'descricaoen', $registro->getDescricaoen(), 1);
+$form->text(__('banner3i.tituloen'), 'tituloen', $registro->getTituloen(), 0);
+$form->text(__('banner3i.descricaoen'), 'descricaoen', $registro->getDescricaoen(), 0);
 $form->insertHtml($tabs->end());
 $form->fieldsetOut();
 
