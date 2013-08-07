@@ -192,12 +192,15 @@ class CtrlLocalizacaoV2 extends CtrlLocalizacao {
     public $registro = false;
     public $cep = "";
 
-    public function getCtrl($exibeCep = true, $exibeEstado = true, $exibeCidade = true, $exibeBairro = true, $exibeRua = true, $exibeNumero = true, $exibeComplemento = true) {
+    public function getCtrl($exibeCep = true, $exibeEstado = true, $exibeCidade = true, $exibeBairro = true, $exibeRua = true, $exibeNumero = true, $exibeComplemento = true, $exibeNaoSeiCep = false) {
         $validateString = autoform2::retornarValidate(1);
         $name = $this->name;
 
         if ($exibeCep) {
             $html = "<input type='text' name='{$name}_cep' id='{$name}_cep' class='$validateString' value='{$this->cep}' maxlength='8'></input> ";
+            if ($exibeNaoSeiCep) {
+                $html .= "<a id='{$name}_cepLink' href='#'>Nao sei o cep</a><script>$(document).ready(function(){ $('#{$name}_cepLink').click(function(){ $('#{$name}_cep').closest('.control-group').after(\"<input type='hidden' name='ctrl_loc_cep'>\"); $('#{$name}_cep').closest('.control-group').remove(); return false; }); });</script>";
+            }
             $s = $this->buildAutoFormField("Cep", $name . "_cep", $html);
         } else {
             $html = "<input type='hidden' name='{$name}_cep' id='{$name}_cep' value='{$this->cep}'></input>";
