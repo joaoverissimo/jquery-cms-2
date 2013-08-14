@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `localizacao` (
   KEY `bairro` (`bairro`),
   KEY `cidade` (`cidade`),
   KEY `estado` (`estado`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8  AUTO_INCREMENT=7 ;
 
 --
 -- Restrições para as tabelas dumpadas
