@@ -119,7 +119,11 @@ class objJqueryimage extends fbaseJqueryimage {
     }
 
     public function getExiste() {
-        return arquivos::existe($this->getFileName());
+        if ($this->getValor()) {
+            return arquivos::existe($this->getFileName());
+        }
+
+        return false;
     }
 
     public function getFolder() {

@@ -187,8 +187,8 @@ class autoform2 {
               success: function(label) {
                 label.closest('.control-group').removeClass('error');
               }
-        " . '}); ' . 
-            $add['onready'] . '
+        " . '}); ' .
+                $add['onready'] . '
         }); ';
         $this->formName = $name;
     }
@@ -442,6 +442,34 @@ class autoform2 {
         $s .="\n\t\t\t<input type='file' name='$name' id='$name' class='$validateString {$add['class']}' {$add['add']} {$add['maxlength']} /> ";
         $s .= $this->retornarSpan($span);
         $s .= "</div>";
+        $s .= $this->FieldOut();
+        $this->formOut .= $s;
+    }
+
+    function fileImagemsRemover($label, $name, $value = '0', $validate = '0', $Conexao = null, $span = '', $add = '') {
+        $add = $this->retornarAddArray($add, "add, class, labelclass, precontrol, poscontrol, divcontrolsclass, spanclass, maxlength, type");
+
+        $s = $this->FieldIn();
+        $s .= "\n\t\t<label class='control-label {$add['labelclass']}' for='{$name}-file'>$label: </label>";
+        $s .= "\n\t\t<div class='controls FormfileImagems {$add['divcontrolsclass']}'>{$add['precontrol']}";
+
+        if ($value != '0') {
+            if (!isset($Conexao)) {
+                $Conexao = CarregarConexao();
+            }
+
+            if (dbJqueryimage::Existe($Conexao, $value)) {
+                $s .= "<div class='div_field_imgAtual'><img src='/img.php?img=$value&width=70&height=35&crop=1' alt='' /><span>Caso queira escolha um arquivo abaixo. <label><input type='checkbox' name='{$name}-remover' id='{$name}-remover' /> Remover esta imagem</label> </span></div>";
+            }
+        }
+
+
+        $validateString = $this->retornarValidate($validate);
+        $s .="<input type='file' name='$name-file' id='$name-file' class='$validateString {$add['class']}' {$add['add']} /> ";
+        $s .= "{$add['poscontrol']}\n\t\t";
+        $s .= $this->retornarSpan($span, $add['spanclass']);
+        $s .= "</div>";
+        $s .= $this->hidden($name, $value);
         $s .= $this->FieldOut();
         $this->formOut .= $s;
     }

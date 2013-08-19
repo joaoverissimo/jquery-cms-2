@@ -53,9 +53,22 @@ class dbJqueryimage extends dbaseJqueryimage {
     public static function UpdateByFileImagems($Conexao, $FormFieldNome, $die = false) {
         $cod = issetpost($FormFieldNome);
 
+        //remove a imagem caso exista e estaja marcado o remover
+        if (issetpostInteger($FormFieldNome . "-remover")) {
+            $obj = new objJqueryimage($Conexao);
+            $obj->loadByCod($cod);
+
+            arquivos::deletar($obj->getFileName());
+            $obj->setValor("");
+            $obj->Save();
+            return $cod;
+        }
+
+        //Se nenhuma imagem foi enviada apenas retorna o codigo
         if (!isset($_FILES[$FormFieldNome . '-file']) || $_FILES[$FormFieldNome . '-file']["size"] == 0)
             return $cod;
 
+        //Tenta salvar a imagem e atualizar o registro jqueryimage
         $prefix = $cod . "_";
         $newvalor = arquivos::uploadImage($FormFieldNome . '-file', $prefix);
 

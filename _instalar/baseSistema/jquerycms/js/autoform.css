@@ -1,7 +1,9 @@
 .control-group .controls {position: relative}
 .control-group .controls label.error {color: #b94a48;display: inline-block;margin-left: 5px;}
 
-.control-group .controls.FormfileImagems .div_field_imgAtual span{font-size: x-small;margin-left: 4px;}
+.control-group .controls.FormfileImagems .div_field_imgAtual span{font-size: x-small;margin-left: 4px;display: block;}
+.control-group .controls.FormfileImagems .div_field_imgAtual span label {font-size: 11px;display: block;margin: -5px 0 0 0;}
+.control-group .controls.FormfileImagems .div_field_imgAtual img {float: left;margin-right: 10px;}
 
 .brDate {background: url(tabela_admin/calendar-icon.png) no-repeat right,0 white;}
 
