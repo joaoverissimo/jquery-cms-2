@@ -31,7 +31,8 @@ class dbJqueryimage extends dbaseJqueryimage {
     public static function InserirByFileImagems($Conexao, $FormFieldNome, $die = false) {
         $prefix = self::getMax($Conexao, true) . "_";
 
-        if (isset($_FILES[$FormFieldNome . '-file']) && $_FILES[$FormFieldNome . '-file']["size"] > 0) {
+        $hasImage = isset($_FILES[$FormFieldNome . '-file']) && $_FILES[$FormFieldNome . '-file']["size"] > 0;
+        if ($hasImage) {
             $valor = arquivos::uploadImage($FormFieldNome . '-file', $prefix);
         } else {
             $valor = $prefix . "imagem.jpg";
@@ -39,7 +40,7 @@ class dbJqueryimage extends dbaseJqueryimage {
 
         $exec = parent::Inserir($Conexao, $valor, $die);
 
-        if ($exec) {
+        if ($exec && $hasImage) {
             //Redimensiona
             $obj = new objJqueryimage($Conexao);
             $obj->loadByCod($exec);
