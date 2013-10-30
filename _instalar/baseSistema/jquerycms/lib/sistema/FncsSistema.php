@@ -188,11 +188,9 @@ function Fncs_EnviarEmail($para, $from, $mensagemHTML, $assunto, $charset = "utf
             return true;
             echo '<!-- Contato Sucesso -->';
         } else {
-            echo '<!-- Ocorreu um erro ao enviar e-mail -->';
             return false;
         }
     } else {
-        echo '<!-- Contato Sucesso - POST FIX-->';
         return true;
     }
 }
