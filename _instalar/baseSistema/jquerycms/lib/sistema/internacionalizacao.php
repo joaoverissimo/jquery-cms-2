@@ -42,7 +42,7 @@ class internacionalizacao {
             return 1;
     }
 
-    function Lang() {
+    public static function Lang() {
         global $internacionalizacaoFileContent;
         $internacionalizacaoLang = self::getCurrentLang();
 
@@ -55,7 +55,7 @@ class internacionalizacao {
         return $internacionalizacaoFileContent;
     }
 
-    function abrirArquivoCsv($filename) {
+    public static function abrirArquivoCsv($filename) {
         $content = arquivos::ler($filename);
         //$s = mb_convert_encoding($content, 'UTF-8', mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true)); 
         $conteudo = $content;
