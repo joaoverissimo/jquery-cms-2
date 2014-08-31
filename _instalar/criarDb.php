@@ -43,8 +43,9 @@ function criarDbValores($campos, $pular = true) {
 
 function criarDbDeleteObjs($tabela, $campos, $relacoes) {
     $tabelaU = ucfirst($tabela);
+    $primarykey = $campos[0]['Field'];
     $s = "\$obj = new obj$tabelaU(\$Conexao);\n\t\t\$obj->loadByCod(\${$campos[0]['Field']});\n\n\t\t";
-    $s .= "\$exec = parent::Deletar(\$Conexao, \$cod); \n\n\t\t";
+    $s .= "\$exec = parent::Deletar(\$Conexao, \$$primarykey); \n\n\t\t";
 
     $coment = true;
 
