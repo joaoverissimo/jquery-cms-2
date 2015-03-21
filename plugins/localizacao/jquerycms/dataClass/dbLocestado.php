@@ -125,9 +125,9 @@ class CtrlLocalizacao {
     public function PostRecebeValores() {
         $name = $this->name;
         if (isset($_POST[$name . "_estado"]) && isset($_POST[$name . "_cidade"]) && isset($_POST[$name . "_bairro"]) && isset($_POST[$name . "_rua"]) && isset($_POST[$name . "_numero"]) && isset($_POST[$name . "_complemento"])) {
-            $this->estado = $_POST[$name . "_estado"];
-            $this->cidade = $_POST[$name . "_cidade"];
-            $this->bairro = $_POST[$name . "_bairro"];
+            $this->estado = $_POST[$name . "_estado"] ? $_POST[$name . "_estado"] : null;
+            $this->cidade = $_POST[$name . "_cidade"] ? $_POST[$name . "_cidade"] : null;
+            $this->bairro = $_POST[$name . "_bairro"] ? $_POST[$name . "_bairro"] : null;
             $this->rua = $_POST[$name . "_rua"];
             $this->numero = $_POST[$name . "_numero"];
             $this->complemento = $_POST[$name . "_complemento"];
