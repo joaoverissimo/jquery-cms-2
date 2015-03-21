@@ -70,7 +70,7 @@ class CtrlLocalizacao {
     public function getAutoFormField($exibeEstado = true, $exibeCidade = true, $exibeBairro = true, $exibeRua = true, $exibeNumero = true, $exibeComplemento = true) {
         $Conexao = $this->Conexao;
         $s = "";
-        $validateString = autoform2::retornarValidate(1);
+        $validateString = autoform2::retornarValidate(0);
         $name = $this->name;
         if ($exibeEstado && $exibeCidade) {
             $html = autoform2::retornarSelectDb($name . "_estado", $this->estado, $validateString . " span1", $Conexao, "locestado", "cod", "uf", "", "nome asc", "Selecione...");
@@ -193,7 +193,7 @@ class CtrlLocalizacaoV2 extends CtrlLocalizacao {
     public $cep = "";
 
     public function getCtrl($exibeCep = true, $exibeEstado = true, $exibeCidade = true, $exibeBairro = true, $exibeRua = true, $exibeNumero = true, $exibeComplemento = true, $exibeNaoSeiCep = false) {
-        $validateString = autoform2::retornarValidate(1);
+        $validateString = autoform2::retornarValidate(0);
         $name = $this->name;
 
         if ($exibeCep) {
