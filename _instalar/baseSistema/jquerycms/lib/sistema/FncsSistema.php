@@ -157,14 +157,20 @@ function issetpost($nome_campo) {
         return "";
 }
 
-function issetpostInteger($nome_campo) {
+function issetpostInteger($nome_campo, $permite_nulo = false) {
     if (isset($_POST["$nome_campo"])) {
-        if ($_POST["$nome_campo"] == "on")
+        if ($_POST["$nome_campo"] == "on") {
             return 1;
+        }
 
-        return intval(trim($_POST["$nome_campo"]));
-    } else
+        if ($permite_nulo && $_POST["$nome_campo"] == "") {
+            return null;
+        }
+
+        return  intval($_POST["$nome_campo"]);
+    } else {
         return 0;
+    }
 }
 
 function Fncs_EnviarEmail($para, $from, $mensagemHTML, $assunto, $charset = "utf-8", $Cc = "", $Bcc = "") {
