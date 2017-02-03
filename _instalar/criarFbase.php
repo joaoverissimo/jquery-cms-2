@@ -65,8 +65,16 @@ function criarFbaseEspeciais($Conexao, $tabela, $campos, $relacoes) {
         if (str_contains($type, "float") || str_contains($type, "decimal")) {
             $s .= "public function get{$fieldU}RS() { \n\t\treturn 'R$ ' . number_format(self::get{$fieldU}(), 2, ',', '.'); \n\t}\n\n\t";
         }
+
+        if ($type == "date" || $type == "datetime") {
+            $s .= "public function obj$fieldU() { \n\t\treturn objDate::initPtBr(\$this->get$fieldU()); \n\t}\n\n\t";
+        }
+
+        if ($type == "time") {
+            $s .= "public function obj$fieldU() { \n\t\treturn objTime::initHMS(\$this->get$fieldU()); \n\t}\n\n\t";
+        }
     }
-    
+
     return $s;
 }
 
@@ -154,12 +162,15 @@ function criarFbaseRelInversas($Conexao, $tabela) {
     $s = "";
     foreach ($relacoesInversas as $relacao) {
         if ($relacao["REFERENCED_TABLE_NAME"] == $tabela) {
-            $s .= "\t/**\n\t* Relacao {$relacao["TABLE_NAME"]}.{$relacao["COLUMN_NAME"]} -> {$relacao["REFERENCED_TABLE_NAME"]}.{$relacao['REFERENCED_COLUMN_NAME']}\n\t* @return obj" . ucfirst($relacao["TABLE_NAME"]) . "[]\n\t*/";
+            $s .= "\t //private \$obtem{$relacao["OBJNAME"]}Rel; \n\t\t/**\n\t* Relacao {$relacao["TABLE_NAME"]}.{$relacao["COLUMN_NAME"]} -> {$relacao["REFERENCED_TABLE_NAME"]}.{$relacao['REFERENCED_COLUMN_NAME']}\n\t* @return obj" . ucfirst($relacao["TABLE_NAME"]) . "[]\n\t*/";
             $s .= "\n\t" . '/*public function obtem' . $relacao["OBJNAME"] . 'Rel ($orderByField = "", $orderByOrientation = "", $limit = "") {
-' . "\t\t" . '$orderBy = new dataOrder($orderByField, $orderByOrientation);
-' . "\t\t" . '$where = new dataFilter("' . $relacao["TABLE_NAME"] . '.' . $relacao["COLUMN_NAME"] . '", $this->get' . ucfirst($relacao['REFERENCED_COLUMN_NAME']) . '());
-' . "\t\t" . '$dados = db' . $relacao["OBJNAME"] . '::ObjsList($this->Conexao, $where, $orderBy, $limit);
-' . "\t\t" . 'return $dados;
+' . "\t\t" . 'if (!isset($this->obtem' . $relacao["OBJNAME"] . 'Rel)) {
+' . "\t\t\t" . '$orderBy = new dataOrder($orderByField, $orderByOrientation);
+' . "\t\t\t" . '$where = new dataFilter("' . $relacao["TABLE_NAME"] . '.' . $relacao["COLUMN_NAME"] . '", $this->get' . ucfirst($relacao['REFERENCED_COLUMN_NAME']) . '());
+' . "\t\t\t" . '$dados = db' . $relacao["OBJNAME"] . '::ObjsList($this->Conexao, $where, $orderBy, $limit);
+' . "\t\t\t" . '$this->obtem' . $relacao["OBJNAME"] . 'Rel = $dados;
+' . "\t\t" . '}
+' . "\t\t" . 'return $this->obtem' . $relacao["OBJNAME"] . 'Rel;
 ' . "\t" . '}*/' . "\n\n";
         }
     }
