@@ -7,15 +7,11 @@ class dbJqueryseopalavra extends dbaseJqueryseopalavra {
 // <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">       
     public static function Inserir($Conexao, $palavra, $url = "", $count = 0, $die = false) {
         $url = toRewriteString($palavra);
-        if ($palavra && $url) {            
-            $obj = new objJqueryseopalavra($Conexao, false);
-            if (!$obj->loadByCod($url, 'url')) {
-                //Somente insere se a palavra nao existir
-                return parent::Inserir($Conexao, trim($palavra), $url, $count, $die);
-            }
+        if ($palavra && $url) {
+            return parent::Inserir($Conexao, trim($palavra), $url, $count, $die);
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     public static function Update($Conexao, $cod, $palavra, $url, $count, $die = false) {

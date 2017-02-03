@@ -2,6 +2,13 @@
 
 class jquerycmsException extends Exception {
 
+    public $str_code;
+
+    public function __construct($message, $str_code = "") {
+        $this->str_code = $str_code;
+        return parent::__construct($message, null, null);
+    }
+
     public function errorMessage() {
         if (___MyDebugger) {
             return '<b>PsgIntegra - Excessão:</b> ' . $this->getMessage() . '. Linha: ' . $this->getLine() . ' | Arquivo: ' . $this->getFile();

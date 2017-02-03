@@ -59,8 +59,8 @@ criarDbase($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFolder);
 echo "<div>Criado Dbase</div>";
 
 //CRIA TEMPLATES
-require_once 'criarTemplate.php';
-criarTemplate($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFolder);
+require_once 'criarForm.php';
+criarForm($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFolder);
 echo "<div>Criado Templates</div>";
 
 //CRIA LOCALE

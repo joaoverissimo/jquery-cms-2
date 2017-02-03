@@ -48,20 +48,24 @@ foreach ($dados as $obj) {
 
     $s = "
             <li id='listItem_{$cod}'>
-                <p><img src='{$obj->objJqueryimage()->getSrc()}' alt='{$obj->getTitulo()}' class='img-polaroid'/></p>
+                <p>
+                    <a href='{$obj->objJqueryimage()->getSrc_PropMax(800,600,false)}' title='{$obj->getTitulo()}' class='img-slider'>
+                      <img src='{$obj->objJqueryimage()->getSrc()}' alt='{$obj->getTitulo()}' class='img-thumbnail'/>
+                    </a>
+                </p>
                 <span>{$obj->getTitulo()}</span>
                 <div> ";
     if ($exibedeletar)
-        $s .= "<a href='/jquerycms/js/fineuploader/upload-delete.php?jqueryimagelist=$jqueryimagelist&jqueryimagelistitem=$jqueryimagelistitem&ctrlname=$ctrlname' class='btn btn-mini {$ctrlname}_deletar' jqwidth='100' jqheight='80' data-toggle='tooltip' data-placement='top' data-original-title='Deletar'><i class='icon-trash'></i></a>";
+        $s .= "<a href='/jquerycms/js/fineuploader/upload-delete.php?jqueryimagelist=$jqueryimagelist&jqueryimagelistitem=$jqueryimagelistitem&ctrlname=$ctrlname' class='btn btn-xs {$ctrlname}_deletar' jqwidth='100' jqheight='80' data-toggle='tooltip' data-placement='top' data-original-title='Deletar'><i class='fa fa-trash'></i></a>";
     if ($exibesetdefault && $obj->getPrincipal() == 1) {
-        $s.="<a href='/jquerycms/js/fineuploader/upload-setdefault.php?jqueryimagelist=$jqueryimagelist&jqueryimagelistitem=$jqueryimagelistitem&ctrlname=$ctrlname' class='btn btn-mini disabled {$ctrlname}_editar' jqwidth='100' jqheight='80' disabled data-toggle='tooltip' data-placement='top' data-original-title='Esta imagem é a miniatura principal desta lista'><i class='icon-star'></i></a>";
+        $s.="<a href='/jquerycms/js/fineuploader/upload-setdefault.php?jqueryimagelist=$jqueryimagelist&jqueryimagelistitem=$jqueryimagelistitem&ctrlname=$ctrlname' class='btn btn-xs disabled {$ctrlname}_editar' jqwidth='100' jqheight='80' disabled data-toggle='tooltip' data-placement='top' data-original-title='Esta imagem é a miniatura principal desta lista'><i class='icon-star'></i></a>";
     } elseif ($exibesetdefault) {
-        $s.="<a href='/jquerycms/js/fineuploader/upload-setdefault.php?jqueryimagelist=$jqueryimagelist&jqueryimagelistitem=$jqueryimagelistitem&ctrlname=$ctrlname' class='btn btn-mini {$ctrlname}_editar' jqwidth='100' jqheight='80' data-toggle='tooltip' data-placement='top' data-original-title='Definir como miniatura'><i class='icon-star'></i></a>";
+        $s.="<a href='/jquerycms/js/fineuploader/upload-setdefault.php?jqueryimagelist=$jqueryimagelist&jqueryimagelistitem=$jqueryimagelistitem&ctrlname=$ctrlname' class='btn btn-xs {$ctrlname}_editar' jqwidth='100' jqheight='80' data-toggle='tooltip' data-placement='top' data-original-title='Definir como miniatura'><i class='icon-star'></i></a>";
     }
 
     if ($exibeeditar)
-        $s .= "<a href='/jquerycms/js/fineuploader/upload-editar.php?jqueryimagelist=$jqueryimagelist&jqueryimagelistitem=$jqueryimagelistitem&ctrlname=$ctrlname&$link' class='btn btn-mini {$ctrlname}_editar' jqwidth='600' jqheight='450' data-toggle='tooltip' data-placement='top' data-original-title='Editar'><i class='icon-pencil'></i></a>";
-    
+        $s .= "<a href='/jquerycms/js/fineuploader/upload-editar.php?jqueryimagelist=$jqueryimagelist&jqueryimagelistitem=$jqueryimagelistitem&ctrlname=$ctrlname&$link' class='btn btn-xs {$ctrlname}_editar' jqwidth='600' jqheight='450' data-toggle='tooltip' data-placement='top' data-original-title='Editar'><i class='fa fa-pencil'></i></a>";
+
     $s .= "</div>
             </li>
           ";

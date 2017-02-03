@@ -2,6 +2,8 @@
 
 function criarDb($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFolder) {
     $temlate = obterDocumentRoot() . "_instalar/templates/";
+    $campo2 =  criarObtemFormFieldsObtemCampo2($Conexao, $tabela, $campos);
+    
     $s = stringuize("db.html", array(
         '$tabela#' => $tabela,
         '$tabelaFistUpper#' => ucfirst($tabela),
@@ -9,6 +11,7 @@ function criarDb($Conexao, $tabela, $campos, $relacoes, $outputFolder, $realFold
         '$primarykey#' => $campos[0]['Field'],
         '$DbInserirValores#' => criarDbValores($campos, true),
         '$DbEditarValores#' => criarDbValores($campos, false),
+        '$campo2#' => $campo2['Field'],
         '$DbDeleteRel#' => criarDbDeleteObjs($tabela, $campos, $relacoes)
             )
             , $temlate);

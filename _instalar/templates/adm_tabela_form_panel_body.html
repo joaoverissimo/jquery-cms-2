@@ -1,0 +1,40 @@
+<div class="panel-body">
+    <?php if ($dados !== false) : ?>
+    <form method="post" action="deletar-multi.php" id="form-grid">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped" id="tablelista">
+                <thead>
+                    <tr>
+                        <th class="th-multi"></th>
+                        $tableListaThead#
+                        <th class="th-actions"></th>
+                    </tr>
+                </thead>
+                <?php foreach($dados as $registro) : ?>
+                <tr>
+                    <td><label><input type="checkbox" name="multi[]" value="<?php echo $registro->get$primarykeyU#(); ?>" class="multi-input" /></td>
+                    $tableListaItem#
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="editar.php?cod=<?php echo $registro->get$primarykeyU#(); ?>"><i class="fa fa-pencil"></i> <?php echo __('editar'); ?></a>
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="deletar.php?cod=<?php echo $registro->get$primarykeyU#(); ?>"><i class="fa fa-trash-o"></i> <?php echo __('deletar'); ?></a></li>
+                            </ul>
+                        </div>  
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+           
+        <?php include '../lib/masterpage/page-multi-actions-default.php'; ?>
+        
+        </div>
+    </form>
+    <?php else : ?>
+        <div class="clearfix">Não existem registros.</div>
+    <?php endif; ?>
+
+    <?php echo $pager->getPager(); ?>
+</div>

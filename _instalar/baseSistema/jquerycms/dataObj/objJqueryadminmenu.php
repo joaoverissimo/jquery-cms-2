@@ -35,14 +35,25 @@ class objJqueryadminmenu extends fbaseJqueryadminmenu {
       return "/" . $link;
       } */
 
+    public function getMenuId() {
+        $titulo = $this->getTitulo();
+        return "mn-" . toRewriteString($titulo);
+    }
+
     public function getLink($adm_folder) {
         $patch = $this->getPatch();
 
-        if (str_contains($patch, "/"))
-            return $patch;
-
-        if (!isset($adm_folder) || !$adm_folder)
+        if (!isset($adm_folder) || !$adm_folder) {
             $adm_folder = "/adm";
+        }
+
+        if ($patch == "#") {
+            return "#";
+        }
+
+        if (str_contains($patch, "/")) {
+            return $patch;
+        }
 
         return $adm_folder . "/" . $patch . "/index.php";
     }

@@ -6,49 +6,72 @@ if (!isset($_SESSION)) {
 }
 
 define('___MyDebugger', true);
-define('___DataEHoraAtual', date('d/m/Y h:i:s'));
+define('___DataEHoraAtual', date('d/m/Y H:i:s'));
 define('___DataAtual', date('d/m/Y'));
 define('___AppRoot', obterDocumentRoot());
-define('___cdn', 'https://github.com/joaoverissimo/jquery-cms-2/blob/master/_instalar/baseSistema.zip?raw=true');
 
-if ($_SERVER['SERVER_NAME'] == 'localhost') {
+define('___AppSESAccessKey', "");
+define('___AppSESSecretKey', "");
+define('___googleMapsAPI', "");
+
+define('___siteUrlHome', "http://www.meusite.com.br/"); //sempre terminar com barra (.br/)
+
+require_once 'saas.php';
+define('___phpDataCliente', saas_getCliente());
+//define('___phpDataDb', 'wsoft_' . ___phpDataCliente);
+define('___siteUrl', saas_getUrlCanonical()); //sempre terminar com barra (.br/)
+define('___sisTitulo', "Fluxo de Caixa");
+
+if (saas_getHost() == "wsoft" || $_SERVER['HTTP_HOST'] == '$___HTTP_HOST#') {
+    define('___phpIsLocalHost', true);
     define('___phpDataServer', '$___MySqlDataServer#');
     define('___phpDataDb', '$___MysqlDataDb#');
     define('___phpDataUser', '$___MySqlDataUser#');
     define('___phpDataPass', '$___MySqlDataPass#');
-    define('___siteUrl', 'http://localhost/'); //sempre terminar com barra (.br/)
-    define('___siteContactMail', 'contato@localhost.com.br');
+    define('___siteContactMail', 'nao-responder@fluxodecaixa.net.br');
     define('___SimpleCacheTime', 0);
+
+    //Permite que o servidor de locLocalizacao seja remoto
+    define('___phpDataServerLoc', 'localhost');
+    define('___phpDataUserLoc', 'root');
+    define('___phpDataPassLoc', '');
+    define('___phpDataDbLoc', 'test');
 } else {
-    define('___phpDataServer', '$___MySqlDataServer#');
+    define('___phpIsLocalHost', false);
     define('___phpDataDb', '$___MysqlDataDb#');
-    define('___phpDataUser', '$___MySqlDataUser#');
-    define('___phpDataPass', '$___MySqlDataPass#');
-    define('___siteUrl', 'http://www.localhost.com.br/');
-    define('___siteContactMail', 'contato@localhost.com.br');
-    define('___SimpleCacheTime', 3 * 60); //3 minutos para cache
+    define('___phpDataServer', 'localhost');
+    define('___phpDataUser', 'conweb');
+    define('___phpDataPass', 'conweb2015');
+    define('___siteContactMail', 'nao-responder@fluxodecaixa.net.br');
+    define('___SimpleCacheTime', 3 * 60);
+
+    //Permite que o servidor de locLocalizacao seja remoto
+    define('___phpDataServerLoc', 'localhost');
+    define('___phpDataUserLoc', 'conweb');
+    define('___phpDataPassLoc', 'conweb2015');
+    define('___phpDataDbLoc', 'test');
 }
 
 $adm_folder = "/adm";
-$loginURL = "$adm_folder/home/login.php";
+$loginURL = "$adm_folder/login/login.php";
 
 require_once 'lib/sistema/BootStrapSistema.php';
+require_once ___AppRoot . 'lib/bootstrap.php';
 require_once 'dataClass/bootStrapData.php';
 require_once 'lib/autoform2/autoform2.php';
 require_once 'dataObj/bootStrapObjFend.php';
-if (arquivos::existe(___AppRoot . 'lib/bootstrap.php')) {
-    require_once ___AppRoot . 'lib/bootstrap.php';
-}
+require_once 'dataObjType/bootStrapObjType.php';
+require_once 'emailClass/bootstrapEmail.php';
 
 function obterDocumentRoot() {
-	$AppRoot = $_SERVER['DOCUMENT_ROOT'];
+    $AppRoot = $_SERVER['DOCUMENT_ROOT'];
     if ($AppRoot[strlen($AppRoot) - 1] != "/")
         $AppRoot.= "/";
-		
-	return $AppRoot;
+
+    return $AppRoot;
 }
 
-function CarregarConexao(){
+function CarregarConexao() {
     $phpDataServer = ___phpDataServer;
     $phpDataDb = ___phpDataDb;
     $phpDataUser = ___phpDataUser;
@@ -57,4 +80,18 @@ function CarregarConexao(){
     return $Conexao;
 }
 
+function CarregarConexaoLoc() {
+    $phpDataServer = ___phpDataServerLoc;
+    $phpDataDb = ___phpDataDbLoc;
+    $phpDataUser = ___phpDataUserLoc;
+    $phpDataPass = ___phpDataPassLoc;
+    $Conexao = new PDO("mysql:host=$phpDataServer; dbname=$phpDataDb", "$phpDataUser", "$phpDataPass", array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+    return $Conexao;
+}
+
+
 $Conexao = CarregarConexao();
+$ConexaoLoc = CarregarConexaoLoc();
+
+saas_syncDb($Conexao);
+define('___sisVersao', saas_getVersao($Conexao));

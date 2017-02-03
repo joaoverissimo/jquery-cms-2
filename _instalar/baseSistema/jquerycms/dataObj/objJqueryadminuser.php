@@ -31,12 +31,15 @@ class objJqueryadminuser extends fbaseJqueryadminuser {
             $adm_folder = "/adm";
         }
 
-        if ($url == "") {
-            $url = Fncs_GetCurrentURL();
+        if ($url == "#") {
+            return true;
         }
 
-        $pattern = str_replace("/", "\/", $adm_folder);
-        $pattern = "/$pattern\/(.*)\//i";
+        if ($url == "") {
+            $url = Fncs_GetCurrentURL(true);
+        }
+
+        $pattern = "/adm\/([a-zA-Z-\.]*)\//";
         if (!preg_match($pattern, $url, $matches)) {
             return false;
         }
@@ -46,6 +49,11 @@ class objJqueryadminuser extends fbaseJqueryadminuser {
         }
 
         $patch = $matches[1];
+
+        if ($patch === "login") {
+            return true;
+        }
+
         $registro = dbJqueryadminmenu::Carregar($this->Conexao, $patch, 'patch');
         if ($registro === false) {
             return false;

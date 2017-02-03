@@ -36,9 +36,9 @@ $dados = dbJqueryimagelistitem::ObjsList($Conexao, $where, $orderBy, $pager->get
                 </div>
                 
                 <div class="btn-toolbar">
-                    <a href="inserir.php?jqueryimagelist=<?php echo $jqueryimagelist; ?>" class="btn btn-primary"><i class="icon-plus icon-white"></i> Inserir</a>
+                    <a href="inserir.php?jqueryimagelist=<?php echo $jqueryimagelist; ?>" class="btn btn-primary"><i class="fa fa-plus"></i> Inserir</a>
                     
-                    <form class="navbar-form pull-right">
+                    <form class="navbar-form ">
                         <input type="text" id="filtraList" placeholder="Busca rápida...">
                     </form>
                 </div>

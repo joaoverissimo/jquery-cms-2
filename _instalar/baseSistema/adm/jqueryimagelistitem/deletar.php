@@ -15,7 +15,7 @@ if ($adm_tema != 'branco') {
 //CONEXÃO E VALORES
 $registro = new objJqueryimagelistitem($Conexao, true);
 $registro->loadByCod($_GET["cod"]);
-    
+
 //POST
 if (count($_POST) > 0) {
     $deletar = issetpost('delete');
@@ -27,7 +27,7 @@ if (count($_POST) > 0) {
             if ($exec && $adm_tema != 'branco') {
                 header("Location: index.php?jqueryimagelist=$jqueryimagelist");
             } else {
-                $msg = fEnd_MsgString("O registro foi excluido.$fEnd_closeTheIFrameImDone", 'success');
+                $msg = fEnd_MsgString("O registro foi excluido." . fEnd_closeTheIFrameImDone('jqueryimagelistitem', $registro->getCod()), 'success');
             }
         } catch (jquerycmsException $exc) {
             $msg = fEnd_MsgString("Ocorreram problemas ao deletar o registro.", 'error', $exc->getMessage());
@@ -47,7 +47,7 @@ $form->end();
 ?><!DOCTYPE HTML>
 <html>
     <head>
-        <title><?php echo __('table_jqueryimagelistitem');?> - Deletar</title>
+        <title><?php echo __('table_jqueryimagelistitem'); ?> - Deletar</title>
 
         <?php include '../lib/masterpage/head.php'; ?>
         <?php echo $form->getHead(); ?>
@@ -58,9 +58,9 @@ $form->end();
         <div class="main">
             <div class="inner">
                 <div class="page-header">
-                    <h3><?php echo __('table_jqueryimagelistitem');?> <small>Deletar</small></h3>
+                    <h3><?php echo __('table_jqueryimagelistitem'); ?> <small>Deletar</small></h3>
                 </div>
-                
+
                 <?php echo $msg; ?>
                 <?php echo $form->getForm(); ?>
             </div>

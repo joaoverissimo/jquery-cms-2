@@ -1,18 +1,14 @@
-body {background-color: #f5f5f5;}
+body{background: white;}
+body{overflow-x: hidden;overflow-y: scroll;/*sortable: pode causar conflito com o jquery ui sortable*/}
 
-.inner {margin: 0 auto;position: relative;}
-.header {display: none;}
-.footer {display:none;}
+.header {display: none !important;}
+#sidebar-left {display: none !important;}
+.content-body {}
+.page-header {display: none !important;}
+section.content-body {margin: 0 auto !important;margin-bottom: 0px !important;padding: 10px !important;width: 100% !important;}
+.panel-footer {position: fixed;top: 0px;right: 0px;width: 30%;text-align: right;z-index: 1;margin: 0px;border-bottom: 1px solid #DADADA;border-left: 1px solid #DADADA;}
+.inner-wrapper {padding-top: 6px !important;}
+.panel-body {webkit-box-shadow: none;box-shadow: none;}
 
-.main {}
-.main .inner {background: white;}
-.main .inner .page-header {margin: 0 0 10px 0;padding-bottom: 0;}
-.main .inner .page-header h3 {margin: 0px;font-size: 20px;}
-
-.form-horizontal .control-group {margin-bottom: 8px;}
-
-.ordem {list-style: none;}
-.ordem li {display: block;padding: 10px;height: auto;min-height: auto;margin-bottom: 5px;cursor: move;}
-
-.ativar0 {display: inline-block; width: 15px; height: 15px; background: url(icons/ativar0.png) no-repeat;}
-.ativar1 {display: inline-block; width: 15px; height: 15px; background: url(icons/ativar1.png) no-repeat}
+.alert {margin-bottom: 5px;}
+.alert h4 {margin: 0px;font-size: 14px;font-weight: bold;}

@@ -11,8 +11,17 @@ class dbJqueryadminuser extends dbaseJqueryadminuser {
     }
 
     public static function Update($Conexao, $cod, $nome, $mail, $senha, $grupo, $die = false) {
+        $obj = objJqueryadminuser::init($cod);
+        $alterouSenha = $obj->getSenha() <> $senha;
 
-        return parent::Update($Conexao, $cod, $nome, $mail, $senha, $grupo, $die);
+        $exec = parent::Update($Conexao, $cod, $nome, $mail, $senha, $grupo, $die);
+
+        if ($alterouSenha && $exec) {
+            $obj = objJqueryadminuser::init($cod);
+            mailJqueryadminuser::enviarAlterarSenha($obj);
+        }
+
+        return $exec;
     }
 
     public static function Deletar($Conexao, $cod) {

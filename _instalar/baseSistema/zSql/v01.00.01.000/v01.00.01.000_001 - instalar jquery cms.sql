@@ -1,0 +1,2 @@
+/* CREATE TABLE IF NOT EXISTS ... */
+SELECT 1 FROM jqueryimage;

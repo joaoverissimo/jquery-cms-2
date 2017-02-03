@@ -4,10 +4,28 @@ require_once "base/dbaseJqueryadmingrupo.php";
 
 class dbJqueryadmingrupo extends dbaseJqueryadmingrupo {
 
+    public static function permissaoAdd($Conexao, $codGrupo, $pathPermissao) {
+        $objMenu = objJqueryadminmenu::init($pathPermissao, "patch", false);
+        if ($objMenu->getCod()) {
+            return dbJqueryadmingrupo2menu::Inserir($Conexao, $codGrupo, $objMenu->getCod());
+        }
+
+        return false;
+    }
+
 // <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">       
     public static function Inserir($Conexao, $titulo, $die = false) {
+        $exec = parent::Inserir($Conexao, $titulo, $die);
 
-        return parent::Inserir($Conexao, $titulo, $die);
+        dbJqueryadmingrupo::permissaoAdd($Conexao, $exec, "home");
+        dbJqueryadmingrupo::permissaoAdd($Conexao, $exec, "arquivos");
+        dbJqueryadmingrupo::permissaoAdd($Conexao, $exec, "arquivolist");
+        dbJqueryadmingrupo::permissaoAdd($Conexao, $exec, "jqueryimage");
+        dbJqueryadmingrupo::permissaoAdd($Conexao, $exec, "jqueryimagelist");
+        dbJqueryadmingrupo::permissaoAdd($Conexao, $exec, "jqueryseo");
+        dbJqueryadmingrupo::permissaoAdd($Conexao, $exec, "locmapaponto");
+
+        return $exec;
     }
 
     public static function Update($Conexao, $cod, $titulo, $die = false) {

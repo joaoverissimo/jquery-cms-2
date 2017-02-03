@@ -1,18 +1,15 @@
 <?php
-//REQUIRE e VALIDA PÁGINA
 require_once '../../jquerycms/config.php';
 require_once '../lib/admin.php';
 
-$msg = "";
+$msg = isset($_GET['msg']) && $_GET['msg'] == 1 ? fEnd_MsgString("O registro foi salvo com sucesso", 'success', "O que mais você deseja fazer?<br /><a href='inserir.php'>Inserir um novo registro</a><br/><a href='index.php'>Voltar para lista</a>") : "";
 Fncs_ValidaQueryString("cod", "index.php");
 
-//CONEXÃO E VALORES
 $registro = new obj$tabelaFistUpper#($Conexao, true);
 $registro->loadByCod($_GET["cod"]);
 
 $editarCtrls#
 
-//POST
 if (count($_POST) > 0) {
     try {
         $editarValoresPost#
@@ -20,16 +17,15 @@ if (count($_POST) > 0) {
         $exec = $registro->Save();
 
         if ($exec && $adm_tema != 'branco') {
-            header("Location: $cancelLink");
+            $msg = fEnd_MsgString("O registro foi salvo com sucesso", 'success', "O que mais você deseja fazer?<br /><a href='inserir.php'>Inserir um novo registro</a><br/><a href='index.php'>Voltar para lista</a>");
         } else {
-            $msg = fEnd_MsgString("O registro foi salvo.$fEnd_closeTheIFrameImDone", 'success');
+            $msg = fEnd_MsgString("O registro foi salvo." . fEnd_closeTheIFrameImDone('$tabela#', $registro->getCod()), 'success');
         }
     } catch (jquerycmsException $exc) {
-        $msg = fEnd_MsgString("Ocorreram problemas ao inserir o registro.", 'error', $exc->getMessage());
+        $msg = fEnd_MsgString("Ocorreram problemas ao editar o registro.", 'error', $exc->getMessage());
     }
 }
 
-//FORM
 $form = new autoform2();
 $form->start("cadastro","","POST");
     
@@ -37,28 +33,40 @@ $formfields#
     
 $form->send_cancel("Salvar", $cancelLink);
 $form->end();
-?><!DOCTYPE HTML>
-<html>
-    <head>
-        <title><?php echo __('table_$tabela#');?> - Editar</title>
 
+$pageVars = array('pageTitle' => __('table_$tabela#'), 'pageAction' => "Editar", "nav-breadcrumbs" => array(__('table_$tabela#') => "index.php"));
+?><!doctype html>
+<html class="fixed sidebar-left-xs">
+    <head>
         <?php include '../lib/masterpage/head.php'; ?>
         <?php echo $form->getHead(); ?>
-        $editarCtrlsHead#
     </head>
-    <body>        
-        <?php include '../lib/masterpage/header.php'; ?>
+    <body>   
+        <section class="body">
+            <?php include '../lib/masterpage/header.php'; ?>
 
-        <div class="main">
-            <div class="inner">
-                <div class="page-header">
-                    <h3><?php echo __('table_$tabela#');?> <small>Editar</small></h3>
-                </div>
-                
-                <?php echo $msg; ?>
-                <?php echo $form->getForm(); ?>
+            <div class="inner-wrapper">
+                <?php include '../lib/masterpage/navbar.php'; ?>
+
+                <section role="main" class="content-body">
+                    <?php include '../lib/masterpage/page-header.php'; ?>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="panel main-panel-pg">
+                                <?php include '../lib/masterpage/panel-header.php'; ?>
+
+                                <div class="panel-body">
+                                    <?php echo $msg; ?>
+                                    <?php echo $form->getForm(); ?>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
-        <?php include '../lib/masterpage/footer.php'; ?>
+
+            <?php include '../lib/masterpage/footer.php'; ?>
+        </section>
     </body>
 </html>

@@ -8,14 +8,14 @@ $registro = new objJqueryimage($Conexao);
 
 //POST
 if (count($_POST) > 0) {
-    
+
     try {
         $exec = dbJqueryimage::InserirByFileImagems($Conexao, 'valor');
 
         if ($exec && $adm_tema != 'branco') {
             header("Location: index.php");
         } else {
-            $msg = fEnd_MsgString("O registro foi inserido.$fEnd_closeTheIFrameImDone", 'success');
+            $msg = fEnd_MsgString("O registro foi inserido." . fEnd_closeTheIFrameImDone('jqueryimage', $registro->getCod()), 'success');
         }
     } catch (jquerycmsException $exc) {
         $msg = fEnd_MsgString("Ocorreram problemas ao inserir o registro.", 'error', $exc->getMessage());

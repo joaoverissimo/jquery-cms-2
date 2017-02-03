@@ -1,14 +1,9 @@
 <?php
-//REQUIRE e VALIDA PÁGINA
 require_once '../../jquerycms/config.php';
 require_once '../lib/admin.php';
 
 $msg = "";
 
-//CONEXÃO E VALORES
-
-   
-//POST
 if (count($_POST) > 0) {
     if (issetArray($_POST['multi'])) {
         foreach ($_POST['multi'] as $cod) {
@@ -16,42 +11,55 @@ if (count($_POST) > 0) {
                 $registro = new obj$tabelaFistUpper#($Conexao, true);
                 $registro->loadByCod($cod);
                 $registro->Delete();
-                $msg .= fEnd_MsgString("O registro #$cod foi excluido com sucesso.$fEnd_closeTheIFrameImDone", 'success');
+                $msg .= fEnd_MsgString("O registro #$cod foi excluido com sucesso." . fEnd_closeTheIFrameImDone('$tabela#', $registro->getCod()), 'success');
             } catch (jquerycmsException $exc) {
                 $msg .= fEnd_MsgString("Ocorreram problemas ao deletar o registro #$cod.", 'warning', $exc->getMessage());
             }
         }
     }
 }
-?><!DOCTYPE HTML>
-<html>
-    <head>
-        <title><?php echo __('table_$tabela#');?> - Deletar</title>
 
+$pageVars = array('pageTitle' => __('table_$tabela#'), 'pageAction' => "Deletar", "nav-breadcrumbs" => array(__('table_$tabela#') => "index.php"));
+?><!doctype html>
+<html class="fixed sidebar-left-xs">
+    <head>
         <?php include '../lib/masterpage/head.php'; ?>
     </head>
-    <body>        
-        <?php include '../lib/masterpage/header.php'; ?>
+    <body>   
+        <section class="body">
+            <?php include '../lib/masterpage/header.php'; ?>
 
-        <div class="main">
-            <div class="inner">
-                <div class="page-header">
-                    <h3><?php echo __('table_$tabela#');?> <small>Deletar Selecionados</small></h3>
-                </div>
-                
-                <div>
-                <?php 
-                    if ($msg) {
-                        echo $msg; 
-                    } else {
-                        echo "Nenhum registro selecionado";
-                    }
-                ?>
-                </div>
-                
-                <a href="index.php" class="btn btn-primary"><i class="icon-arrow-left icon-white"></i> Voltar</a>
+            <div class="inner-wrapper">
+                <?php include '../lib/masterpage/navbar.php'; ?>
+
+                <section role="main" class="content-body">
+                    <?php include '../lib/masterpage/page-header.php'; ?>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="panel main-panel-pg">
+                                <?php include '../lib/masterpage/panel-header.php'; ?>
+
+                                <div class="panel-body">
+                                    <div>
+                                        <?php
+                                        if ($msg) {
+                                            echo $msg;
+                                        } else {
+                                            echo "Nenhum registro selecionado";
+                                        }
+                                        ?>
+
+                                        <a href='index.php' class='btn btn-default'>Voltar</a>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
-        <?php include '../lib/masterpage/footer.php'; ?>
+
+            <?php include '../lib/masterpage/footer.php'; ?>
+        </section>
     </body>
 </html>

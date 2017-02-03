@@ -5,11 +5,10 @@ ini_set('max_execution_time', '6000');
 //CONEXAO E PARAMETROS
 require_once '_config.php';
 require_once 'lib/BootStrapSistema.php';
-require_once "lib/zip/dUnzip2.inc.php";
 
 $Conexao = CarregarConexao();
 
-$sql = "SHOW TABLES FROM $meuDb";
+$sql = "SHOW TABLES FROM $meuDb where tables_in_$meuDb <> 'zsqlversao'";
 $dados = dataExecSqlDireto($Conexao, $sql);
 
 include "_instalar_html/header.html";

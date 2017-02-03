@@ -108,13 +108,17 @@ class dbase$tabelaFistUpper# {
         }
     }
 
+    protected static function ListarValidFields() {
+        return "$dbaseListValidFields#";
+    }
+    
     public static function Listar($Conexao, $where = "", $orderBy = "", $limit = "") {
         if ($where instanceof dataFilter) {
-            $where->setValidFields("$dbaseListValidFields#");
+            $where->setValidFields(db$tabelaFistUpper#::ListarValidFields());
         }         
         
         if ($orderBy instanceof dataOrder) {
-            $orderBy->setValidFields("$dbaseListValidFields#");
+            $orderBy->setValidFields(db$tabelaFistUpper#::ListarValidFields());
         } elseif (!$orderBy) {
             $orderBy = "$primarykey# desc";
         }
@@ -129,13 +133,17 @@ class dbase$tabelaFistUpper# {
         return $dados;        
     }
 
+    protected static function ListarLeftValidFields() {
+        return "$dbaseListValidFields# $dbaseLeftValidFields#";
+    }
+    
     public static function ListarLeft($Conexao, $where = "", $orderBy = "", $limit = "") {
         if ($where instanceof dataFilter) {
-            $where->setValidFields("$dbaseListValidFields# $dbaseLeftValidFields#");
+            $where->setValidFields(db$tabelaFistUpper#::ListarLeftValidFields());
         } 
         
         if ($orderBy instanceof dataOrder) {
-            $orderBy->setValidFields("$dbaseListValidFields# $dbaseLeftValidFields#");
+            $orderBy->setValidFields(db$tabelaFistUpper#::ListarLeftValidFields());
         } elseif (!$orderBy) {
             $orderBy = "$primarykey# desc";
         }

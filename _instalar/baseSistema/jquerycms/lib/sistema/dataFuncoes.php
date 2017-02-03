@@ -113,11 +113,19 @@ function dataExecSqlDireto($Conexao, $sql, $fetchAll = true) {
     try {
 
         $statement = $Conexao->prepare($sql);
-        $statement->execute();
-        if ($fetchAll)
+        $exec = $statement->execute();
+
+        if (!$exec) {
+            $erro = $statement->errorInfo();
+        }
+
+        if ($fetchAll) {
             $dados = $statement->fetchAll(PDO::FETCH_ASSOC);
-        else
+        } else {
             $dados = $statement->fetch(PDO::FETCH_ASSOC);
+        }
+
+
 
         if ($dados && ($dados != ""))
             return $dados;
@@ -139,7 +147,6 @@ class dataFilter {
      * $field = $value
      * @return string
      */
-
     const op_equals = "=";
 
     /**
@@ -308,7 +315,7 @@ class dataFilter {
         if (issetArray($arrKeys) && issetArray($this->filters)) {
             foreach ($this->filters as $filter) {
                 $column = $filter[0];
-                if (!in_array($column, $arrKeys)) {
+                if ($column && !in_array($column, $arrKeys)) {
                     if (___MyDebugger) {
                         $msg = join(", ", $arrKeys);
                         $msg = "Coluna '{$column}' desconhecida. Campos válidos: {$msg}";
@@ -400,11 +407,11 @@ class dataFilter {
             } elseif ($op == "incommavalues") {
                 //$s .= " {$filter[0]} IN (:$bindkey)";
                 //$this->binds[$bindkey] = self::getCommaValues($filter[1]);
-				$s .= " {$filter[0]} IN (" . self::getCommaValues($filter[1]) . ")";
+                $s .= " {$filter[0]} IN (" . self::getCommaValues($filter[1]) . ")";
             } elseif ($op == "notincommavalues") {
                 //$s .= " {$filter[0]} NOT IN (:$bindkey)";
                 //$this->binds[$bindkey] = self::getCommaValues($filter[1]);
-				$s .= " {$filter[0]} NOT IN (" . self::getCommaValues($filter[1]) . ")";
+                $s .= " {$filter[0]} NOT IN (" . self::getCommaValues($filter[1]) . ")";
             } elseif ($op == "inarrayvalues") {
                 $s .= " {$filter[0]} IN (:$bindkey)";
                 $this->binds[$bindkey] = self::getArrayValues($filter[1]);
@@ -614,8 +621,11 @@ class dataPager {
                 if ($querystring) {
                     $querystring .= "&";
                 }
-
-                $querystring .= "$key=$value";
+                if (is_array($value)) {
+                    $querystring .= $key . '[]=' . $value[0];
+                } else {
+                    $querystring .= "$key=$value";
+                }
             }
         }
 
@@ -636,7 +646,7 @@ class dataPager {
         $recordsTotal = $this->recordsTotal;
         $paginas = $this->getTotalPages();
 
-        $s = "<div class='{$this->cssClass}'><ul>";
+        $s = "<nav><ul class='{$this->cssClass}'>";
         for ($index = 0; $index < $paginas; $index++) {
             if ($index == 0) {
                 //Prev
@@ -663,7 +673,7 @@ class dataPager {
             }
         }
 
-        $s.= "</ul></div>";
+        $s.= "</ul></nav>";
         return $s;
     }
 

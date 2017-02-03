@@ -24,7 +24,7 @@ if (count($_POST) > 0) {
         if ($exec && $adm_tema != 'branco') {
             header("Location: index.php");
         } else {
-            $msg = fEnd_MsgString("O registro foi inserido.$fEnd_closeTheIFrameImDone", 'success');
+            $msg = fEnd_MsgString("O registro foi inserido." . fEnd_closeTheIFrameImDone('jqueryadminmenu', $registro->getCod()), 'success');
         }
     } catch (jquerycmsException $exc) {
         $msg = fEnd_MsgString("Ocorreram problemas ao inserir o registro.", 'error', $exc->getMessage());
@@ -35,7 +35,7 @@ if (count($_POST) > 0) {
 $form = new autoform2();
 $form->start("cadastro", "", "POST");
 
-$form->selectDb(__('jqueryadminmenu.codmenu'), 'codmenu', $registro->getCodmenu(), '', $Conexao, 'jqueryadminmenu', 'cod', 'titulo');
+$form->insertHtml(dbJqueryadminmenu::getAutoFormField("Menu para ordenar", "codmenu", "", 1, $Conexao));
 $form->text(__('jqueryadminmenu.titulo'), 'titulo', $registro->getTitulo(), 1);
 $form->text(__('jqueryadminmenu.patch'), 'patch', $registro->getPatch(), 1);
 $form->fileImagems(__('jqueryadminmenu.icon'), 'icon', $registro->getIcon(), 0);
@@ -44,27 +44,40 @@ $form->text(__('jqueryadminmenu.addhtml'), 'addhtml', $registro->getAddhtml(), 0
 
 $form->send_cancel("Salvar", $cancelLink);
 $form->end();
-?><!DOCTYPE HTML>
-<html>
-    <head>
-        <title><?php echo __('table_jqueryadminmenu'); ?> - Editar</title>
 
+$pageVars = array('pageTitle' => __('table_jqueryadminmenu'), 'pageAction' => "Editar", "nav-breadcrumbs" => array(__('table_jqueryadminmenu') => "index.php"));
+?><!doctype html>
+<html class="fixed sidebar-left-xs">
+    <head>
         <?php include '../lib/masterpage/head.php'; ?>
         <?php echo $form->getHead(); ?>
     </head>
-    <body>        
-        <?php include '../lib/masterpage/header.php'; ?>
+    <body>   
+        <section class="body">
+            <?php include '../lib/masterpage/header.php'; ?>
 
-        <div class="main">
-            <div class="inner">
-                <div class="page-header">
-                    <h3><?php echo __('table_jqueryadminmenu'); ?> <small>Editar</small></h3>
-                </div>
+            <div class="inner-wrapper">
+                <?php include '../lib/masterpage/navbar.php'; ?>
 
-                <?php echo $msg; ?>
-                <?php echo $form->getForm(); ?>
+                <section role="main" class="content-body">
+                    <?php include '../lib/masterpage/page-header.php'; ?>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="panel main-panel-pg">
+                                <?php include '../lib/masterpage/panel-header.php'; ?>
+
+                                <div class="panel-body">
+                                    <?php echo $msg; ?>
+                                    <?php echo $form->getForm(); ?>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
-        <?php include '../lib/masterpage/footer.php'; ?>
+
+            <?php include '../lib/masterpage/footer.php'; ?>
+        </section>
     </body>
 </html>

@@ -3,13 +3,39 @@
 require_once "base/dbase$tabelaFistUpper#.php";
 
 class db$tabelaFistUpper# extends dbase$tabelaFistUpper# {
-// <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">       
+// <editor-fold defaultstate="collapsed" desc="checks">
+
+    private static function checkIsValid($Conexao, $DbEditarValores#) {
+        return true;
+    }
+
+    private static function checkIsUnique($Conexao, $DbEditarValores#) {
+        $where = new dataFilter(db$tabelaFistUpper#::_$campo2#, $$campo2#);
+        //$where->add(db$tabelaFistUpper#::_$campo2#, "", dataFilter::op_different);
+        if (isset($cod) && $cod) {
+            $where->add(db$tabelaFistUpper#::_cod, $cod, dataFilter::op_different);
+        }
+
+        if (db$tabelaFistUpper#::Listar($Conexao, $where) !== false) {
+            throw new jquerycmsException("Já existe outro registro com dados principais iguais aos informados.");
+        }
+
+        return false;
+    }
+
+// </editor-fold>
+//
+// <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">
     public static function Inserir($Conexao, $DbInserirValores#, $die = false) {
+        self::checkIsValid($Conexao, null, $DbInserirValores#);
+        self::checkIsUnique($Conexao, null, $DbInserirValores#);
         
         return parent::Inserir($Conexao, $DbInserirValores#, $die);
     }
     
     public static function Update($Conexao, $DbEditarValores#, $die = false) {
+        self::checkIsValid($Conexao, $DbEditarValores#);
+        self::checkIsUnique($Conexao, $DbEditarValores#);
         
         return parent::Update($Conexao, $DbEditarValores#, $die);
     }

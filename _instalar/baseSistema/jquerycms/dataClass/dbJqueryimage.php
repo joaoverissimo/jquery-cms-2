@@ -4,6 +4,10 @@ require_once "base/dbaseJqueryimage.php";
 
 class dbJqueryimage extends dbaseJqueryimage {
 
+    public static function ImageFileFolder() {
+        return ___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/images/";
+    }
+
 // <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">       
     public static function Inserir($Conexao, $valor, $die = false) {
 
@@ -31,8 +35,7 @@ class dbJqueryimage extends dbaseJqueryimage {
     public static function InserirByFileImagems($Conexao, $FormFieldNome, $die = false) {
         $prefix = self::getMax($Conexao, true) . "_";
 
-        $hasImage = isset($_FILES[$FormFieldNome . '-file']) && $_FILES[$FormFieldNome . '-file']["size"] > 0;
-        if ($hasImage) {
+        if (isset($_FILES[$FormFieldNome . '-file']) && $_FILES[$FormFieldNome . '-file']["size"] > 0) {
             $valor = arquivos::uploadImage($FormFieldNome . '-file', $prefix);
         } else {
             $valor = $prefix . "imagem.jpg";
@@ -40,7 +43,48 @@ class dbJqueryimage extends dbaseJqueryimage {
 
         $exec = parent::Inserir($Conexao, $valor, $die);
 
-        if ($exec && $hasImage) {
+        if ($exec) {
+            //Redimensiona
+            $obj = new objJqueryimage($Conexao);
+            $obj->loadByCod($exec);
+
+            arquivos::resizeImageMaxSize($obj->getFileName(), 1000, 700);
+        }
+
+        return $exec;
+    }
+
+    public static function prepararPastas() {
+        if (!arquivos::existe(___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/")) {
+            mkdir(___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/", 0777);
+        }
+
+        if (!arquivos::existe(___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/images/")) {
+            mkdir(___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/images/", 0777);
+        }
+
+        if (!arquivos::existe(___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/images/imagecache/")) {
+            mkdir(___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/images/imagecache/", 0777);
+        }
+    }
+
+    public static function InserirByFilename($Conexao, $filename, $die = false) {
+        if (!arquivos::existe($filename)) {
+            return false;
+        }
+
+        self::prepararPastas();
+
+        $filefolder = dbJqueryimage::ImageFileFolder();
+        $prefix = self::getMax($Conexao, true) . "_";
+        $basename = basename($filename);
+        $valor = $prefix . toRewriteString($basename, true);
+
+        rename($filename, $filefolder . $valor);
+
+        $exec = parent::Inserir($Conexao, $valor, $die);
+
+        if ($exec) {
             //Redimensiona
             $obj = new objJqueryimage($Conexao);
             $obj->loadByCod($exec);
@@ -54,22 +98,9 @@ class dbJqueryimage extends dbaseJqueryimage {
     public static function UpdateByFileImagems($Conexao, $FormFieldNome, $die = false) {
         $cod = issetpost($FormFieldNome);
 
-        //remove a imagem caso exista e estaja marcado o remover
-        if (issetpostInteger($FormFieldNome . "-remover")) {
-            $obj = new objJqueryimage($Conexao);
-            $obj->loadByCod($cod);
-
-            arquivos::deletar($obj->getFileName());
-            $obj->setValor("");
-            $obj->Save();
-            return $cod;
-        }
-
-        //Se nenhuma imagem foi enviada apenas retorna o codigo
         if (!isset($_FILES[$FormFieldNome . '-file']) || $_FILES[$FormFieldNome . '-file']["size"] == 0)
             return $cod;
 
-        //Tenta salvar a imagem e atualizar o registro jqueryimage
         $prefix = $cod . "_";
         $newvalor = arquivos::uploadImage($FormFieldNome . '-file', $prefix);
 
@@ -78,12 +109,10 @@ class dbJqueryimage extends dbaseJqueryimage {
             $obj->loadByCod($cod);
             arquivos::deletar($obj->getFileName());
 
-
             //Redimensiona
-            $obj->setValor($newvalor);
             arquivos::resizeImageMaxSize($obj->getFileName(), 1000, 700);
 
-            if (!$obj->Save()) {
+            if (!parent::Update($Conexao, $cod, $newvalor, $die)) {
                 throw new jquerycmsException("Nao foi possivel salvar o registro!");
             }
 

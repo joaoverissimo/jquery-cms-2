@@ -23,7 +23,7 @@ if (count($_POST) > 0) {
         if ($exec && $adm_tema != 'branco') {
             header("Location: index.php");
         } else {
-            $msg = fEnd_MsgString("O registro foi salvo.$fEnd_closeTheIFrameImDone", 'success');
+            $msg = fEnd_MsgString("O registro foi salvo.", 'success');
         }
     } catch (jquerycmsException $exc) {
         $msg = fEnd_MsgString("Ocorreram problemas ao inserir o registro.", 'error', $exc->getMessage());

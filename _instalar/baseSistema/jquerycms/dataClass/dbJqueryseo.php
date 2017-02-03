@@ -115,10 +115,10 @@ class CtrlJquerySeo {
                                 <label>
                                     <span class='titulo'>Palavras-chave</span>
                                     <input type='text' id='{$ctrlname}_palavrainput' name='{$ctrlname}_palavra' value='' placeholder='Digite aqui uma keyword...'>
-                                    <button type='button' class='btn btn-primary btn-mini' id='{$ctrlname}_addkey' rel='tooltip' title='Adicionar Palavra-Chave' tabIndex='-1'><i class='icon-plus icon-white'></i></button>
+                                    <button type='button' class='btn btn-primary btn-xs' id='{$ctrlname}_addkey' rel='tooltip' title='Adicionar Palavra-Chave' tabIndex='-1'><i class='fa fa-plus'></i></button>
                                     ";
         if ($palavras) {
-            $html .= "<button type='button' class='btn btn-primary btn-mini' id='{$ctrlname}_showcomum' rel='tooltip' title='Adicionar Palavra-Chave' tabIndex='-1'><i class='icon-tags icon-white'></i></button>";
+            $html .= "<button type='button' class='btn btn-primary btn-xs' id='{$ctrlname}_showcomum' rel='tooltip' title='Adicionar Palavra-Chave' tabIndex='-1'><i class='fa fa-tags'></i></button>";
         }
         $html .= "
                                 </label>

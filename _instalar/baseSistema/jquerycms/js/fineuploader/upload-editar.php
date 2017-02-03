@@ -86,7 +86,7 @@ if (count($_POST) > 0) {
         $exec = $registro->Save();
 
         if ($exec) {
-          $msg = fEnd_MsgString("O registro foi salvo.<script>setTimeout(function() {window.parent.{$ctrlname}_closeModalJquery()}, 1150);</script>", 'success');
+            $msg = fEnd_MsgString("O registro foi salvo.<script>setTimeout(function() {window.parent.{$ctrlname}_closeModalJquery()}, 1150);</script>", 'success');
         }
     } catch (jquerycmsException $exc) {
         $msg = fEnd_MsgString("Ocorreram problemas ao inserir o registro.", 'error', $exc->getMessage());
@@ -108,14 +108,16 @@ if ($exibetarget && $exibelink)
 
 $form->send_cancel('Salvar', '#', array('btn2add' => "onclick='window.parent.{$ctrlname}_closeModalJquery();'"));
 $form->end();
+
+$pageVars = array('pageTitle' => "Editar imagem", 'pageAction' => "Imagens", "nav-breadcrumbs" => array());
 ?><!DOCTYPE HTML>
 <html>
     <head>
         <?php include '../../../adm/lib/masterpage/head.php'; ?>
         <?php echo $form->getHead(); ?>
         <script>
-            $(document).ready(function(){
-                window.parent.<?php echo $ctrlname;?>_resizeModalJquery($("body").width() + 100 , $("body").height() + 100 );
+            $(document).ready(function () {
+                window.parent.<?php echo $ctrlname; ?>_resizeModalJquery($("body").width() + 100, $("body").height() + 100);
             });
         </script>
     </head>

@@ -5,6 +5,10 @@ require_once '../lib/admin.php';
 $msg = "";
 
 $codmenu = "";
+
+$form = new autoform2();
+$form->start("cadastro", "", "GET");
+
 if (isset($_GET['codmenu'])) {
     $codmenu = $_GET['codmenu'];
     //Lista os dados
@@ -14,31 +18,28 @@ if (isset($_GET['codmenu'])) {
 } else {
     $dados = false;
 
-    $form = new autoform2();
-    $form->start("cadastro", "", "GET");
     $form->insertHtml(dbJqueryadminmenu::getAutoFormField("Menu para ordenar", "codmenu", "", 1, $Conexao));
     $form->send_cancel("Avançar", "index.php", "Cancelar");
     $form->end();
 }
-?><!DOCTYPE HTML>
-<html>
+
+$pageVars = array('pageTitle' => __('table_jqueryadminmenu'), 'pageAction' => "Ordem", "nav-breadcrumbs" => array(__('table_jqueryadminmenu') => "index.php"));
+?><!doctype html>
+<html class="fixed sidebar-left-xs">
     <head>
-        <title>Ordem</title>
-
         <?php include '../lib/masterpage/head.php'; ?>
+        <?php echo $form->getHead(); ?>
 
-        <script type='text/javascript' src='/jquerycms/js/jquery-ui/js/jquery-ui-1.8.19.custom.min.js'></script>
-        <link rel='stylesheet' href='/jquerycms/js/jquery-ui/css/ui-lightness/jquery-ui-1.8.19.custom.css' type='text/css' media='all' />
         <script>
             $(document).ready(function () {
                 $('.ordem').sortable({
-                    update : function () {
+                    update: function () {
                         order = [];
-                        $('.ordem').children('li').each(function(idx, elm) {
+                        $('.ordem').children('li').each(function (idx, elm) {
                             order.push(elm.id.split('_')[1]);
                         });
 
-                        $('#status').load('ordem-salvar.php', {'order' : order});
+                        $('#status').load('ordem-salvar.php', {'order': order});
                         $('#status').html('Aguarde...');
                     }
                 });
@@ -47,40 +48,60 @@ if (isset($_GET['codmenu'])) {
             });
         </script>
     </head>
-    <body>        
-        <?php include '../lib/masterpage/header.php'; ?>
+    <body>   
+        <section class="body">
+            <?php include '../lib/masterpage/header.php'; ?>
 
-        <div class="main">
-            <div class="inner">
-                <div class="page-header">
-                    <h3>Ordem</h3>
-                </div>
+            <div class="inner-wrapper">
+                <?php include '../lib/masterpage/navbar.php'; ?>
 
-                <div class="btn-toolbar">
-                    <a href="index.php<?php echo $codmenu ? "?codmenu=$codmenu" : ""; ?>" class="btn btn-primary"><i class="icon-arrow-left icon-white"></i> Voltar</a>
-                </div>
+                <section role="main" class="content-body">
+                    <?php include '../lib/masterpage/page-header.php'; ?>
 
-                <div id="status"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="panel main-panel-pg">
+                                <?php include '../lib/masterpage/panel-header.php'; ?>
 
-                <?php if ($dados !== false) { ?>
-                    <ul class="ordem">
-                        <?php foreach ($dados as $obj) { ?>
+                                <div class="panel-body">
+                                    <?php echo $msg; ?>
 
-                            <li class="navbar-inner" id="listItem_<?php echo $obj->getCod(); ?>">
-                                <span class="titulo"><?php echo $obj->getTitulo(); ?></span>
-                            </li>
+                                    <div id="status"></div>
 
-                        <?php } ?>
-                    </ul>
-                    <?php
-                } else {
-                    echo $form->getHead();
-                    echo $form->getForm();
-                }
-                ?>
+                                    <?php if ($codmenu !== "") : ?>
+                                        <?php if (issetArray($dados)) : ?>
+                                            <h3><?php echo "Ordenar " . $dados[0]->getTitulo(); ?></h3>
 
+                                            <ul class="ordem">
+                                                <?php foreach ($dados as $obj) : ?>
+
+                                                    <li class="navbar-inner" id="listItem_<?php echo $obj->getCod(); ?>">
+                                                        <span class="titulo">
+                                                            <i class="fa fa-arrows"></i>
+                                                            <?php echo $obj->getTitulo(); ?>
+                                                        </span>
+                                                    </li>
+
+                                                <?php endforeach ?>
+                                            </ul>
+                                        <?php else : ?>
+                                            Este menu não possui itens filhos que possam ser ordenados.
+                                        <?php endif; ?>
+
+                                        <div class="btn-toolbar">
+                                            <a href="ordem.php" class="btn btn-primary"><i class="icon-arrow-left icon-white"></i> Voltar</a>
+                                        </div>
+                                    <?php else : ?>
+                                        <?php echo $form->getForm(); ?>
+                                    <?php endif; ?>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
-        <?php include '../lib/masterpage/footer.php'; ?>
+
+            <?php include '../lib/masterpage/footer.php'; ?>
+        </section>
     </body>
 </html>

@@ -78,7 +78,7 @@ if (count($_POST) > 0) {
         if ($exec && $adm_tema != 'branco') {
             header("Location: index.php?jqueryimagelist=$jqueryimagelist");
         } else {
-            $msg = fEnd_MsgString("O registro foi salvo.$fEnd_closeTheIFrameImDone", 'success');
+            $msg = fEnd_MsgString("O registro foi salvo." . fEnd_closeTheIFrameImDone('jqueryimagelistitem', $registro->getCod()), 'success');
         }
     } catch (jquerycmsException $exc) {
         $msg = fEnd_MsgString("Ocorreram problemas ao inserir o registro.", 'error', $exc->getMessage());

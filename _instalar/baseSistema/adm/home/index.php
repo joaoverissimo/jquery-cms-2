@@ -4,54 +4,46 @@ require_once '../../jquerycms/config.php';
 require_once '../lib/admin.php';
 $msg = "";
 
+$hoje = objDate::initPtBr(___DataAtual);
 
-//Lista os dados
-$where = new dataFilter('jqueryadminmenu.cod', 0, dataFilter::op_different);
-$where->add(dbJqueryadminmenu::_codmenu, 0);
-$where->add(dbJqueryadminmenu::_patch, "home", dataFilter::op_different);
-
-$orderBy = new dataOrder('jqueryadminmenu.ordem', 'asc');
-$dados = dbJqueryadminmenu::ObjsList($Conexao, $where, $orderBy);
-?><!DOCTYPE HTML>
-<html>
+$pageVars = array('pageTitle' => "Home", 'pageAction' => "Listar", "nav-breadcrumbs" => array());
+?><!doctype html>
+<html class="fixed sidebar-left-xs">
     <head>
-        <title><?php echo __('table_jqueryadminmenu'); ?> - Listar</title>
-
         <?php include '../lib/masterpage/head.php'; ?>
     </head>
-    <body>        
-        <?php include '../lib/masterpage/header.php'; ?>
+    <body>
+        <section class="body">
+            <?php include '../lib/masterpage/header.php'; ?>
 
-        <div class="main">
-            <div class="inner">
-                <div class="page-header">
-                    <h3>Home <small>Admin</small></h3>
-                </div>
+            <div class="inner-wrapper">
+                <?php include '../lib/masterpage/navbar.php'; ?>
 
-                <?php if ($dados !== false) : ?>
-                    <ul class="thumbnails">
-                        <?php foreach ($dados as $obj) : ?>
-                            <?php if ($currentUser->validatePermissions($obj->getLink($adm_folder))): ?>
+                <section role="main" class="content-body">
 
-                                <li class="span3">
-                                    <div class="thumbnail">
-                                        <a href="<?php echo $obj->getLink($adm_folder); ?>" style="text-align: center;display: block;" class="btn">
-                                            <img src="<?php echo $obj->objIcon()->getSrc(); ?>">
-                                            <h3 style="text-align: center"><?php echo $obj->getTitulo(); ?></h3>
-                                        </a>                                            
+                    <?php include '../lib/masterpage/page-header.php'; ?>
+                    <?php include 'dados/migalhas.php'; ?>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="panel dash-panel-agenda-atrasadas dash-panel">
+                                <header class="panel-heading">
+                                    <div class="panel-actions">
+                                        <a href="#" class="panel-action panel-action-toggle" data-panel-toggle=""></a>
                                     </div>
-                                </li>
-
-                            <?php endif; ?>
-
-                        <?php endforeach; ?>
-                    </ul>
-                <?php else: ?>
-                    Não existem menus.
-                <?php endif; ?>
-
+                                    <h2 class="panel-title"><i class="fa fa-star"></i> Dashboard</h2>
+                                </header>
+                                <div class="panel-body " style="display: block;">
+                                    <div class="dash-item dash-item-interacao-agenda dash-item-interacao-agenda-atrasadas">
+                                        Esperando algo...
+                                    </div>
+                                </div> 
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
-        <?php include '../lib/masterpage/footer.php'; ?>
+
+            <?php include '../lib/masterpage/footer.php'; ?>
+        </section>
     </body>
 </html>

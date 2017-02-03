@@ -90,6 +90,15 @@ class arquivos {
             return false;
     }
 
+    public static function deletarDiretorio($folder) {
+        //obs.: não recursivo
+        if (file_exists($folder)) {
+            return rmdir($folder);
+        }
+
+        return false;
+    }
+
     public static function copiar($in, $out) {
         return copy($in, $out);
     }
@@ -110,7 +119,7 @@ class arquivos {
         }
 
         if ($filefolder == '') {
-            $filefolder == ___AppRoot . "jquerycms/upload/files/";
+            $filefolder == ___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/files/";
         }
 
         if (!move_uploaded_file($_FILES[$FormFieldNome]["tmp_name"], $filefolder . $filename)) {
@@ -124,17 +133,19 @@ class arquivos {
         if (!isset($_FILES[$FormFieldNome]))
             throw new jquerycmsException("Não foi enviado o arquivo $FormFieldNome.");
 
-        if ((($_FILES[$FormFieldNome]["type"] == "image/gif")
-                || ($_FILES[$FormFieldNome]["type"] == "image/jpeg")
-                || ($_FILES[$FormFieldNome]["type"] == "image/png")
-                || ($_FILES[$FormFieldNome]["type"] == "image/pjpeg"))) {
+        if ((($_FILES[$FormFieldNome]["type"] == "image/gif") || ($_FILES[$FormFieldNome]["type"] == "image/jpeg") || ($_FILES[$FormFieldNome]["type"] == "image/png") || ($_FILES[$FormFieldNome]["type"] == "image/pjpeg"))) {
 
             if ($_FILES[$FormFieldNome]["error"] > 0) {
                 throw new jquerycmsException("Problemas ao salvar arquivo: " . $_FILES[$FormFieldNome]["error"]);
             }
 
             if ($filefolder == '') {
-                $filefolder = ___AppRoot . "jquerycms/upload/images/";
+                $filefolder = dbJqueryimage::ImageFileFolder();
+            }
+
+            if (!arquivos::existe($filefolder)) {
+                mkdir(___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/", 0777);
+                mkdir($filefolder, 0777);
             }
 
             $fileext = arquivos::arquivoExtensao($_FILES[$FormFieldNome]['name']);
@@ -143,14 +154,16 @@ class arquivos {
             $filename = strtolower($filename);
             $filename = str_replace($fileext, '', $filename);
 
-            while (arquivos::existe($filefolder . $prefix . $filename . '.' . $fileext)) {
+            $fileFullName = $filefolder . $prefix . $filename . '.' . $fileext;
+
+            while (arquivos::existe($fileFullName)) {
                 $int = str_toInteger($filename);
                 $filename = str_replace($int, '', $filename);
                 $filename .= $int + 1;
             }
 
-            if (!move_uploaded_file($_FILES[$FormFieldNome]["tmp_name"], $filefolder . $prefix . $filename . '.' . $fileext)) {
-                throw new jquerycmsException("Problemas ao mover arquivo de <b>{$_FILES[$FormFieldNome]["tmp_name"]}</b> para: <b>{$filefolder}/{$filename}</b>");
+            if (!move_uploaded_file($_FILES[$FormFieldNome]["tmp_name"], $fileFullName)) {
+                throw new jquerycmsException("Problemas ao mover arquivo de <b>{$_FILES[$FormFieldNome]["tmp_name"]}</b> para: <b>$fileFullName</b>");
             }
 
             return $prefix . $filename . '.' . $fileext;

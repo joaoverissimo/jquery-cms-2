@@ -14,20 +14,25 @@ $registro->loadByCod($_GET["cod"]);
 if (count($_POST) > 0) {
 
     try {
+
         $where = new dataFilter("jqueryadmingrupo2menu.jqueryadmingrupo", $registro->getCod());
         dbJqueryadmingrupo2menu::DeletarWhere($Conexao, $where);
-        foreach ($_POST as $jqueryadminmenu => $value) {
-            $obj = new objJqueryadmingrupo2menu($Conexao);
-            $obj->setJqueryadmingrupo($registro->getCod());
-            $obj->setJqueryadminmenu($jqueryadminmenu);
-            $obj->Save();
+        if (isset($_POST['permissoes']) && $_POST['permissoes']) {
+            $permissoes = explode(",", $_POST['permissoes']);
+
+            foreach ($permissoes as $jqueryadminmenu) {
+                $obj = new objJqueryadmingrupo2menu($Conexao);
+                $obj->setJqueryadmingrupo($registro->getCod());
+                $obj->setJqueryadminmenu($jqueryadminmenu);
+                $obj->Save();
+            }
         }
 
         $exec = true;
         if ($exec && $adm_tema != 'branco') {
-            header("Location: index.php");
+            $msg = fEnd_MsgString("O registro foi salvo com sucesso.", 'success');
         } else {
-            $msg = fEnd_MsgString("O registro foi inserido.$fEnd_closeTheIFrameImDone", 'success');
+            $msg = fEnd_MsgString("O registro foi inserido." . fEnd_closeTheIFrameImDone('jqueryadmingrupo', $registro->getCod()), 'success');
         }
     } catch (jquerycmsException $exc) {
         $msg = fEnd_MsgString("Ocorreram problemas ao inserir o registro.", 'error', $exc->getMessage());
@@ -37,8 +42,8 @@ if (count($_POST) > 0) {
 $template = array(
     "htmlstart" => "<ul class='#ulclass#'>\n",
     "htmlend" => "</ul>",
-    "li" => "\n\t<li><label><input type='checkbox' id='permissao_getCod' name='getCod'> <span>getTitulo</span></label></li>",
-    "lisub" => "\n\t<li><label><input type='checkbox' id='permissao_getCod' name='getCod'> <span>getTitulo</span></label>#getmenu#</li>",
+    "li" => "\n\t<li id='getCod' data-titulo='getTitulo'><label><span>getTitulo</span></label></li>",
+    "lisub" => "\n\t<li id='getCod' data-titulo='getTitulo' data-jstree='{ \"opened\" : true }'><label><span>getTitulo</span></label>#getmenu#</li>",
     "nivelclass" => array(
         0 => "treecheckbox",
         1 => ""
@@ -55,48 +60,84 @@ $form = new autoform2();
 $form->start("cadastro", "", "POST");
 
 $form->fieldset("Permissões Ativas");
-$form->insertHtml(dbJqueryadminmenu::getMenu($Conexao, $adm_folder, 0, 0, $template));
-
+$form->insertHtml("<input type='hidden' id='permissoes' name='permissoes'></input>");
+$form->insertHtml("<div id='tree' class='jstree-open'>" . dbJqueryadminmenu::getMenu($Conexao, $adm_folder, 0, 0, $template)) . "</div>";
+$form->fieldsetOut();
 
 $form->send_cancel("Salvar", $cancelLink);
 $form->end();
-?><!DOCTYPE HTML>
-<html>
-    <head>
-        <title><?php echo __('table_jqueryadmingrupo'); ?> - Editar</title>
 
+
+$pageVars = array('pageTitle' => __('table_jqueryadmingrupo'), 'pageAction' => "Permissões de {$registro->getTitulo()}", "nav-breadcrumbs" => array(__('table_jqueryadmingrupo') => "index.php"));
+?><!doctype html>
+<html class="fixed sidebar-left-xs">
+    <head>
         <?php include '../lib/masterpage/head.php'; ?>
         <?php echo $form->getHead(); ?>
 
-        <script type="text/javascript" src="/jquerycms/js/jquery-tree/jquery.tree.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="/jquerycms/js/jquery-tree/jquery.tree.min.css"/>
+        <script type="text/javascript" src="/jquerycms/js/jstree/jstree.js"></script>
+        <link rel="stylesheet" type="text/css" href="/jquerycms/js/jstree/jstree.css"/>
         <script>
-            $(document).ready(function(){
-                $('.treecheckbox').tree({ components: [/*'ajax'*/, 'checkbox', 'collapse', /*'contextmenu'*/, 'dnd', 'select'] });
-                
-<?php if ($permissoes) : foreach ($permissoes as $obj) : ?>
-                                        
-                $('#permissao_<?php echo $obj->objJqueryadminmenu()->getCod(); ?>').attr('checked','checked');
-                                    
-    <?php endforeach;
-endif;
-?>
-    });
+            $(document).ready(function () {
+                $('#tree').jstree({
+                    "core": {
+                        "themes": {
+                            "variant": "large"
+                        }
+                    },
+                    "plugins": ["checkbox"]
+                });
+
+<?php if ($permissoes) : ?>
+    <?php foreach ($permissoes as $obj) : ?>
+        <?php if (!$obj->objJqueryadminmenu()->obtemJqueryadminmenuRel()): ?>
+                            $("#tree").jstree("select_node", "#<?php echo $obj->objJqueryadminmenu()->getCod(); ?>");
+        <?php endif; ?>
+    <?php endforeach; ?>
+<?php endif; ?>
+
+<?php if ($currentUser->getGrupo() != 1) : ?>
+                    $("li[data-titulo='Jquerycms']").hide();
+<?php endif; ?>
+
+                $("#cadastro").submit(function () {
+                    var checked_ids = $('#tree').jstree('get_selected');
+                    $("#tree").find(".jstree-undetermined").each(function (i, element) {
+                        checked_ids.push($(element).closest("li").attr("id"));
+                    });
+
+                    $("#permissoes").val(checked_ids);
+                });
+
+            });
         </script>
     </head>
-    <body>        
-<?php include '../lib/masterpage/header.php'; ?>
+    <body>   
+        <section class="body">
+            <?php include '../lib/masterpage/header.php'; ?>
 
-        <div class="main">
-            <div class="inner">
-                <div class="page-header">
-                    <h3><?php echo __('table_jqueryadmingrupo'); ?> <small>Permissões de <?php echo $registro->getTitulo(); ?></small></h3>
-                </div>
+            <div class="inner-wrapper">
+                <?php include '../lib/masterpage/navbar.php'; ?>
 
-                <?php echo $msg; ?>
-<?php echo $form->getForm(); ?>
+                <section role="main" class="content-body">
+                    <?php include '../lib/masterpage/page-header.php'; ?>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="panel main-panel-pg">
+                                <?php include '../lib/masterpage/panel-header.php'; ?>
+
+                                <div class="panel-body">
+                                    <?php echo $msg; ?>
+                                    <?php echo $form->getForm(); ?>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
-<?php include '../lib/masterpage/footer.php'; ?>
+
+            <?php include '../lib/masterpage/footer.php'; ?>
+        </section>
     </body>
 </html>

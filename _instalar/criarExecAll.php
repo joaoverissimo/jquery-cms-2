@@ -3,7 +3,7 @@
 require 'criarDbase.php';
 
 function criarExecAll($Conexao, $temlate, $dados, $outputFolder, $meuDb, $httpCreator) {
-
+    
     criarBootStrapData($Conexao, $temlate, $dados, $outputFolder, $meuDb, $httpCreator);
     criarBootStrapObjFend($temlate, $dados, $outputFolder, $meuDb);
     criarHome($outputFolder, $dados);
@@ -71,7 +71,8 @@ function criarLibConfig($outputFolder) {
         '$___MySqlDataServer#' => ___MySqlDataServer,
         '$___MysqlDataDb#' => ___MysqlDataDb,
         '$___MySqlDataUser#' => ___MySqlDataUser,
-        '$___MySqlDataPass#' => ___MySqlDataPass
+        '$___MySqlDataPass#' => ___MySqlDataPass,
+        '$___HTTP_HOST#' => $_SERVER['HTTP_HOST']
             )
             , $temlate);
 
@@ -79,24 +80,24 @@ function criarLibConfig($outputFolder) {
     arquivos::criar($s, $filename);
 }
 
+function recurse_copy($src, $dst) {
+    $dir = opendir($src);
+    @mkdir($dst);
+    while (false !== ( $file = readdir($dir))) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            if (is_dir($src . '/' . $file)) {
+                recurse_copy($src . '/' . $file, $dst . '/' . $file);
+            } else {
+                copy($src . '/' . $file, $dst . '/' . $file);
+            }
+        }
+    }
+    closedir($dir);
+}
+
 function unzipFolderBase($outputFolder) {
-    $fileIn = "baseSistema.zip";
-    $fileOut = $outputFolder;
-
-    $zip = new dUnzip2($fileIn);
-
-    $zip->unzipAll($outputFolder);
-    /* $zip = new ZipArchive;
-
-      $filename = $outputFolder . "_instalar/baseSistema.zip";
-
-      if ($zip->open($filename) === TRUE) {
-      $zip->extractTo($outputFolder);
-      $zip->close();
-
-      return true;
-      } else
-      return false; */
+    $src = $outputFolder . "_instalar/baseSistema/";
+    recurse_copy($src, $outputFolder);
 }
 
 function criarPermissoesAddMenu($Conexao, $tabela, $dados, $outputFolder, $meuDb) {
@@ -110,7 +111,7 @@ function criarPermissoesAddMenu($Conexao, $tabela, $dados, $outputFolder, $meuDb
     $img = dataExecSqlDireto($Conexao, "SELECT MAX(cod) AS getmax FROM `jqueryimage`", false);
 
     dataExecSqlDireto($Conexao, "INSERT INTO `jqueryadminmenu`(`codmenu`, `titulo`, `patch`, `icon`, `addhtml`, `ordem`) 
-                                     VALUES                       (0,'$tabelaU','$tabela',{$img['getmax']},'',1)", false);
+                                     VALUES                       (0,'$tabelaU','$tabela',{$img['getmax']},'<i class=\"fa fa-list-alt\"></i>',1)", false);
 
     $menu = dataExecSqlDireto($Conexao, "SELECT MAX(cod) AS getmax FROM `jqueryadminmenu`", false);
     dataExecSqlDireto($Conexao, "INSERT INTO `jqueryadmingrupo2menu`(`jqueryadmingrupo`, `jqueryadminmenu`) 
@@ -150,6 +151,8 @@ function criarPermissoes($Conexao, $dados, $outputFolder, $meuDb) {
     dataExecSqlDireto($Conexao, "UPDATE `jqueryadminmenu` SET `codmenu`= {$menu['getmax']} WHERE `patch` LIKE 'jquery%'", false);
     dataExecSqlDireto($Conexao, "UPDATE `jqueryadminmenu` SET `codmenu`= {$menu['getmax']} WHERE `patch` = 'locmapaponto'", false);
     dataExecSqlDireto($Conexao, "UPDATE `jqueryadminmenu` SET `codmenu` = 0 WHERE `cod` = {$menu['getmax']}", false);
+    
+    dataExecSqlDireto($Conexao, "UPDATE `jqueryadminmenu` SET `patch` = '#' WHERE `patch` = 'jquerycms'", false);
 }
 
 function posUnzip($outputFolder, $dados, $meuDb) {

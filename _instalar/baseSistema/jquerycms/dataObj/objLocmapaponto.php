@@ -64,6 +64,7 @@ class objLocmapaponto extends fbaseLocmapaponto {
                 var bryantPark = new google.maps.LatLng($lat, $lng);
                 var panoramaOptions = {
                   position:bryantPark,
+                  scrollwheel: false,
                   pov: {
                     heading: $heading,
                     pitch: $pitch,
@@ -89,7 +90,7 @@ class objLocmapaponto extends fbaseLocmapaponto {
         $cod = $this->getCod();
         $lat = $this->getLat();
         $lng = $this->getLng();
-		
+
         $title = str_replace("'", "", $title);
 
         if (strpos($height, "px") === false) {
@@ -104,7 +105,7 @@ class objLocmapaponto extends fbaseLocmapaponto {
         $s = "";
 
         if ($addJsMapsApi) {
-            $s.= "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
+            $s.= "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?key=" . ___googleMapsAPI . "'></script>";
         }
 
         $s .= "
@@ -137,7 +138,7 @@ class objLocmapaponto extends fbaseLocmapaponto {
         return $s;
     }
 
-	public function getGmapsStaticImage($zoom = 12, $width = "300px", $height = "200px", $cache = false) {
+    public function getGmapsStaticImage($zoom = 12, $width = "300px", $height = "200px", $cache = false) {
         $cod = $this->getCod();
         $lat = $this->getLat();
         $lng = $this->getLng();
@@ -146,10 +147,10 @@ class objLocmapaponto extends fbaseLocmapaponto {
         $height = str_replace("px", "", $height);
 
         $url = "http://maps.googleapis.com/maps/api/staticmap?center={$lat},{$lng}&zoom={$zoom}&size={$width}x{$height}&maptype=roadmap%20&markers=color:red%7C{$lat},{$lng}&sensor=false";
-        
+
         if ($cache) {
             $filename = "map-$cod-$width-$height.jpg";
-            $filefolder = $folder = ___AppRoot . "jquerycms/upload/map-cache/";
+            $filefolder = $folder = ___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/map-cache/";
 
             if (!arquivos::existe($filefolder)) {
                 umask(0);
@@ -157,13 +158,12 @@ class objLocmapaponto extends fbaseLocmapaponto {
             }
 
             if (arquivos::existe($filefolder . $filename) || arquivos::downloadFile($url, $filefolder . $filename)) {
-                $url = "/jquerycms/upload/map-cache/" . $filename;
+                $url = "/jquerycms/upload/" . ___phpDataCliente . "/map-cache/" . $filename;
             }
         }
-        
+
         return $url;
     }
-
 
     public function getGmapsViewImage($width = "300px", $height = "200px", $cache = false) {
         $cod = $this->getCod();
@@ -180,7 +180,7 @@ class objLocmapaponto extends fbaseLocmapaponto {
 
         if ($cache) {
             $filename = "view-$cod-$width-$height.jpg";
-            $filefolder = $folder = ___AppRoot . "jquerycms/upload/map-cache/";
+            $filefolder = $folder = ___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/map-cache/";
 
             if (!arquivos::existe($filefolder)) {
                 umask(0);
@@ -188,11 +188,11 @@ class objLocmapaponto extends fbaseLocmapaponto {
             }
 
             if (arquivos::existe($filefolder . $filename) || arquivos::downloadFile($url, $filefolder . $filename)) {
-                $url = "/jquerycms/upload/map-cache/" . $filename;
+                $url = "/jquerycms/upload/" . ___phpDataCliente . "/map-cache/" . $filename;
             }
         }
 
         return $url;
     }
-	
+
 }

@@ -36,7 +36,7 @@ function criarObtemFormFields($Conexao, $campos, $relacoes, $tabela) {
     $templateSeo = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
     $templateImageList = "\$form->insertHtml(\$ctrlCampoUpper->getCtrl());\n";
     $templateFloat = "\$form->floatReal(__('$tabela.Field'), 'Field', \$registro->getCampoUpperRS(), #validate#);\n";
-    
+
     //FAZ O LOOP
     foreach ($campos as $value) {
         $value["CampoUpper"] = ucfirst($value['Field']);
@@ -153,8 +153,12 @@ function criarEdiarObtemValoresPost($campos, $relacoes) {
                 $template = "\n\t\t\$registro->setCampoUpper(\$ctrlCampoUpper->updateByPost());\n\t\t";
             } elseif (obtemRelacaoMachTable($value['Field'], $relacoes, "jqueryimagelist")) {
                 $template = ""; #salva por ajax, nao necessita salvar
-            } elseif ($value['Type'] == "int(11)" || $value['Type'] == "tinyint(1)") {
+            } elseif (($value['Type'] == "int(11)" || $value['Type'] == "tinyint(1)") && $value['Null'] == "NO") {
                 $template = "\$registro->setCampoUpper(issetpostInteger('Field'));\n\t\t";
+            } elseif (($value['Type'] == "int(11)" || $value['Type'] == "tinyint(1)") && $value['Null'] == "YES") {
+                $template = "\$registro->setCampoUpper(issetpostInteger('Field', true));\n\t\t";
+            } elseif ($value['Null'] == "YES") {
+                $template = "\$registro->setCampoUpper(issetpost('Field', true));\n\t\t";
             } else {
                 $template = "\$registro->setCampoUpper(issetpost('Field'));\n\t\t";
             }

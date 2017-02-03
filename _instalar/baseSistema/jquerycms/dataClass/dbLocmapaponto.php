@@ -4,6 +4,10 @@ require_once "base/dbaseLocmapaponto.php";
 
 class dbLocmapaponto extends dbaseLocmapaponto {
 
+    const ct_exibirMapaEVisaoDaRua = "1";
+    const ct_exibirSomenteMapa = "2";
+    const ct_naoExibir = "3";
+
 // <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">       
     public static function Inserir($Conexao, $lat, $lng, $heading, $pitch, $zoom, $comportamento, $suportaview, $die = false) {
 
@@ -80,7 +84,15 @@ class CtrlMapaPontoView {
         $this->suporta = $obj->getSuportaview();
     }
 
-	public function loadByCtrlLocalizacao(CtrlLocalizacao $ctrlLocalizacao) {
+    public function loadByObjLocalizacao(objLocalizacao $objLocalizacao) {
+        $this->uf = $objLocalizacao->objEstado()->getUf();
+        $this->cidade = $objLocalizacao->objCidade()->getNome();
+        $this->bairro = $objLocalizacao->objBairro()->getNome();
+        $this->rua = $objLocalizacao->getRua();
+        $this->numero = $objLocalizacao->getNumero();
+    }
+
+    public function loadByCtrlLocalizacao(CtrlLocalizacao $ctrlLocalizacao) {
         $estado = new objLocestado($this->Conexao, false);
         $estado->loadByCod($ctrlLocalizacao->estado);
 
@@ -126,10 +138,10 @@ class CtrlMapaPontoView {
         } else {
             $zoom = 1;
         }
-        
+
         $s = "";
         if ($addJsMapsApi) {
-            $s.= "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
+            $s.= "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?key=" . ___googleMapsAPI . "'></script>";
         }
 
         $s .= "
@@ -323,7 +335,7 @@ class CtrlMapaPontoView {
             <select id='{$name}comportamento' name='{$name}comportamento'>
                 <option value='1' selected>Exibir mapa e visão da rua</option>
                 <option value='2'>Exibir somente mapa</option>
-                <option value='3'>Não exibir</option>
+                <!--option value='3'>Não exibir</option-->
             </select>
             <div class='clearfix'></div>
             <input type='hidden' id='{$name}lat' name='{$name}lat'  value='$lat'  /> 
@@ -345,7 +357,7 @@ class CtrlMapaPontoView {
     public function getCtrl() {
         return $this->getAutoFormField();
     }
-    
+
     public function SaveByPost() {
         $name = $this->CtrlName;
 
@@ -414,6 +426,14 @@ class CtrlMapaPontoLatLng {
         $this->numero = $numero;
     }
 
+    public function loadByObjLocalizacao(objLocalizacao $objLocalizacao) {
+        $this->uf = $objLocalizacao->objEstado()->getUf();
+        $this->cidade = $objLocalizacao->objCidade()->getNome();
+        $this->bairro = $objLocalizacao->objBairro()->getNome();
+        $this->rua = $objLocalizacao->getRua();
+        $this->numero = $objLocalizacao->getNumero();
+    }
+
     public function loadByCod($codPontoMapa) {
         $this->codPontoMapa = $codPontoMapa;
 
@@ -445,7 +465,7 @@ class CtrlMapaPontoLatLng {
 
         $s = "";
         if ($addJsMapsApi) {
-            $s.= "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=false'></script>";
+            $s.= "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?key=" . ___googleMapsAPI . "'></script>";
         }
 
         $s .= "
@@ -585,7 +605,7 @@ class CtrlMapaPontoLatLng {
     public function getCtrl() {
         return $this->getAutoFormField();
     }
-    
+
     public function SaveByPost() {
         $name = $this->CtrlName;
 

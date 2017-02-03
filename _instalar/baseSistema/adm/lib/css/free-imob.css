@@ -1,0 +1,37 @@
+.control-bootstrap-multiselect .btn-group {width: 100%;}
+.control-bootstrap-multiselect .btn-group button {width: 100%;text-align: left;}
+.control-bootstrap-multiselect .btn-group button .caret {position: absolute;top: 13px;right: 12px;}
+.control-bootstrap-multiselect .multiselect-container {width: 100%;}
+.control-bootstrap-multiselect .input-group {width: 95%;}
+.control-bootstrap-multiselect .input-group .input-group-addon {width: 38px;}
+
+.imovel-lista-mini-item {}
+.imovel-lista-mini-item .imovel-item {border: 1px solid #ccc;margin-bottom: 10px;padding: 5px;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
+.imovel-lista-mini-item .imovel-item .imovel-item-imagem {float: left;margin-right: 5px;text-align: center;}
+.imovel-lista-mini-item .imovel-item .imovel-item-imagem img {display: block}
+.imovel-lista-mini-item .imovel-item .imovel-item-imagem .badge.label-info {}
+.imovel-lista-mini-item .imovel-item .imovel-item-adicionar {height: 100px;text-align: right;padding-top: 12px;padding-right: 5px;}
+
+.imovel-lista-mini-item .imovel-item:hover ul,
+.imovel-lista-mini-item .imovel-item:active ul {display: block}
+
+.imovel-lista-mini-item .imovel-item .imovel-item-info {list-style: none;padding: 0px; display: none}
+.imovel-lista-mini-item .imovel-item .imovel-item-info li {}
+.imovel-lista-mini-item .imovel-item .imovel-item-info li.preco {font-size: 10px;}
+.imovel-lista-mini-item .imovel-item .imovel-item-info li.banheiro {}
+.imovel-lista-mini-item .imovel-item .imovel-item-info li.area-util {}
+.imovel-lista-mini-item .imovel-item .imovel-item-info li.area-total {}
+.imovel-lista-mini-item .imovel-item .imovel-item-info li i {padding-right: 4px;font-size: 14px;}
+.imovel-lista-mini-item .imovel-item .tooltip .tooltip-inner {}
+.imovel-lista-mini-item .imovel-item .tooltip .tooltip-inner span {display: block;border-bottom: 1px solid #252525;}
+.imovel-lista-mini-item .imovel-item .tooltip .tooltip-inner span:last-child {border-bottom: none;}
+
+.atendimento-imovel-lista {list-style: none;margin: 0px;padding: 5px;}
+.atendimento-imovel-lista li {margin: 0 5px 5px 0;display: inline-block;}
+.atendimento-imovel-lista li {-moz-transition:border-top-width 0.4s ease-in; -webkit-transition:border-top-width 0.4s ease-in; }
+.atendimento-imovel-lista li.atendimento-imovel-lista-placeholder {display: inline-block;width: 70px;height: 83px;background: #f6f6f6;border: 1px dashed #dddddd;margin: 0 5px 5px 0;}
+.atendimento-imovel-lista li .img-thumbnail {text-align: center;}
+.atendimento-imovel-lista li .badge {display: block;margin-top: 5px;}
+
+.atendimento-imovel-lista-sortable {background-color: #ecedf0;min-height: 148px;padding: 5px 5px 45px 5px;}
+.atendimento-imovel-lista-sortable li {cursor: move;}

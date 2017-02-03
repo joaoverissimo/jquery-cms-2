@@ -113,21 +113,39 @@ class objJqueryimage extends fbaseJqueryimage {
             return "/" . $link;
     }
 
+    /**
+     * Retorna a imagem ajustada para preencheer os pixels informados
+     * @return string
+     */
+    public function getSrc_FitTo($pixels = 100, $orientacao = "width", $fullUrl = false) {
+        $cod = $this->getCod();
+        $titulo = toRewriteString($this->getValor());
+        $titulo = str_replace("{$cod}_", "", $this->getValor());
+
+        $params = array();
+        $params[] = "img=$cod";
+        $params[] = "orientacao=$orientacao";
+        $params[] = "pixels=$pixels";
+
+        $link = "img_fitto.php?" . join("&", $params);
+
+        if ($fullUrl)
+            return ___siteUrl . $link;
+        else
+            return "/" . $link;
+    }
+
     public function getFileName() {
         $filefolder = $this->getFolder();
         return $filefolder . $this->getValor();
     }
 
     public function getExiste() {
-        if ($this->getValor()) {
-            return arquivos::existe($this->getFileName());
-        }
-
-        return false;
+        return arquivos::existe($this->getFileName());
     }
 
     public function getFolder() {
-        return ___AppRoot . "jquerycms/upload/images/";
+        return ___AppRoot . "jquerycms/upload/" . ___phpDataCliente . "/images/";
     }
 
 }

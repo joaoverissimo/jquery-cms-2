@@ -150,11 +150,28 @@ function str_dataPtBrToMySql($data) {
     }
 }
 
-function issetpost($nome_campo) {
-    if (isset($_POST["$nome_campo"]))
-        return trim($_POST["$nome_campo"]);
-    else
+function issetpost($nome_campo, $permite_nulo = false) {
+    if (isset($_POST["$nome_campo"])) {
+        if ($permite_nulo && $_POST["$nome_campo"] == "") {
+            return null;
+        }
+
+        return $_POST["$nome_campo"];
+    } else {
         return "";
+    }
+}
+
+function issetget($nome_campo, $permite_nulo = false) {
+    if (isset($_GET["$nome_campo"])) {
+        if ($permite_nulo && $_GET["$nome_campo"] == "") {
+            return null;
+        }
+
+        return $_GET["$nome_campo"];
+    } else {
+        return "";
+    }
 }
 
 function issetpostInteger($nome_campo, $permite_nulo = false) {
@@ -167,7 +184,27 @@ function issetpostInteger($nome_campo, $permite_nulo = false) {
             return null;
         }
 
-        return  intval($_POST["$nome_campo"]);
+        return intval($_POST["$nome_campo"]);
+    } else {
+        if ($permite_nulo) {
+            return null;
+        }
+
+        return 0;
+    }
+}
+
+function issetgetInteger($nome_campo, $permite_nulo = false) {
+    if (isset($_GET["$nome_campo"])) {
+        if ($_GET["$nome_campo"] == "on") {
+            return 1;
+        }
+
+        if ($permite_nulo && $_GET["$nome_campo"] == "") {
+            return null;
+        }
+
+        return intval($_GET["$nome_campo"]);
     } else {
         return 0;
     }
@@ -194,9 +231,11 @@ function Fncs_EnviarEmail($para, $from, $mensagemHTML, $assunto, $charset = "utf
             return true;
             echo '<!-- Contato Sucesso -->';
         } else {
+            echo '<!-- Ocorreu um erro ao enviar e-mail -->';
             return false;
         }
     } else {
+        echo '<!-- Contato Sucesso - POST FIX-->';
         return true;
     }
 }
@@ -264,6 +303,19 @@ function sortArrayByLenght($a, $b) {
     if (strlen($a) > strlen($b))
         return 0;
     return +1;
+}
+
+function arrToStr($arr, $method = "getDescricao", $glue = ", ") {
+    if (!issetArray($arr)) {
+        return "";
+    }
+
+    $rt = array();
+    foreach ($arr as $obj) {
+        $rt[] = call_user_func(array($obj, $method));
+    }
+    //
+    return join($glue, $rt);
 }
 
 function stringuizeCmp($a, $b) {

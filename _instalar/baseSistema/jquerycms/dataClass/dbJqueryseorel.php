@@ -9,7 +9,7 @@ class dbJqueryseorel extends dbaseJqueryseorel {
         if (!$seo || !$palavra) {
             return false;
         }
-        
+
         $where = new dataFilter(self::_seo, $seo);
         $where->add(self::_palavra, $palavra);
 
@@ -55,7 +55,5 @@ class dbJqueryseorel extends dbaseJqueryseorel {
 
         return self::Inserir($Conexao, $seo, $palavra);
     }
-
-    
 
 }

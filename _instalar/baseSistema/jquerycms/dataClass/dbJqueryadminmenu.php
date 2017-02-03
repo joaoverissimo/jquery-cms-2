@@ -6,12 +6,14 @@ class dbJqueryadminmenu extends dbaseJqueryadminmenu {
 
 // <editor-fold defaultstate="collapsed" desc="Inserir, Update, Deletar">       
     public static function Inserir($Conexao, $codmenu, $titulo, $patch, $icon, $addhtml, $ordem, $die = false) {
-        $where = new dataFilter("jqueryadminmenu.patch", $patch);
-        $dados = self::Listar($Conexao, $where);
+        if ($patch != "#") {
+            $where = new dataFilter("jqueryadminmenu.patch", $patch);
+            $dados = self::ObjsList($Conexao, $where);
 
-        if ($dados !== false) {
-            dbJqueryimage::Deletar($Conexao, $icon);
-            throw new jquerycmsException("Este menu patch já existe!");
+            if ($dados !== false) {
+                dbJqueryimage::Deletar($Conexao, $icon);
+                throw new jquerycmsException("Este menu patch já existe!");
+            }
         }
 
         return parent::Inserir($Conexao, $codmenu, $titulo, $patch, $icon, $addhtml, $ordem, $die);
@@ -79,10 +81,10 @@ class dbJqueryadminmenu extends dbaseJqueryadminmenu {
         //Cria o select
         $add = autoform2::retornarAddArray($add, "add, class, labelclass, precontrol, poscontrol, divcontrolsclass, spanclass");
         $s = autoform2::FieldIn();
-        $s .= "\n\t\t<label class='control-label {$add['labelclass']}' for='$name'>$label: </label>";
+        $s .= "\n\t\t<label class='col-md-3 control-label {$add['labelclass']}' for='$name'>$label: </label>";
 
         $validateString = autoform2::retornarValidate($validate);
-        $s .= "\n\t\t<div class='controls {$add['divcontrolsclass']}'>{$add['precontrol']}";
+        $s .= "\n\t\t<div class='col-md-6 {$add['divcontrolsclass']}'>{$add['precontrol']}";
 
         $s .= "<select id='$name' name='$name' class='$validateString {$add['class']}' {$add['add']} >\n";
         if ($root == 0)
@@ -93,7 +95,6 @@ class dbJqueryadminmenu extends dbaseJqueryadminmenu {
         $s .= "{$add['poscontrol']}\n\t\t";
         $s .= autoform2::retornarSpan($span, $add['spanclass']);
         $s .= "</div>";
-        $s .= "\n\t\t<script> $().ready(function() { $('#$name').val('$value'); });</script>\t\t";
         $s .= autoform2::FieldOut();
         return $s;
     }
@@ -150,12 +151,12 @@ class dbJqueryadminmenu extends dbaseJqueryadminmenu {
             $template = array(
                 "htmlstart" => "<ul class='#ulclass#'>\n",
                 "htmlend" => "</ul>",
-                "li" => "\n\t<li><a href='getLink'>getTitulo</a></li>",
-                "lisub" => "\n\t<li class='dropdown'><a href='getLink' class='dropdown-toggle' data-toggle='dropdown'>getTitulo<b class='caret'></b></a>\n\t\t #getmenu# \n\t</li>",
+                "li" => "\n\t<li id='getMenuId' data-path='getPatch'><a href='getLink?clear=1'>getAddhtml<span>getTitulo</span></a></li>",
+                "lisub" => "\n\t<li id='getMenuId' class='nav-parent' data-path='getPatch'><a href='getLink'>getAddhtml<span>getTitulo</span></a>\n\t\t #getmenu# \n\t</li>",
                 "nivelclass" => array(
-                    0 => "nav",
-                    1 => "dropdown-menu",
-                    2 => "dropdown-submenu"
+                    0 => "nav nav-main",
+                    1 => "nav nav-children",
+                    2 => "nav nav-children"
                 )
             );
         }
@@ -178,11 +179,22 @@ class dbJqueryadminmenu extends dbaseJqueryadminmenu {
             foreach ($dados as $obj) {
                 if ($currentUser->validatePermissions($obj->getLink($adm_folder))) {
                     $subdados = $obj->obtemJqueryadminmenuRel("jqueryadminmenu.ordem");
-                    if ($subdados === false) {
-                        $s .= $obj->getHtmlTemplateString($template["li"]);
+                    //Valida subdados: percorre todos os objetos, se algum possuir permissao gera como sub-menu, senão, gera como menu simples
+                    //Gera subdados com base no carregado
+                    if ($subdados !== false) {
+                        $subdadosBool = false;
+                        foreach ($subdados as $objPermissao) {
+                            if ($currentUser->validatePermissions($objPermissao->getLink($adm_folder))) {
+                                $subdadosBool = true;
+                            }
+                        }
+
+                        if ($subdadosBool) {
+                            $sub = $obj->getHtmlTemplateString($template["lisub"]);
+                            $s .= str_replace("#getmenu#", self::getMenuValidate($Conexao, $adm_folder, $obj->getCod(), $nivel + 1, $template), $sub);
+                        }
                     } else {
-                        $sub = $obj->getHtmlTemplateString($template["lisub"]);
-                        $s .= str_replace("#getmenu#", self::getMenu($Conexao, $adm_folder, $obj->getCod(), $nivel + 1, $template), $sub);
+                        $s .= $obj->getHtmlTemplateString($template["li"]);
                     }
                 }
             }

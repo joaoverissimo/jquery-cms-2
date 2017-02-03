@@ -1,5 +1,4 @@
 <?php
-//REQUIRE E CONEXÃO
 require_once '../../jquerycms/config.php';
 require_once '../lib/admin.php';
 $msg = "";
@@ -8,7 +7,6 @@ $registro = new obj$tabelaFistUpper#($Conexao);
 
 $inserirCtrls#
 
-//POST
 if (count($_POST) > 0) {
     try {
         $inserirValoresPost#
@@ -16,9 +14,9 @@ if (count($_POST) > 0) {
         $exec = $registro->Save();
 
         if ($exec && $adm_tema != 'branco') {
-            header("Location: $cancelLink");
+            header("Location: editar.php?cod={$registro->getCod()}&msg=1");
         } else {
-            $msg = fEnd_MsgString("O registro foi inserido.$fEnd_closeTheIFrameImDone", 'success');
+            $msg = fEnd_MsgString("O registro foi inserido." . fEnd_closeTheIFrameImDone("$tabela#", $registro->getCod()), 'success');
         }
     } catch (jquerycmsException $exc) {
         $msg = fEnd_MsgString("Ocorreram problemas ao inserir o registro.", 'error', $exc->getMessage());
@@ -26,7 +24,6 @@ if (count($_POST) > 0) {
 }
 
     
-//FORM
 $form = new autoform2();
 $form->start("cadastro","","POST");
     
@@ -34,28 +31,41 @@ $formfields#
     
 $form->send_cancel("Salvar", $cancelLink);
 $form->end();
-?><!DOCTYPE HTML>
-<html>
-    <head>
-        <title><?php echo __('table_$tabela#');?> - Inserir</title>
 
+$pageVars = array('pageTitle' => __('table_$tabela#'), 'pageAction' => "Inserir", "nav-breadcrumbs" => array(__('table_$tabela#') => "index.php"));
+?><!doctype html>
+<html class="fixed sidebar-left-xs">
+    <head>
         <?php include '../lib/masterpage/head.php'; ?>
         <?php echo $form->getHead(); ?>
         $inserirCtrlsHead#
     </head>
-    <body>        
-        <?php include '../lib/masterpage/header.php'; ?>
+    <body>   
+        <section class="body">
+            <?php include '../lib/masterpage/header.php'; ?>
 
-        <div class="main">
-            <div class="inner">
-                <div class="page-header">
-                    <h3><?php echo __('table_$tabela#');?> <small>Inserir</small></h3>
-                </div>
-                
-                <?php echo $msg; ?>
-                <?php echo $form->getForm(); ?>
+            <div class="inner-wrapper">
+                <?php include '../lib/masterpage/navbar.php'; ?>
+
+                <section role="main" class="content-body">
+                    <?php include '../lib/masterpage/page-header.php'; ?>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="panel main-panel-pg">
+                                <?php include '../lib/masterpage/panel-header.php'; ?>
+
+                                <div class="panel-body">
+                                    <?php echo $msg; ?>
+                                    <?php echo $form->getForm(); ?>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </div>
-        <?php include '../lib/masterpage/footer.php'; ?>
+
+            <?php include '../lib/masterpage/footer.php'; ?>
+        </section>
     </body>
 </html>

@@ -22,6 +22,25 @@ class objJqueryimagelist extends fbaseJqueryimagelist {
         return $this->jqueryimagelistitemRel;
     }
 
+    private $obtemItensExistentes;
+
+    public function obtemItensExistentes($orderByField = "jqueryimagelistitem.ordem", $orderByOrientation = "ASC", $limit = "") {
+        if (!isset($this->obtemItensExistentes)) {
+            $dados = $this->obtemJqueryimagelistitemRel($orderByField, $orderByOrientation, $limit);
+            $rt = array();
+
+            foreach ($dados as $objJqueryimagelistitem) {
+                if ($objJqueryimagelistitem->objJqueryimage()->getExiste()) {
+                    $rt[] = $objJqueryimagelistitem;
+                }
+            }
+
+            $this->obtemItensExistentes = $rt;
+        }
+
+        return $this->obtemItensExistentes;
+    }
+
     public function obtemItens($orderByField = "jqueryimagelistitem.ordem", $orderByOrientation = "ASC", $limit = "") {
         return $this->obtemJqueryimagelistitemRel($orderByField, $orderByOrientation, $limit);
     }
@@ -52,6 +71,17 @@ class objJqueryimagelist extends fbaseJqueryimagelist {
 
     public function RecalcInfo() {
         return dbJqueryimagelist::RecalcInfo($this->Conexao, $this->getCod());
+    }
+
+    public function addJqueryImage($jqueryimage) {
+        if ($jqueryimage instanceof objJqueryimage) {
+            $jqueryimage = $jqueryimage->getCod();
+        } else {
+            $jqueryimage = $jqueryimage;
+        }
+
+        $jqueryimagelist = $this->cod;
+        return dbJqueryimagelistitem::Inserir($this->Conexao, $jqueryimagelist, $jqueryimage, "", "", "", "", "", false);
     }
 
 }

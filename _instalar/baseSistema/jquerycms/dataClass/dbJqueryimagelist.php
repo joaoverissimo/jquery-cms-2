@@ -69,8 +69,8 @@ class dbJqueryimagelist extends dbaseJqueryimagelist {
 
         return false;
     }
-	
-	public static function RecalcInfo($Conexao, $cod, $updatedb = true) {
+
+    public static function RecalcInfo($Conexao, $cod, $updatedb = true) {
         $sql = "SELECT COUNT(*) AS rt FROM  `jqueryimagelistitem` WHERE  `jqueryimagelist` = '{$cod}'";
         $dados = dataExecSqlDireto($Conexao, $sql, false);
 
@@ -189,7 +189,7 @@ class CtrlJqueryImageList {
                         if (jqheight === 'undefined') {
                             jqheight = 330;
                         }
-                        var html = \"<div class='{$ctrlName}_jquerymodal' style='width: \"+ $(document).width() +\"px; height: \"+ $(document).height() +\"px;top: 0; left: 0; position: absolute; z-index: 1000; background: url(/jquerycms/js/fineuploader/background.png);'>\";
+                        var html = \"<div class='{$ctrlName}_jquerymodal' style='width: \"+ $(document).width() +\"px; height: \"+ $(document).height() +\"px;top: 0; left: 0; position: absolute; z-index: 1025; background: url(/jquerycms/js/fineuploader/background.png);'>\";
                         html += \"<div style='background: white; width: \"+ jqwidth +\"px; height: \"+ jqheight +\"px; padding: 10px; margin: 0 auto; margin-top: \"+ margemtop +\"px;'>\";
                         html += \"<iframe src='\"+ url +\"' style='width: 99%; height: 99%;border: 0;'>\";
                         html += \"</iframe></div></div>\";
@@ -224,6 +224,24 @@ class CtrlJqueryImageList {
                             $(\"#{$ctrlName} #imagelist li.noimage\").html('Não existem imagens. Cadastre através do botão <b>$lblInserirUpload</b>.');
 
                             $(\"a[data-toggle='tooltip']\").tooltip();
+                            
+                            $('#{$ctrlName} #imagelist').magnificPopup({
+                                delegate: 'a.img-slider',
+                                type: 'image',
+                                tLoading: 'Carregando imagem #%curr%...',
+                                mainClass: 'mfp-img-mobile',
+                                gallery: {
+                                    enabled: true,
+                                    navigateByImgClick: true,
+                                    preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+                                },
+                                image: {
+                                    tError: '<a href=\"%url%\">A imagem #%curr%</a> não pode ser carregada.',
+                                    titleSrc: function (item) {
+                                        return item.el.attr('title');
+                                    }
+                                }
+                            });
                         });
                     }
 
@@ -255,7 +273,7 @@ class CtrlJqueryImageList {
                                 inputName: 'valor-file'
                             },
                             text: {
-                                uploadButton: \"<i class='icon-plus-sign icon-white'></i> {$lblInserirUpload}\"
+                                uploadButton: \"<i class='fa fa-plus-square-o'></i> {$lblInserirUpload}\"
                             },
                             validation: {
                                 allowedExtensions: ['jpeg', 'jpg', 'gif', 'png']
@@ -268,7 +286,7 @@ class CtrlJqueryImageList {
                                 '</div>',
                             classes: {
                                 success: 'alert alert-success',
-                                fail: 'alert alert-error'
+                                fail: 'alert alert-danger'
                             }
                         }).on('submit', function (event, id, filename) { 
                             $(this).fineUploader('setParams', {'jqueryimagelist': imagelist} );
@@ -298,7 +316,7 @@ class CtrlJqueryImageList {
                         $('#{$ctrlName} #imagelist').disableSelection();
 
                         $('#{$ctrlName} .inserir').each(function(){
-                        $(this).click(function(){
+                            $(this).click(function(){
                             {$ctrlName}_iframe(this);
                             return false;                            
                         });
@@ -315,23 +333,23 @@ class CtrlJqueryImageList {
         $css = "                    
                     .qq-upload-list {text-align: left;}
                     li.alert-success {background-color: #DFF0D8;}
-                    li.alert-error {background-color: #F2DEDE;}
-                    .alert-error .qq-upload-failed-text {display: inline;}
+                    li.alert-danger {background-color: #F2DEDE;}
+                    .alert-danger .qq-upload-failed-text {display: inline;}
                     #{$ctrlName} {float: left; background: white;}
                     #{$ctrlName} .inserir {float: left; margin-right: 10px;}
                     #{$ctrlName} #status {float: right; margin-top: -30px;}
                     #{$ctrlName} #imagelist {list-style: none;}
                     #{$ctrlName} #imagelist li {float: left; width: 200px; height: 150px; margin: 4px;padding: 5px;}
-                    #{$ctrlName} #imagelist li.noimage {height: 20px !important;width: 440px !important}
+                    #{$ctrlName} #imagelist li.noimage {height: 35px !important;width: 440px !important;margin-bottom: 50px;}
                     #{$ctrlName} #imagelist li {border: 1px solid #d4d4d4;  -webkit-border-radius: 4px;  -moz-border-radius: 4px;  border-radius: 4px;  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#fff2f2f2',GradientType=0);  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.065);  -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.065);  box-shadow: 0 1px 4px rgba(0,0,0,0.065);background: rgba(241, 241, 241, 0.6);}
                     #{$ctrlName} #imagelist li p {display: block; width: 130px; height: 100px; overflow: hidden; margin: 0 auto;}
                     #{$ctrlName} #imagelist li img {width: 120px;margin: 0 auto;display: block;}
                     #{$ctrlName} #imagelist li span {display: block;height: 26px;width: 195px; overflow: hidden; font-size: 12px;text-align: center;}
-                    #{$ctrlName} #imagelist li div {}
+                    #{$ctrlName} #imagelist li div {margin-top: -3px;}
                     #{$ctrlName} #imagelist li div .btn {height: 20px;}
                     #{$ctrlName} #imagelist li div .{$ctrlName}_deletar{float: right;}
                     #{$ctrlName} #imagelist li div .{$ctrlName}_editar{float: right;}
-
+                    #{$ctrlName} #imagelist li div i {font-size: 16px;}
                     ";
         $s .= "<style>$css</style>";
         return $s;
@@ -368,7 +386,7 @@ class CtrlJqueryImageList {
         $s .= "
                     <div id='{$ctrlName}'> ";
         if ($exibeInserirSimple) {
-            $s .= "<a href='/jquerycms/js/fineuploader/upload-inserir.php?jqueryimagelist={$codImgListEncode}&ctrlname={$ctrlName}&{$link}' class='btn btn-success inserir'  jqwidth='600' jqheight='450' ><i class='icon-plus-sign icon-white'></i> {$lblInserirSimple}</a>";
+            $s .= "<a href='/jquerycms/js/fineuploader/upload-inserir.php?jqueryimagelist={$codImgListEncode}&ctrlname={$ctrlName}&{$link}' class='btn btn-success inserir'  jqwidth='600' jqheight='450' ><i class='fa fa-plus-square-o icon-white'></i> {$lblInserirSimple}</a>";
         }
 
         if ($exibeInserirUpload) {
